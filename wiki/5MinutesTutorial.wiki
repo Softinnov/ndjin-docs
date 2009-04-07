@@ -39,3 +39,72 @@ var applicationDataType = model.getDataTypeByName( 'Application' );
 applicationDataType.fields.push( { name: 'contacts', dataTypeId: model.getDataTypeByName( 'Contact' )._id, min: 0, max: 100, unique: false, preview: false } );
 model.createOrUpdateDataType( applicationDataType );
 }}}
+
+
+= Operate your model =
+
+
+Include our simple instance helper library.
+{{{
+<script type="text/javascript" src="instanceHelper.js"></script>
+}}}
+
+
+Initialize instance helper proxy that will permform webservice request to the server and provide you application URL.
+{{{
+var applicationDomainName = "your-application-domain-name";
+var instanceHelper = new InstanceHelper( applicationDomainName, false );
+}}}
+
+Create an instance of 'Contact' and append it to the 'contacts' collection of your application singleton. As you can see we apply two transitions to the 'Contact' instance: 'New' and 'Store'.
+'New' instanciate one 'Contact', and 'Store' updates it with the given values, checks the assertion if any and appends it to the collection.
+{{{
+var query = {
+        ownerFieldName: 'contacts',
+        appliedTransitionNames: ['New', 'Store'],
+        instance: {
+                name: 'MySelf',
+                phone: '0123456789'
+        }
+};
+
+var contact = instanceHelper.applyTransition( query );
+}}}
+
+Update the previous instance of 'Contact' . As you can see, we apply two transitions to the 'Contact' instance: 'Edit' and 'Update'.
+'Edit' set the instance in an 'Edited' state disallowing someone else to apply an 'Edit' on it. 'Update' updates the instance with the given values and checks the assertion.
+Also, you might note that the instance '_id' is obviously required for those transitions.
+{{{
+query = {
+        ownerFieldName: 'contacts',
+        appliedTransitionNames: ['Edit', 'Update'],
+        instance: {
+                _id: contact._id,
+                name: 'Noboby'
+        }
+};
+contact = instanceHelper.applyTransition( query );
+}}}
+
+
+Get 10 contacts from the 'contacts' collection of 'Application'.
+{{{
+query = {
+        ownerFieldName: "contacts",
+        count: 10,
+};
+var instances = instanceHelper.getInstances( query );
+}}}
+
+And delete those instances (if any).
+{{{
+for( var i=0; i&lt;instances.length; i++ ){
+        var instance = instances[i];
+        var query = {
+                ownerFieldName: 'contacts',
+                appliedTransitionNames: ['Delete' ],
+                instance: instance
+        };
+        instanceHelper.applyTransition( query );
+}
+}}}
