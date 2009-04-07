@@ -1,5 +1,10 @@
 #summary By reading this tutorial you'll learn how to create a basic application model and interact with it using only your browser javascript.
 
+
+= Authenticate yourself =
+
+[http://yourdomainname.ndjin.net/ng/?openid=youopenid&returnURL=http://yourhost/currentpage]
+
 = Create your model =
 
 Include our simple model library.
