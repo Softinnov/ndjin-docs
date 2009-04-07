@@ -1,9 +1,4 @@
-#summary One-sentence summary of this page.
-
-= Introduction =
-
-By reading this tutorial you'll learn how to create a basic application model and interact with it using only your browser javascript.
-
+#summary By reading this tutorial you'll learn how to create a basic application model and interact with it using only your browser javascript.
 
 = Create your model =
 
