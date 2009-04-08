@@ -5,4 +5,32 @@
 
 http://ndjin.googlecode.com/svn/trunk/docs/metamodel.png
 
-== DataType == 
+Due to limitation of our underlying data storage model, the metamodel cannot contain inheritance.
+
+== DataType ==
+
+DataType are similar to classes in OO languages with few enhancements. 
+
+A dataType has a name, belongs to a package, and contains:
+  * fields: properties of the dataType
+  * operationFields: equivalent to the object methods
+  * states: set of state associated with this datatype
+  * uiTypes: type of user interface that could be associated to this dataType
+  * validatorTypes: type of data validator that could be associated to this dataType
+  * serviceTypes: executable service that could be accessed via this dataType
+
+Common dataType primitives are:
+
+|| *Name* || *Description* ||
+||Text||UTF-8 string||
+||Number||any kind of numbers||
+||Date||represented in milisecond since EPOC||
+||File||any kind of file||
+
+
+Specific dataType objects are:
+
+|| *Name* || *Description* ||
+||Object||base object inherited by any object of your application||
+||Application||application dataType that is instantiated once and used has your application entry point||
+||Member||dataType used to specify user level of the member of you application||
