@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>5 minutes tutorial sample</title>
+
+		
+        <script type="text/javascript" src="./lib/model.js"></script>
+        <script type="text/javascript" src="./lib/instanceHelper.js"></script>
+    </head>
+	
+    <body>
+        <script>
+        	var applicationSiteURL = "http://localhost:8080/ng/main";
+			
+			// Model Part : we create a Contact object
+            var model = new Model( applicationSiteURL, false );
+            model.init();
+			
+			var dataType = {
+				name: "Contact",
+				inheritedDataTypeId: model.getDataTypeByName( 'Object' )._id,
+				fields: [
+					{ name: 'name', dataTypeId: model.getDataTypeIdByName( 'Text' ), min: 0, max: 1, unique: false, preview: true },
+					{ name: 'telephone', dataTypeId: model.getDataTypeIdByName( 'Text' ), min: 0, max: 1, unique: false, preview: false },
+				]
+			}
+			model.createOrUpdateDataType( dataType );
+			
+			// Model Part : we create a contact collection and set it as Application field
+			var applicationDataType = model.getDataTypeByName( 'Application' );
+			applicationDataType.fields.push( { name: 'contacts', dataTypeId: model.getDataTypeByName( 'Contact' )._id, min: 0, max: 100, unique: false, preview: false } );
+			model.createOrUpdateDataType( applicationDataType );			
+
+
+
+
+			
+			
+			var instanceHelper = new InstanceHelper( applicationSiteURL, false );
+			
+			// Instance Part - we create an instance of Contact and append it in Application 'contacts' collection 
+			var query = 
+			{ 
+				ownerFieldName: 'contacts',
+				appliedTransitionNames: ['New', 'Store'],
+				instance: 
+				{
+					name: 'MySelf',
+					telephone: '0123456789'
+				}
+			};
+			var contact = instanceHelper.applyTransition( query );
+			
+			
+			
+			// Instance Part - we update our instance of Contact
+			query = 
+			{ 
+				ownerFieldName: 'contacts',
+				appliedTransitionNames: ['Edit', 'Update'],
+				instance: 
+				{
+					_id: contact._id,
+					name: 'Noboby'
+				}
+			};
+			contact = instanceHelper.applyTransition( query );
+			
+			
+			
+			// Instance Part - we query 10 Contacts instance from the Application 'contacts' collection
+			query = 
+			{
+				ownerFieldName: "contacts",
+				count: 10,
+			};
+			var instances = instanceHelper.getInstances( query );
+			
+
+			// Instance Part - we delete those 10 instances from 'contacts' collection
+			for( var i=0; i<instances.length; i++ )
+			{
+				var instance = instances[i];
+				var query = 
+				{ 
+					ownerFieldName: 'contacts',
+					appliedTransitionNames: ['Delete' ],
+					instance: instance
+				};
+				instanceHelper.applyTransition( query );
+			}
+
+        </script>
+        5 minutes tutotial
+    </body>
+</html>
