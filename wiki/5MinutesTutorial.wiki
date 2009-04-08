@@ -5,6 +5,8 @@
 
 You need to register an [http://openid.net/get/ OpenID] and create an application site on [http://www.ndjin.net ndjin platform].
 
+You can get the source of this tutorial [http://code.google.com/p/ndjin/source/browse/trunk/js/5min-sample.html here].
+
 = Authenticate yourself =
 
 You need to authenticate yourself to get the required right to operate on your application site.
