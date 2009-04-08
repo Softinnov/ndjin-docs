@@ -3,7 +3,7 @@
 
 = Prerequisite =
 
-You need to register an OpenID and create a site on ndjin platform.
+You need to register an [http://openid.net/get/ OpenID] and create a site on [http://www.ndjin.net ndjin platform].
 
 = Authenticate yourself =
 
@@ -12,7 +12,7 @@ You need to make request with your browser to the url http://yourdomainname.ndji
   * returnURL: the URL your browser will be redirected after authenticated
 
 For example :
-[http://yourdomainname.ndjin.net/ng/login/?openID=yourOpenId&returnURL=http://yourhost/currentpage]
+http://yourdomainname.ndjin.net/ng/login/?openID=yourOpenId&returnURL=http://yourhost/currentpage
 
 
 
