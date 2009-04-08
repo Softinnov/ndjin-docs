@@ -10,12 +10,12 @@ You can get the source of this tutorial [http://code.google.com/p/ndjin/source/b
 = Authenticate yourself =
 
 You need to authenticate yourself to get the required right to operate on your application site.
-Just make a request with your browser to the url http://yourdomainname.ndjin.net/ng/login/ and pass 2 parameters:
+Just make a request with your browser to the url http://yourdomainname.ndjin.net/ng/auth and pass 2 parameters:
   * openID: your OpenID (such as https://me.yahoo.com/yourlogin)
   * returnURL: the URL your browser will be redirected after authenticated
 
 For example :
-http://yourdomainname.ndjin.net/ng/login/?openID=yourOpenId&returnURL=http://yourhost/currentpage
+http://yourdomainname.ndjin.net/ng/auth?openID=yourOpenId&returnURL=http://yourhost/currentpage
 
 
 
