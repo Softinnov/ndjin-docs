@@ -23,7 +23,7 @@ You just need to edit a new web page hosted behind any web server.
 
 Include our simple model library.
 {{{
-<script type="text/javascript" src="model.js"></script>
+<script type="text/javascript" src="http://ndjin.googlecode.com/svn/trunk/js/lib/model.js"></script>
 }}}
 
 Initialize model instance proxy that will permform webservice requests to the server and provide your application domain name.
@@ -60,7 +60,7 @@ model.createOrUpdateDataType( applicationDataType );
 
 Include our simple instance helper library.
 {{{
-<script type="text/javascript" src="instanceHelper.js"></script>
+<script type="text/javascript" src="http://ndjin.googlecode.com/svn/trunk/js/lib/instanceHelper.js"></script>
 }}}
 
 
