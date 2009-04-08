@@ -1,0 +1,8 @@
+#summary Ndjin metamodel
+
+
+= Big Picture =
+
+http://ndjin.googlecode.com/svn/trunk/docs/metamodel.png
+
+== DataType == 
