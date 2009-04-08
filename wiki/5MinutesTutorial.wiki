@@ -10,10 +10,15 @@ You need to register an OpenID and create a site on ndjin platform.
 You need to make request with your browser to the url http://yourdomainname.ndjin.net/ng/login/ and pass 2 parameters:
   * openID: your OpenID (such as https://me.yahoo.com/yourlogin)
   * returnURL: the URL your browser will be redirected after authenticated
+
 For example :
 [http://yourdomainname.ndjin.net/ng/login/?openID=yourOpenId&returnURL=http://yourhost/currentpage]
 
+
+
 = Create your model =
+
+You just need to edit a new web page hosted behind any web server.
 
 Include our simple model library.
 {{{
