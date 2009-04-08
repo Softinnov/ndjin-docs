@@ -39,8 +39,8 @@ var dataType = {
         name: "Contact",
         inheritedDataTypeId: model.getDataTypeByName( 'Object' )._id,
         fields: [
-                { name: 'name', dataTypeId: model.getDataTypeByName( 'Text' )._id, min: 0, max: 1, unique: false, preview: true },
-                { name: 'phone', dataTypeId: model.getDataTypeByName( 'Text' )._id, min: 0, max: 1, unique: false, preview: false },
+                { name: 'name', dataTypeId: model.getDataTypeIdByName( 'Text' ), min: 0, max: 1, unique: false, preview: true },
+                { name: 'phone', dataTypeId: model.getDataTypeIdByName( 'Text' ), min: 0, max: 1, unique: false, preview: false },
         ]
 }
 model.createOrUpdateDataType( dataType );
