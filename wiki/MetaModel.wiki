@@ -45,9 +45,12 @@ BTW you can always introspect the model (only member on your application can que
 DataType can have states. 
 A dataType instance can be in a specific state and anyone can apply a transition on the instance to change its state. When a transition is apply, a set of operation can be executed. 
 Those operations can generate exception and cancel transition. Each operations are transactional but the whole transition is not transactional itself for performance reason. 
-If an exception occurs during a transition, the current operation is rolled back but previous one remains. To be sure to have an atomic set of operation executed in transition you can define a specific method (operationField) and execute all operation in a transation inside this method.
+If an exception occurs during a transition, the current operation is rolled back but previous one remains. To be sure to have an atomic set of operation executed in transition you can define a specific method (operationField) and execute all operation in a transition inside this method.
 
-Common states are: Begin, Created, Stored, Edited, End
+Common object states are: Begin, Created, Stored, Edited, End
+
+http://ndjin.googlecode.com/svn/trunk/docs/objectStates.png
+
 
 Common state transition are: New, Create, Store, Edit, Update, Cancel, View, Delete. View transition is applied when trying to read the content of an object.
 
