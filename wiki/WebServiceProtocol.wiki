@@ -2,7 +2,7 @@
 
 = Overview =
 
-NDJIN webservices are accessible via GET or POST HTTP requests. 
+Ndjin webservices are accessible via GET or POST HTTP requests. 
 
 All data encoding MUST be done using *UTF-8* encoding.
 
