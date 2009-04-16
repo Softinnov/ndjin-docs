@@ -1,0 +1,59 @@
+#summary We describe here ndjin HTTP/JSON and XML protocol.
+
+= Overview =
+
+NDJIN webservices are accessible via GET or POST HTTP requests. 
+
+All data encoding MUST be done using *UTF-8* encoding.
+
+Data and HTTP responses could be formatted using either [http://json.org JSON] or XML.
+
+[http://bob.pythonmac.org/archives/2005/12/05/remote-json-jsonp/ JSONP] is supported allowing you cross domain scripting features.
+
+  
+An HTTP request should have following parameters:
+
+|| Parameters || ||
+|| `requestDataType` || `data` request parameter format: could be `json` or `xml` ||
+|| `responseDataType` || response format: could be `xml`, `json` or `jsonp`  ||
+|| `callback` || optional, in case of [http://bob.pythonmac.org/archives/2005/12/05/remote-json-jsonp/ jsonp] response callback is required ||
+|| `data` || request data that will be deserialized and passed to webservice  ||
+
+
+*Example of HTTP request using JQuery/JSONP*
+
+{{{
+var webserviceURL = "http://..."
+var jsonData = "..."
+
+$.ajax({
+ url: webserviceURL,
+ dataType: "jsonp",
+ data: { requestDataType:'json', responseDataType:'jsonp', data: jsonData },
+ success: function ( dataResponse, textStatus )
+ {
+  // dataResponses contain the results
+ }
+
+}}}
+
+
+= JSON =
+
+Content Type: application/jsonrequest
+
+= XML =
+
+Content Type: text/xml
+
+{{{
+<?xml version='1.0' encoding='UTF-8'?>
+<response xmlns:ds='http://ndjin.net/ds/1.0/'
+ xmlns:s='urn:ds:string'
+ xmlns:d='urn:ds:date'
+ xmlns:l='urn:ds:localestring'
+ xmlns:n='urn:ds:number'
+ xmlns:b='urn:ds:boolean'
+ xmlns:r='urn:ds:ref'>
+</response>
+}}}
