@@ -1,0 +1,28 @@
+#summary List of ndjin webservices
+
+= Introduction =
+
+Ndjin webservice can be called using HTTP/JSON or XML request (see [WebServiceProtocol]).
+
+Request URL should be formatted as: `http://[you application site name].ndjin.net/ng/service/[service name]/[operation name]`
+
+For example: `http://myapp.ndjin.net/ng/service/AuthenticationService/getSessionInfo`
+
+Available webservices group are:
+  * AuthenticationService: user authentication
+  * ModelService: application model operations
+  * InstanceService: object instances operations 
+
+Each group hold one or many operations that may required membership privilege to be executed.
+
+Common privileges are:
+
+|| Open || operation can be executed by anybody  ||
+|| Captcha || a captcha chalenge should have been passed with this session ||
+|| Authenticaded || this session must be authenticated ||
+|| Owner || if operation may concern an instance then the current session user must be owner of the instance ||
+|| MemberLevel ||  session user must have member level on the application ||
+|| EditorLevel ||   session user must have editor level on the application ||
+|| AdministratorLevel ||   session user must have administrator level on the application ||
+
+This list may be extended according to specific application model.
