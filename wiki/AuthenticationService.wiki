@@ -1,0 +1,13 @@
+#summary authentication web service
+
+@NGWebService(securityLevel=NGSecurityLevel.Open)
+public Instance getSessionInfo()
+
+@NGWebService(securityLevel=NGSecurityLevel.Authenticaded)
+public Instance getUser()
+
+@NGWebService(securityLevel=NGSecurityLevel.Open)
+public void logout()
+
+@NGWebService(securityLevel=NGSecurityLevel.Open)
+public Instance validateCaptcha( Instance parametersInstance ) throws Exception
