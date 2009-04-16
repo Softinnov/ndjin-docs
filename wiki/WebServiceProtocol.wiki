@@ -120,7 +120,7 @@ Content of object referenced are serialized only once. Any reference to an objec
 
 *Example of request HTTP/XML*
 
-We perform HTTP request to URL: http://myapplication.ndjin.net/ng/service/InstanceService/getInstances
+We perform HTTP request to URL: `http://myapplication.ndjin.net/ng/service/InstanceService/getInstances`
 
 With HTTP parameters : `requestDataType=xml&responseDataType=xml`
 
