@@ -176,38 +176,37 @@ Response would look like:
  xmlns:b='urn:ds:boolean'
  xmlns:r='urn:ds:ref'>
 
-	<r:result>
-		<ds:item>
-			<r:instances>
-				<ds:item ds:id="11442">
-					<r:modifyUser>
-						<ds:item ds:id="200">
-							<s:name>Sysop</s:name>
-						</ds:item>
-					</r:modifyUser>
-					<s:name>Bill</s:name>
-					<n:age>23</n:age>
-					<b:isChessMaster>true</b:isChessMaster>
-				</ds:item>
-				
-				<ds:item ds:id="9620">
-					<r:modifyUser>
-						<ds:ref ds:ref-id="200" />
-					</r:modifyUser>
-					<s:name>Zoe</s:name>
-					<n:age>24</n:age>
-					<b:isChessMaster>true</b:isChessMaster>
-				</ds:item>
-			</r:instances>
-			<n:totalCount>2</n:totalCount>
-			<s:siteName>myapplication</s:siteName>
-		</ds:item>
-	</r:result>
-	<s:state>OK</s:state>
-	<s:sessionId>ndjin.78sjelbpg6ib</s:sessionId>
+<r:result>
+	<ds:item>
+		<r:instances>
+			<ds:item ds:id="11442">
+				<r:modifyUser>
+					<ds:item ds:id="200">
+						<s:name>NG Admin</s:name>
+					</ds:item>
+				</r:modifyUser>
+				<s:name>Bill</s:name>
+				<n:age>23</n:age>
+				<b:isChessMaster>true</b:isChessMaster>
+			</ds:item>
+			
+			<ds:item ds:id="9620">
+				<r:modifyUser>
+					<ds:ref ds:ref-id="200" />
+				</r:modifyUser>
+				<s:name>Zoe</s:name>
+				<n:age>24</n:age>
+				<b:isChessMaster>true</b:isChessMaster>
+			</ds:item>
+		</r:instances>
+		<n:totalCount>2</n:totalCount>
+		<s:siteName> myapplication </s:siteName>
+	</ds:item>
+</r:result>
+<s:state>OK</s:state>
+<s:sessionId>ndjin.78sjelbpg6ib</s:sessionId>
 
 </response>
 }}}
 
 As you can see, `modifyUser` object is only serialized once, being referred on next object using XML fragment: `<ds:ref ds:ref-id="200" />`
-
