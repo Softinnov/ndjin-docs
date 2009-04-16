@@ -1,0 +1,70 @@
+#summary Ndjin instance webservices
+
+
+= getInstances =
+
+|| Security || Open ||
+|| Input ||  `ownerId`, `ownerFieldName`, `packagePath`, `start`, `count`, `viewFieldNames`, `deepFieldNames`, `filters`, `filtersOperator` `sortByFieldNames`, `viewStateNames` ||
+|| Output || `instances`, `totalCount`, `siteName`, `stateNames` ||
+
+Result a list of instance.
+
+
+Input value
+  * ownerFieldName:
+
+Optional input values
+  * ownerId: instance id number from where the query is performed (if none is provided, the query is performed on application singleton)
+  * start: start number from where it should retrieve item
+  * count: number of item to get back in list
+  * packagePath: field path string to a package singleton (in of having many package singleton in application)
+  * viewFieldNames: array of string containing field name that should be returned
+  * deepFieldNames: array of string containing field name of sub instance (in case of an object relation association)
+  * filters: array of filter object
+  * filtersOperator: operator applied to each element of filters object (if none provided then AND is applyed)
+  * sortByFieldNames: array of sort object
+  * viewStateNames: boolean true if result should contain an array of all state id/name returned in result
+
+
+Output values
+  * instances: 
+  * totalCount:
+  * stateNames:
+Optional output value
+  * stateNames: array of all state object ( id/name) returned in result
+
+
+
+== Filters == 
+
+You can limit the result by applying a list of filters to the query.
+fieldName
+filtersOperator
+filters
+
+Filters Operator: AND, OR
+
+Filter 
+value
+operator
+
+
+==
+!=
+=~
+=%
+>
+>=
+<
+<=
+
+
+
+
+
+== Sort == 
+
+sortBy
+sortAscOrder
+
+
