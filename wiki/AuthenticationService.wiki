@@ -1,4 +1,4 @@
-#summary Ndjin authentication web service
+#summary Ndjin authentication webservice
 
 = getSessionInfo =
 
@@ -81,5 +81,3 @@ Input value
 
 Output value
   * captchaValid: true if reCaptcha validate the challenge/captchaResponse
-
-
