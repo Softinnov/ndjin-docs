@@ -1,4 +1,4 @@
-#summary We describe here ndjin HTTP/JSON and XML protocol.
+#summary Ndjin HTTP/JSON and XML protocol.
 
 = Overview =
 
