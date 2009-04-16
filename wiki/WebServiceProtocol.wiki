@@ -10,7 +10,8 @@ Data and HTTP responses could be formatted using either [http://json.org JSON] o
 
 [http://bob.pythonmac.org/archives/2005/12/05/remote-json-jsonp/ JSONP] is supported allowing you cross domain scripting features.
 
-  
+*Request paremeters*
+
 An HTTP request should have following parameters:
 
 || Parameters || ||
@@ -20,7 +21,24 @@ An HTTP request should have following parameters:
 || `data` || request data that will be deserialized and passed to webservice  ||
 
 
-*Example of HTTP request using JQuery/JSONP*
+*Response*
+
+Content response are directly send to the HTTP output stream formatted according to the `responseDataType` value with content type:
+
+||responseDataType || Content-Type ||
+|| `xml` || text/xml ||
+|| `json` or `jsonp` || application/jsonrequest ||
+
+Response is structured as follow:
+
+|| `result` || contains the webservice data response if any ||
+|| `state` || one literal values: `OK`, `SERVER_ERROR`, `PROTOCOL_ERROR`, `SECURITY_ERROR` ||
+|| `error` || in case of error state it should contains field `message` and `cause` ||
+
+
+
+
+*Example of HTTP request using Javascript [http://jquery.org JQuery]/JSONP*
 
 {{{
 var webserviceURL = "http://..."
@@ -32,7 +50,15 @@ $.ajax({
  data: { requestDataType:'json', responseDataType:'jsonp', data: jsonData },
  success: function ( dataResponse, textStatus )
  {
-  // dataResponses contain the results
+  var result = dataResponse.result
+  var state = dataResponse.state
+  if( state == 'SERVER_ERROR' )
+  {
+   var error = dataResponse.error
+   var errorMessage = error.message
+   var errorCause = error.cause
+  }
+
  }
 
 }}}
@@ -40,11 +66,11 @@ $.ajax({
 
 = JSON =
 
-Content Type: application/jsonrequest
+
 
 = XML =
 
-Content Type: text/xml
+Content Type: 
 
 {{{
 <?xml version='1.0' encoding='UTF-8'?>
