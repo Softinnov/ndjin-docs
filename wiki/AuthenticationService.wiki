@@ -1,13 +1,85 @@
-#summary authentication web service
+#summary Ndjin authentication web service
 
-@NGWebService(securityLevel=NGSecurityLevel.Open)
-public Instance getSessionInfo()
+= getSessionInfo =
 
-@NGWebService(securityLevel=NGSecurityLevel.Authenticaded)
-public Instance getUser()
+|| Security || Open ||
+|| Input || void ||
+|| Output || `user`, `member`,`currentOpenId`, `captchaValid` ||
 
-@NGWebService(securityLevel=NGSecurityLevel.Open)
-public void logout()
+Get the current user session info.
+If user is not authenticated the user is set as 'Anonymous'.
 
-@NGWebService(securityLevel=NGSecurityLevel.Open)
-public Instance validateCaptcha( Instance parametersInstance ) throws Exception
+Output value
+  * user: a short content of the user with only id and name field
+Optional output values
+  * member: user member values
+  * currentOpenId: current openid used to authenticated current session
+  * captchaValid: true if the current session has passed a captcha or if has been successfully authenticated
+
+
+= authenticate =
+
+|| Security || Open ||
+|| Input || `apiKey` ||
+|| Output || `user`, `member`,`currentOpenId`, `captchaValid` ||
+
+Authenticated the current session with an API Key associated to the user account instance. 
+This operation could be used when ndjin is used outside a web browser usage.
+Otherwise you should use authentication servlet using URL:
+
+`http://yourdomainname.ndjin.net/ng/auth` and pass 2 parameters:
+  * openID: your OpenID (such as `https://me.yahoo.com/yourlogin`)
+  * returnURL: the URL your browser will be redirected after authenticated
+For example : `http://yourdomainname.ndjin.net/ng/auth?openID=yourOpenId&returnURL=http://yourhost/currentpage`
+
+
+Input value
+  * apiKey: api key that should match a user api key
+
+
+Output value
+  * user: a short content of the user with only id and name field
+Optional output values
+  * member: user member values
+  * currentOpenId: current openid used to authenticated current session
+  * captchaValid: true if the current session has passed a captcha or if has been successfully authenticated
+
+
+= getUser =
+
+|| Security || Authenticaded ||
+|| Input || void ||
+|| Output || `user` ||
+
+Return current session user full description.
+
+Output value
+  * user: full content of the user
+
+
+= logout =
+
+|| Security || Open ||
+|| Input || void ||
+|| Output || void ||
+
+Logout current user session.
+
+
+= validateCaptcha =
+
+|| Security || Open ||
+|| Input || `challenge`, `captchaResponse` ||
+|| Output || `captchaValid` ||
+
+Validate current session with [http://recaptcha.net/ reCaptcha] challenge.
+
+Input value
+  * challenge: reCaptcha challenge
+  * captchaResponse: reCaptcha challenge response (see [http://recaptcha.net/apidocs/captcha/client.html reCaptcha API])
+
+
+Output value
+  * captchaValid: true if reCaptcha validate the challenge/captchaResponse
+
+
