@@ -19,25 +19,6 @@ A dataType has a name, belongs to a package, and contains:
   * validatorTypes: type of data validator that could be associated to this dataType
   * serviceTypes: executable service that could be accessed via this dataType
 
-Common dataType primitives are:
-
-|| *Name* || *Description* ||
-||Text||UTF-8 string||
-||Number||any kind of numbers||
-||Date||represented in milisecond since EPOC||
-||File||any kind of file||
-
-
-Specific dataType objects are:
-
-|| *Name* || *Description* ||
-||Object||base object inherited by any object of your application||
-||Application||application dataType that is instantiated once and used has your application entry point||
-||Member||dataType used to specify user level of the member of you application||
-
-
-BTW you can always introspect the model (only member on your application can query the model service) and have a description of all dataType.
-
 
 == States ==
 
@@ -47,10 +28,6 @@ A dataType instance can be in a specific state and anyone can apply a transition
 Those operations can generate exception and cancel transition. Each operations are transactional but the whole transition is not transactional itself for performance reason. 
 If an exception occurs during a transition, the current operation is rolled back but previous one remains. To be sure to have an atomic set of operation executed in transition you can define a specific method (operationField) and execute all operation in a transition inside this method.
 
-Common ApplicationModel object states are: Begin, Created, Stored, Edited, End
-
-Common state transition are: New, Create, Store, Edit, Update, Cancel, View, Delete. View transition is applied when trying to read the content of an object.
-
-
 == Operations == 
+
 Operations are executed during transitions. Field operations code can be written using scripts language. Service operations are integrated in the platform.
