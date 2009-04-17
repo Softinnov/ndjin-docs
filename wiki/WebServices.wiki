@@ -13,15 +13,15 @@ Available webservices group are:
   * ModelService: application model operations
   * InstanceService: object instances operations 
 
-Direct IO webserice are:
-  * [auth]
-  * [exportpackage]
-  * [importpackage]
-  * [upload]
-  * [importxls]
-  * [exportxls]
+Direct IO webservice are:
+  * [auth]: web browser authentication 
+  * [exportpackage]: export application package model in an XML
+  * [importpackage]: import application package model using an XML
+  * [upload]: upload a file and associate it with the current session
+  * [importxls]: export a collection of instances in an XLS file
+  * [exportxls]: import a collection of instance using an XLS file
 
-Each group hold one or many operations that may required membership privilege to be executed.
+Each operation that may required membership privilege to be executed.
 
 Common privileges are:
 
