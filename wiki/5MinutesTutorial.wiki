@@ -3,7 +3,7 @@
 
 = Prerequisite =
 
-You need to register an [http://openid.net/get/ OpenID] and create an application site on [http://www.ndjin.net ndjin platform].
+You need to register an [http://openid.net/get/ OpenID] and create an application site on [http://ndjin.net ndjin platform].
 Once your application site your have URL to refer to it such as: `http://[your application site name].ndjin.net/ng/`
 
 You can get the source of this tutorial [http://code.google.com/p/ndjin/source/browse/trunk/js/5min-sample.html here].
