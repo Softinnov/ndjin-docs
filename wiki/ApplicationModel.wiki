@@ -4,7 +4,9 @@
 
 Any application created on ndjin start with a default model.
 
+http://ndjin.googlecode.com/svn/trunk/docs/applicationModel.png
 
+Application model can be modified dynamically using ModelService.
 
 === Object states ===
 
