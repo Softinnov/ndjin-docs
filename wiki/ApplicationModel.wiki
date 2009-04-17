@@ -9,7 +9,7 @@ http://ndjin.googlecode.com/svn/trunk/docs/applicationModel.png
 Application model can be modified dynamically using ModelService.
 
 
-Common ApplicationModel dataType primitives are:
+Common ApplicationModel dataTypes/classes primitives are:
 
 || *Name* || *Description* ||
 ||Text||UTF-8 string||
@@ -30,5 +30,5 @@ Specific classes are:
 
 http://ndjin.googlecode.com/svn/trunk/docs/objectStates.png
 
-When a class extends an existing dataType, it inherit of its states. So basically any classe extending `Object` class automatically gets all its states.
+When a class (dataType) extends an existing class, it inherit of its states. So basically any classe extending `Object` class automatically gets all its states.
 Of course each state could be overloaded.
