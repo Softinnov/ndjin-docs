@@ -9,9 +9,9 @@ Due to limitation of our underlying data storage model, the metamodel cannot con
 
 Each new application starts with a default ApplicationModel based on this MetaModel.
 
-== DataType ==
+== DataType/Class ==
 
-DataType are similar to classes in OO languages with few enhancements. 
+DataType (or Class) are similar to classes in OO languages with few enhancements. 
 
 A dataType has a name, belongs to a package, and contains:
   * fields: properties of the dataType
@@ -48,5 +48,3 @@ if( instance.level < _member.level ) throw new ServiceException( 'Current User L
 }}}
 
 Has you can see first line `@groovy` indicate that we use [http://groovy.codehaus.org/ Groovy] script to write this code.
-
-
