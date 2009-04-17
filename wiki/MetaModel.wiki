@@ -7,6 +7,8 @@ http://ndjin.googlecode.com/svn/trunk/docs/metamodel.png
 
 Due to limitation of our underlying data storage model, the metamodel cannot contain inheritance.
 
+Each new application starts with a default ApplicationModel based on this MetaModel.
+
 == DataType ==
 
 DataType are similar to classes in OO languages with few enhancements. 
@@ -30,4 +32,21 @@ If an exception occurs during a transition, the current operation is rolled back
 
 == Operations == 
 
-Operations are executed during transitions. Field operations code can be written using scripts language. Service operations are integrated in the platform.
+Operations are executed during transitions.
+
+Service operations are integrated in the platform and can be accessed by most of dataType instance.
+
+Field operations code can be written using scripts language and are owed by one dataType.
+
+For example, in the ApplicationModel, the Member dataType has the field operation 'checkRight'.
+This operation has one input parameter `instance` (which is itself a Member).
+The code script is:
+{{{
+@groovy
+
+if( instance.level < _member.level ) throw new ServiceException( 'Current User Level is lower than assigned level' )
+}}}
+
+Has you can see first line `@groovy` indicate that we use [http://groovy.codehaus.org/ Groovy] script to write this code.
+
+
