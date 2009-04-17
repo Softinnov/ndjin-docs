@@ -1,5 +1,46 @@
 #summary how to use php to operate on ndjin platform
 
-= Introduction =
+=== Prerequisite ===
 
-to be written
+We use [http://fr.php.net/manual/en/book.json.php JSON extension] to serialize/deserialize our objects.
+
+
+=== PHP JSON request sample ===
+
+We assume that we have defined 2 classes, AuthenticateRequest and AuthenticateResponse, having appropriate structure to respectively, serialized in a json request data string, and deserialized from json response string.
+
+{{{
+// we serialize our object in a json string
+$jsonData = json_encode($authenticateRequest);
+
+// we perform request on our application site (here we set "myapp.ndjin.net" for the example, but you should set your application site hostname)
+$host = "myapp.ndjin.net";
+$path = "/ng/service/AuthenticationService/authenticate";
+
+// build the http parameters
+$parameters = array();
+array_push( $parameters, 'requestDataType=json' );
+array_push( $parameters, 'responseDataType=json' );
+array_push( $parameters, 'data=' . urlencode($jsonData) );
+$data = implode('&', $parameters);
+$content_length = strlen($data);
+
+// build http request headers
+$fp = fsockopen($host, 80);
+fputs($fp, "POST $path HTTP/1.1\r\n");
+fputs($fp, "Host: $host\r\n");
+fputs($fp, "Content-Type: application/x-www-form-urlencoded; charset=UTF-8\r\n");
+fputs($fp, "Content-Length: $content_length\r\n");
+fputs($fp, "Connection: close\r\n\r\n");
+fputs($fp, $data, $content_length);
+
+// perform the request
+$http_response = stream_get_contents($fp);
+fclose($fp);
+
+// get response body
+list($headers, $body) = explode("\r\n\r\n", $http_response, 2);
+
+// we deserialize the body in a new object
+$authenticateResponse = json_decode($body);
+}}}
