@@ -18,14 +18,17 @@ Common ApplicationModel dataType primitives are:
 ||File||any kind of file||
 
 
-Specific dataType objects are:
+Specific classes are:
 
 || *Name* || *Description* ||
 ||Object||base object inherited by any object of your application||
-||Application||application dataType that is instantiated once and used has your application entry point||
+||Application||application class that is instantiated once and used has your application entry point||
 ||Member||dataType used to specify user level of the member of you application||
 
 
 === Object states ===
 
 http://ndjin.googlecode.com/svn/trunk/docs/objectStates.png
+
+When a class extends an existing dataType, it inherit of its states. So basically any classe extending `Object` class automatically gets all its states.
+Of course each state could be overloaded.
