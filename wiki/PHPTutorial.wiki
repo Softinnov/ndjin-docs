@@ -12,6 +12,9 @@ We use [http://fr.php.net/manual/en/book.json.php JSON extension] to serialize/d
 We assume that we have defined 2 classes, AuthenticateRequest and AuthenticateResponse, having appropriate structure to respectively, serialized in a json request data string, and deserialized from json response string.
 
 {{{
+
+$authenticateRequest->apiKey = "anything";
+
 // we serialize our object in a json string
 $jsonData = json_encode($authenticateRequest);
 
@@ -45,4 +48,6 @@ list($headers, $body) = explode("\r\n\r\n", $http_response, 2);
 
 // we deserialize the body in a new object
 $authenticateResponse = json_decode($body);
+
+$sessionId = $authenticateResponse->sessionId;
 }}}
