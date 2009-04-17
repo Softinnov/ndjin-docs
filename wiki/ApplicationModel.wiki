@@ -8,6 +8,24 @@ http://ndjin.googlecode.com/svn/trunk/docs/applicationModel.png
 
 Application model can be modified dynamically using ModelService.
 
+
+Common ApplicationModel dataType primitives are:
+
+|| *Name* || *Description* ||
+||Text||UTF-8 string||
+||Number||any kind of numbers||
+||Date||represented in milisecond since EPOC||
+||File||any kind of file||
+
+
+Specific dataType objects are:
+
+|| *Name* || *Description* ||
+||Object||base object inherited by any object of your application||
+||Application||application dataType that is instantiated once and used has your application entry point||
+||Member||dataType used to specify user level of the member of you application||
+
+
 === Object states ===
 
 http://ndjin.googlecode.com/svn/trunk/docs/objectStates.png
