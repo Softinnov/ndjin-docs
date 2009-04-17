@@ -4,10 +4,25 @@
 = getInstances =
 
 || Security || Open ||
-|| Input ||  `ownerId`, `ownerFieldName`, `packagePath`, `start`, `count`, `viewFieldNames`, `deepFieldNames`, `filters`, `filtersOperator` `sortByFieldNames`, `viewStateNames` ||
+|| Input ||  `ownerId`, `ownerFieldName`, `packagePath`, `start`, `count`, `viewFieldNames`, `deepFieldNames`, `filters`, `filtersOperator`, `sortByFieldNames`, `viewStateNames` ||
 || Output || `instances`, `totalCount`, `siteName`, `stateNames` ||
 
 Result a list of instance.
+Following steps are executed to build the result:
+  * get an list of instance according to `ownerId`, `ownerFieldName`, `packagePath`
+  * filter this list applying `filters`, `filtersOperator`
+  * sort the list using `sortByFieldNames`
+  * keep `totalCount` of the list
+  * apply 'View' transition on each item in the list starting at `start` until the sublist list reach `count` size
+  * copy each instance value of sublist in result list `viewFieldNames`, `deepFieldNames`
+  * build  `stateNames` list of states name of resulting instance
+
+Instances returned are reduced value object with selected field. Each instance contains also internal fields:
+  * `id` persistent unique id of the instance
+  * `stateId` referring to id of a state model object
+  * `dataTypeId` referring to the id of a dataType mode object
+
+_Internal values are returned as `_id`, `_stateId` and `_dataTypeId` object fieldname when using JSON format and as element attribute in XML format._
 
 
 Input value
@@ -27,44 +42,44 @@ Optional input values
 
 
 Output values
-  * instances: 
-  * totalCount:
-  * stateNames:
+  * instances: list of resulting instance eventually sorted
+  * totalCount: total result count after filters and before applying start/count and 'View' transition applyed
+  * stateNames: a list of id/state name containing all name related to all state id mentioned in instance result
 Optional output value
   * stateNames: array of all state object ( id/name) returned in result
 
 
 
-== Filters == 
+=== Filters === 
 
 You can limit the result by applying a list of filters to the query.
-fieldName
-filtersOperator
-filters
-
-Filters Operator: AND, OR
-
-Filter 
-value
-operator
-
-
-==
-!=
-=~
-=%
->
->=
-<
-<=
+Each item object in list of filter could be
+  * a filter list item having:
+    * `filters`: a list of filter object
+    * `filtersOperator`: operator applied between item object of the `filters`, could be `AND` or `OR`
+  * a filter item object having:
+    * `fieldName`: a string with dataType field name
+    * `operator` : a string (see below)
+    * `value`:  any primitive type (string, number, boolean) to be compared
 
 
 
+Filter item `operator` are:
+|| `operator` || Description ||
+|| `==` || strict equal (case sensitive for string)  ||
+|| `!=` ||  strict not equal (case sensitive for string) ||
+|| `=~` || equals ignore case ||
+|| `=%` || contains ||
+|| `>` ||  greater than (case insensitive for string) ||
+|| `>=` || greater than or equals (case insensitive for string) ||
+|| `<` || lower than (case insensitive for string) ||
+|| `<=` || lower than or equals (case insensitive for string) ||
 
 
-== Sort == 
 
-sortBy
-sortAscOrder
+=== Sort ===
 
-
+Result can be sorted using `sortByFieldNames` list.
+Each item object of `sortByFieldNames` has: 
+  * `sortBy`: a field name string
+  * `sortAscOrder`: boolean if true then sort with be in ascending order
