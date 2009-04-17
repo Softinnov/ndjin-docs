@@ -26,7 +26,7 @@ _Internal values are returned as `_id`, `_stateId` and `_dataTypeId` object fiel
 
 
 Input value
-  * ownerFieldName:
+  * ownerFieldName: name of dataType field pointing to a a collection of instances
 
 Optional input values
   * ownerId: instance id number from where the query is performed (if none is provided, the query is performed on application singleton)
@@ -83,3 +83,107 @@ Result can be sorted using `sortByFieldNames` list.
 Each item object of `sortByFieldNames` has: 
   * `sortBy`: a field name string
   * `sortAscOrder`: boolean if true then sort with be in ascending order
+
+
+=== Example using Javascript[http://jquery.org JQuery]/JSONP/[http://www.JSON.org/json2.js JSON2] ===
+
+{{{
+// build the query object
+query = {
+  ownerFieldName: "contacts",
+  count: 10,
+
+  filters: [
+    { fieldName: "name", operator: "=%", value: "Bill" },
+    { fieldName: "age", operator: ">", value: 18 }
+  ],
+  filtersOperator: "AND",
+
+  sortByFieldNames: [ { sortBy: "name", sortAscOrder: true } ],
+
+  viewFieldNames: [ "name", "age", "nickname" ]
+
+};
+
+// do the HTTP request
+$.ajax({
+  url: "http://myapp.ndjin.net/ng/service/InstanceService/getInstances",
+  dataType: "jsonp",
+  data: { requestDataType:'json', responseDataType:'jsonp', data: JSON.stringify( query ) },
+  success: function (data, textStatus) {
+    result = data.result.instances;
+  }
+}); // ajax
+}}}
+
+
+
+
+
+
+= applyTransitionsToInstance =
+
+_Could also be `applyTransitionToInstance`_
+
+|| Security || Open ||
+|| Input ||  `instance`, `appliedTransitionNames`, `ownerId`, `ownerFieldName`, `packagePath`, `viewFieldNames`, `deepFieldNames` ||
+|| Output || `instance`, `siteName` ||
+
+Apply transitions to the given instance.
+According to the current state of the instance and the transition defined at his state, a transition is applied on this instance.
+
+When a transition is applied, an set of operation can be executed. Those operation may required some parameters to be properly executed.
+Those parameters should also be provided in input object.
+
+Each operation are individually executed inside a transaction meaning that if an instance is modified during the execution of an operation, all modified value are saved transactionnally.
+So the whole transition is not transaction (for performance reasons). If you need to have complete set of operation executed in a transactionnal context, you should define an operation that will itself call other operation, in this case the transaction will be propagated.
+If one operation fails (generating an exception) the transition is not applied but, each previous modifications that might have occurs in other operation, still remains. So it is better practice to set security and safety check operation on top of operations list and apply modification at last operation execution.
+
+
+Input value
+  * instance: object instance on which transitions will be applied
+  * appliedTransitionNames: list of string containing the transition name successively applied to the given instance
+  * ownerFieldName: name of dataType field pointing to a a collection of instances (_will not be mandatory soon_)
+
+Optional input values
+
+  * viewFieldNames: array of string containing field name that should be returned
+  * deepFieldNames: array of string containing field name of sub instance (in case of an object relation association)
+
+Common instance operation optional input values
+  * ownerId: instance id number of the owner (parent) of the instance (if none is provided, the query is performed on application singleton)
+  * packagePath: field path string to a package singleton (in of having many package singleton in application)
+
+
+Output values
+  * instance: instance after transitions applied
+  * siteName: site name on witch transition has been applyed (_might be considered as redundent_)
+
+
+
+=== Example using Javascript[http://jquery.org JQuery]/JSONP/[http://www.JSON.org/json2.js JSON2] ===
+
+
+{{{
+// build the query to apply 'New' and 'Store' transitions on the given instance that will be appended to contacts property of Application singleton instance
+var query = { 
+ ownerFieldName: 'contacts',
+ appliedTransitionNames: ['New', 'Store'],
+  instance: {
+    name: 'MySelf',
+    telephone: '0123456789'
+  }
+};
+
+// do the HTTP request
+$.ajax({
+  url: "http://myapp.ndjin.net/ng/service/InstanceService/getInstances",
+  dataType: "jsonp",
+  data: { requestDataType:'json', responseDataType:'jsonp', data: JSON.stringify( query ) },
+  success: function (data, textStatus) {
+    result = data.result.instance;
+  } // success
+}); // ajax     
+
+}}}
+
