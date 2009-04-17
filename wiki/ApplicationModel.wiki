@@ -1,0 +1,11 @@
+#summary ndjin default application model
+
+= Introduction =
+
+Any application created on ndjin start with a default model.
+
+
+
+=== Object states ===
+
+http://code.google.com/p/ndjin/source/browse/trunk/docs/objectStates.png
