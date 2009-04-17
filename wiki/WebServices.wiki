@@ -2,7 +2,10 @@
 
 = Introduction =
 
-Ndjin webservice can be called using HTTP/JSON or XML request (see [WebServiceProtocol]).
+=== Operation webservice === 
+
+Operations webservice required data formatted with JSON or XML WebServiceProtocol.
+Ndjin webservice can be called using HTTP/JSON or XML request.
 
 Request URL should be formatted as: `http://[you application site name].ndjin.net/ng/service/[service name]/[operation name]`
 
@@ -13,13 +16,20 @@ Available webservices group are:
   * ModelService: application model operations
   * InstanceService: object instances operations 
 
-Direct IO webservice are:
+=== Direct webservices ===
+
+Direct webservice can be called using direct HTTP request.
+http://[you application site name].ndjin.net/ng/service/[name]
+
+Direct webservice are:
   * [auth]: web browser authentication 
   * [exportpackage]: export application package model in an XML
   * [importpackage]: import application package model using an XML
   * [upload]: upload a file and associate it with the current session
   * [importxls]: export a collection of instances in an XLS file
   * [exportxls]: import a collection of instance using an XLS file
+
+=== Privileges ===
 
 Each operation that may required membership privilege to be executed.
 
