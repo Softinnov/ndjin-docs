@@ -1,5 +1,5 @@
-var json2Loaded; if (!json2Loaded) {	json2Loaded = true;	document.write('<script type="text/javascript" src="./lib/json2.js"></script>'); }
-var jqueryLoaded; if (!jqueryLoaded) {jqueryLoaded = true; document.write('<script type="text/javascript" src="./lib/jquery/jquery-1.3.2.min.js"></script>');}
+var json2Loaded; if (!json2Loaded) {	json2Loaded = true;	document.write('<script type="text/javascript" src="http://www.json.org/json2.js"></script>'); }
+var jqueryLoaded; if (!jqueryLoaded) {jqueryLoaded = true; document.write('<script type="text/javascript" src="http://jqueryjs.googlecode.com/files/jquery-1.3.2.min.js"></script>');}
 
 
 function InstanceHelper(appName, asyncRequest ){
