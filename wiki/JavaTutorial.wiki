@@ -2,6 +2,8 @@
 
 === Prerequisite ===
 
+We assume that you have created an application site on [http://ndjin.net ndjin platform] and set an API Key on your user account.
+
 We use [http://hc.apache.org/httpclient-3.x/ Apache HTTP Client] and [http://code.google.com/p/google-gson/ Gson] library to compile and execute our examples.
 
 If you use maven2 to build your application you'll need to include those dependency.
