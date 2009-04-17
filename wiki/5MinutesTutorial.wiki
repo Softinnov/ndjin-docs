@@ -1,4 +1,4 @@
-#summary By reading this tutorial you'll learn how to create a basic application model and interact with it using only your browser javascript.
+#summary ndjin simple Javascript tutorial to build a basic application model
 
 
 = Prerequisite =
