@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>Blog Create Model</title>
+
+		
+        <script type="text/javascript" src="http://ndjin.googlecode.com/svn/trunk/js/lib/model.js"></script>
+        <script type="text/javascript" src="http://ndjin.googlecode.com/svn/trunk/js/lib/instanceHelper.js"></script>
+    </head>
+	
+    <body>
+        <script>
+        	var applicationDomainName = "your-application-domain-name";
+            var model = new Model( applicationDomainName, false );
+			model.init();
+			
+			var applicationDataType = model.getDataTypeByName( 'Application' );
+			
+			
+			// We create Topic ---------------------------------------------------------------------------------
+			var dataType = {
+				name: 'Topic',
+				inheritedDataTypeId: model.getDataTypeIdByName( 'Object' ),
+				fields: [
+					{ name: 'name', dataTypeId: model.getDataTypeIdByName( 'Text' ), min: 1, max: 1, unique: true, preview: true }
+				]
+			}
+			model.createOrUpdateDataType( dataType );
+			
+			// add topics field ton Application
+			applicationDataType.fields.push( { name: 'topics', dataTypeId: model.getDataTypeIdByName( 'Topic' ), min: 0, max: 100, unique: false, preview: false } );
+			model.createOrUpdateDataType( applicationDataType );			
+			
+			
+			
+			// We create Comment ---------------------------------------------------------------------------------
+			var dataType = {
+				name: 'Comment',
+				inheritedDataTypeId: model.getDataTypeIdByName( 'Object' ),
+				fields: [
+					{ name: 'title', dataTypeId: model.getDataTypeIdByName( 'Text' ), min: 0, max: 1, unique: false, preview: true },
+					{ name: 'body', dataTypeId: model.getDataTypeIdByName( 'Text' ), min: 0, max: 1, unique: false, preview: false }
+				]
+			}
+			model.createOrUpdateDataType( dataType );
+			
+			
+			
+			
+			// We create Article ---------------------------------------------------------------------------------
+			var dataType = {
+				name: 'Article',
+				inheritedDataTypeId: model.getDataTypeIdByName( 'Object' ),
+				fields: [
+					{ name: 'title', dataTypeId: model.getDataTypeIdByName( 'Text' ), min: 1, max: 1, unique: false, preview: true },
+					{ name: 'topic', dataTypeId: model.getDataTypeIdByName( 'Topic' ), relationPath: '/topics', min: 1, max: 1, unique: false, preview: false },
+					{ name: 'abstract', dataTypeId: model.getDataTypeIdByName( 'Text' ), min: 0, max: 1, unique: false, preview: false },
+					{ name: 'body', dataTypeId: model.getDataTypeIdByName( 'Text' ), min: 0, max: 1, unique: false, preview: false },
+					{ name: 'comments', dataTypeId: model.getDataTypeIdByName( 'Comment' ), min: 0, max: 1000, unique: false, preview: false }
+				]
+			}
+			model.createOrUpdateDataType( dataType );
+			
+			// add article field to Application
+			applicationDataType.fields.push( { name: 'articles', dataTypeId: model.getDataTypeIdByName( 'Article' ), min: 0, max: 10000, unique: false, preview: false } );
+			model.createOrUpdateDataType( applicationDataType );			
+			
+			
+			
+			
+			
+		</script>
+        Blog model create.
+    </body>
+</html>

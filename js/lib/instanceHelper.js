@@ -29,6 +29,19 @@ function InstanceHelper(appName, asyncRequest ){
 		return result;
 	}
 
+	this.callBackApplyTransition = function ( query, callback )
+	{
+		var result;
+		$.ajax({
+	        url: this.ndjinServiceURL+"/InstanceService/applyTransitionToInstance",
+			async: this.async,
+	        dataType: "jsonp",
+	        data: { requestDataType:'json', responseDataType:'jsonp', data: JSON.stringify( query ) },
+	        success: callback
+		}); // ajax	
+		return result;
+	}
+
 
 	this.getInstances = function ( query )
 	{
@@ -53,5 +66,17 @@ function InstanceHelper(appName, asyncRequest ){
 		return result;
 	}
 
-	
+	this.callbackInstances = function(query, callback){
+		$.ajax({
+			url: this.ndjinServiceURL + "/InstanceService/getInstances",
+			async: this.async,
+			dataType: "jsonp",
+			data: {
+				requestDataType: 'json',
+				responseDataType: 'jsonp',
+				data: JSON.stringify(query)
+			},
+			success: callback
+		}); // ajax	
+	}	
 }

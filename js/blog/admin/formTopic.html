@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>Blog Tutorial Topic Form</title>
+
+		
+        <script type="text/javascript" src="http://ndjin.googlecode.com/svn/trunk/js/lib/model.js"></script>
+        <script type="text/javascript" src="/ndjin/js/lib/instanceHelper.js"></script>
+    </head>
+	
+    <body>
+        <script>
+    	var applicationDomainName = "your-application-domain-name";
+		var instanceHelper = new InstanceHelper( applicationDomainName, true );
+        
+		$(document).ready(function()
+		{
+			loadTopics();
+			
+			$('#createButton').click( function (){ 
+				createTopic( $('#topicFormName').val() );
+			});
+		});
+		
+		function loadTopics()
+		{
+			query = 
+			{
+				ownerFieldName: "topics",
+				count: 100,
+			};
+			instanceHelper.callbackInstances( query, function (data, textStatus)
+	        {
+	          	var topicsContentTarget = $('#topicsContent');
+	          	topicsContentTarget.empty();
+
+    	      	if (data.result['instances']) {
+				
+					var template = $('#templates .topicsContent');
+					var topicTemplate = $( '.topics .topic', template );
+					var topicsContent = template.clone();
+					topicsContentTarget.append( topicsContent );
+
+					var topics = $( '.topics', topicsContent );
+					$( '.topic', topics ).remove();
+					
+					$.each(data.result.instances, function(i, instance){
+						var topic = topicTemplate.clone();
+						$( ' .topicName', topic ).text( instance.name );
+						$( '.deleteButton', topic ).click(function(){
+							deleteTopic(instance);
+						});
+						topics.append(topic)
+					});
+				}
+			}
+			);
+		}
+		function deleteTopic( topic )
+		{
+			var query = 
+			{ 
+				ownerFieldName: 'topics',
+				appliedTransitionNames: ['Delete' ],
+				instance: 
+				{
+					_id: topic._id
+				}
+			};
+			
+			instanceHelper.callBackApplyTransition( query, function(data, textStatus)
+			{
+				loadTopics();					
+			}
+			);
+			
+		}
+
+        function createTopic( topicName )
+		{
+			var query = 
+			{ 
+				ownerFieldName: 'topics',
+				appliedTransitionNames: ['New', 'Store'],
+				instance: 
+				{
+					name: topicName
+				}
+			};
+			
+			instanceHelper.callBackApplyTransition( query, function(data, textStatus)
+			{
+				loadTopics();					
+			}
+			);
+		}
+		
+        </script>
+        
+
+
+		<div id="templates" style="display:none" >
+	
+			<div class="topicsContent">
+				<table class="topics" cellpadding="5" cellspacing="0" border="1">
+					<tr><th>Topic Name</th><th/></tr>
+					<tr class="topic">
+						<td class="topicName"></td>
+						<td><input type="button" class="deleteButton" value="Delete" /></td>
+					</tr>
+				</table>
+			</div>
+		
+		</div>
+
+
+		<h1>Topic Form</h1>
+
+
+		<div id="topicsContent"></div>
+
+		<span id="message" class="alertMessage" style="display:none"></span> <br/>
+					
+		Topic Name <input id="topicFormName" type="text" /><br/>
+		<input type="button" id="createButton" value="Create"/>
+
+
+
+    </body>
+</html>
