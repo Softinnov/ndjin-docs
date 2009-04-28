@@ -131,8 +131,7 @@ query =
 instanceHelper.callbackInstances( query, function (data, textStatus)
 {
 	/// ...
-}}}}
+}}}
 
 Here you can see that we specify a `deepFieldNames ` to fetch in one query all the comments and body fields. 
 By default each relation instance get only the field set as 'preview' fetched.
-
