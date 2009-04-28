@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>Blog Tutorial Article Form</title>
+
+		
+        <script type="text/javascript" src="http://ndjin.googlecode.com/svn/trunk/js/lib/model.js"></script>
+        <script type="text/javascript" src="/ndjin/js/lib/instanceHelper.js"></script>
+    </head>
+	
+    <body>
+        <script>
+    	var applicationDomainName = "your-application-domain-name";
+		var instanceHelper = new InstanceHelper( applicationDomainName, true );
+        
+		var topicsMap = {};
+
+		$(document).ready(function()
+		{
+			loadArticles();
+			loadTopics();
+			$('#createButton').click( function (){ 
+				createArticle( 
+					$('#articleFormTitle').val(),
+					topicsMap[ parseInt($('#articleFormTopic').val()) ],
+					$('#articleFormAbstract').val(),
+					$('#articleFormBody').val()	
+					);
+			});
+		});
+		
+		function loadArticles()
+		{
+			query = 
+			{
+				ownerFieldName: "articles",
+				count: 100,
+			};
+			instanceHelper.callbackInstances( query, function (data, textStatus)
+	        {
+	          	var articlesContentTarget = $('#articlesContent');
+	          	articlesContentTarget.empty();
+
+    	      	if (data.result['instances']) {
+				
+					var template = $('#templates .articlesContent');
+					var articleTemplate = $( '.articles .article', template );
+					var articlesContent = template.clone();
+					articlesContentTarget.append( articlesContent );
+
+					var articles = $( '.articles', articlesContent );
+					$( '.article', articles ).remove();
+					
+					$.each(data.result.instances, function(i, instance){
+						var article = articleTemplate.clone();
+						$( ' .articleTitle', article ).text( instance.title );
+						$( '.deleteButton', article ).click(function(){
+							deleteArticle(instance);
+						});
+						articles.append(article)
+					});
+				}
+			}
+			);
+		}
+		
+
+		function loadTopics()
+		{
+			query = 
+			{
+				ownerFieldName: "topics",
+				count: 100,
+			};
+			instanceHelper.callbackInstances( query, function (data, textStatus)
+	        {
+	          	var topicContentTarget = $('#articleFormTopic');
+	          	topicContentTarget.empty();
+
+    	      	if (data.result['instances']) {
+				
+					$.each(data.result.instances, function(i, instance){
+						topicsMap[instance._id] = instance;
+						var topic = $( '<option value="'+instance._id+'">'+instance.name+'</option>');
+						topicContentTarget.append( topic )
+					});
+				}
+			}
+			);
+		}
+
+
+
+
+		function deleteArticle( article )
+		{
+			var query = 
+			{ 
+				ownerFieldName: 'articles',
+				appliedTransitionNames: ['Delete' ],
+				instance: 
+				{
+					_id: article._id
+				}
+			};
+			
+			instanceHelper.callBackApplyTransition( query, function(data, textStatus)
+			{
+				loadArticles();					
+			}
+			);
+			
+		}
+
+
+
+
+        function createArticle( articleTitle, articleTopic, articleAbstract, articleBody )
+		{
+			var query = 
+			{ 
+				ownerFieldName: 'articles',
+				appliedTransitionNames: ['New', 'Store'],
+				instance: 
+				{
+					title: articleTitle,
+					abstract: articleAbstract,
+					body: articleBody,
+					topic: articleTopic
+				},
+				deepUpdateFieldNames: ['topic']
+			};
+			
+			instanceHelper.callBackApplyTransition( query, function(data, textStatus)
+			{
+				loadArticles();					
+			}
+			);
+		}
+		
+        </script>
+        
+
+
+		<div id="templates" style="display:none" >
+	
+			<div class="articlesContent">
+				<table class="articles" cellpadding="5" cellspacing="0" border="1">
+					<tr><th>Article Titles</th><th/></tr>
+					<tr class="article">
+						<td class="articleTitle"></td>
+						<td><input type="button" class="deleteButton" value="Delete" /></td>
+					</tr>
+				</table>
+			</div>
+		
+		</div>
+
+
+		<h1>Article Form</h1>
+
+
+		<div id="articlesContent"></div>
+
+		<span id="message" class="alertMessage" style="display:none"></span> <br/>
+					
+		
+		Title <input id="articleFormTitle" type="text" /><br/>
+		Topic <select id="articleFormTopic"></select><br/>
+		Abstract <textarea id="articleFormAbstract"></textarea><br/>
+		Body <textarea id="articleFormBody"></textarea><br/>
+		<input type="button" id="createButton" value="Create"/>
+
+
+
+    </body>
+</html>

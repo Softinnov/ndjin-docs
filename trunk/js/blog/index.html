@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>Blog Tutorial</title>
+
+		
+        <script type="text/javascript" src="http://ndjin.googlecode.com/svn/trunk/js/lib/model.js"></script>
+        <script type="text/javascript" src="/ndjin/js/lib/instanceHelper.js"></script>
+    </head>
+	
+    <body>
+        <script>
+    	var applicationDomainName = "your-application-domain-name";
+		var instanceHelper = new InstanceHelper( applicationDomainName, true );
+        
+		$(document).ready(function()
+		{
+			loadArticles();
+		});
+		
+		function loadArticles()
+		{
+			query = 
+			{
+				ownerFieldName: "articles",
+				count: 100,
+				deepFieldNames: ['topic', 'comments', 'body']
+			};
+			instanceHelper.callbackInstances( query, function (data, textStatus)
+	        {
+	          	var articlesContentTarget = $('#articlesContent');
+	          	articlesContentTarget.empty();
+
+    	      	if (data.result['instances']) {
+				
+					var template = $('#templates .articlesContent');
+					var articleTemplate = $( '.articles .article', template );
+					var articlesContent = template.clone();
+					articlesContentTarget.append( articlesContent );
+
+					var articles = $( '.articles', articlesContent );
+					$( '.article', articles ).remove();
+					
+					$.each(data.result.instances, function(i, instance){
+						var article = articleTemplate.clone();
+						$( '.articleTitle', article ).text( instance.title );
+						$( '.articleAbstract', article ).text( instance.abstract );
+						$( '.articleBody', article ).text( instance.body );
+						$( '.articleTopic', article ).text( instance.topic[0].name );
+
+						
+						var comments = $( '.comments', article );
+						comments.empty();
+						
+						if( instance.comments ) $.each(instance.comments, function(j, commentInstance ){
+							var comment = $( '.comments .comment', articleTemplate ).clone();
+							$( '.commentTitle', comment ).text( commentInstance.title );
+							$( '.commentBody', comment ).text( commentInstance.body );
+							comments.append(comment);	
+						});
+						
+						$( '#addComment', article ).click(function(){
+							createComment( 
+								instance, 
+								$( '#commentTitle', article ).val(),
+								$( '#commentBody', article ).val()
+							);
+						});
+						
+						articles.append(article)
+					});
+				}
+			}
+			);
+		}
+		
+		
+        function createComment( article, commentTitle, commentBody )
+		{
+			var query = 
+			{ 
+				ownerId: article._id,
+				ownerFieldName: 'comments',
+				appliedTransitionNames: ['New', 'Store'],
+				instance: 
+				{
+					title: commentTitle,
+					body: commentBody
+				},
+			};
+			
+			instanceHelper.callBackApplyTransition( query, function(data, textStatus)
+			{
+				loadArticles();					
+			}
+			);
+		}
+
+        </script>
+        
+
+
+		<div id="templates" style="display:none" >
+	
+			<div class="articlesContent">
+				<div class="articles">
+					<div class="article">
+						<h3><span class="articleTitle"></span></h3>
+						
+						<p><b><span class="articleTopic"></span></b></p>
+						
+						<p><i><span class="articleAbstract"></span></i></p>
+						
+						<p><span class="articleBody"></span></p>
+
+						
+						<div class="comments">
+							<div class="comment">
+								<small><b><span class="commentTitle"></span></b></small>
+								<p><small><span class="commentBody"></span></small></p>
+							</div>
+						</div>
+						
+						<div style="border:solid">
+						<input type="text" id="commentTitle"></input><br/>
+						<textarea id="commentBody"></textarea><br/>
+						<input type="button" id="addComment" value="Add Comment"></input>
+						</div>
+
+					</div>
+				</div>
+			</div>
+		
+		</div>
+
+
+		
+		
+		<div id="articlesContent"></div>
+
+
+    </body>
+</html>
