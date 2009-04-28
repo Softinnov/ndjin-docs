@@ -23,11 +23,6 @@ function Model(appName, asyncRequest ){
         }); // ajax
     }
     
-    this.getDataTypeIdByName = function( name )
-	{
-		var dataType = getDataTypeByName( name );
-		if( dataType ) return dataType._id;
-	}
     this.getDataTypeByName = function( name )
 	{
 		for( var i=0; i<this.dataTypes.length; i++ )
@@ -36,6 +31,11 @@ function Model(appName, asyncRequest ){
 		}
 	}
 	
+    this.getDataTypeIdByName = function( name )
+	{
+		var dataType = getDataTypeByName( name );
+		if( dataType ) return dataType._id;
+	}
 	
 	this.createOrUpdateDataType = function( dataType )
 	{
