@@ -25,9 +25,14 @@ function Model(appName, asyncRequest ){
     
     this.getDataTypeIdByName = function( name )
 	{
+		var dataType = getDataTypeByName( name );
+		if( dataType ) return dataType._id;
+	}
+    this.getDataTypeByName = function( name )
+	{
 		for( var i=0; i<this.dataTypes.length; i++ )
 		{
-			if( this.dataTypes[i].name == name ) return this.dataTypes[i]._id;
+			if( this.dataTypes[i].name == name ) return this.dataTypes[i];
 		}
 	}
 	
