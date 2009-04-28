@@ -20,8 +20,12 @@
 			loadArticles();
 		});
 		
+		
+		// Load Articles and build the dom copying article template elements
 		function loadArticles()
 		{
+			
+			// we want max 100 Articles from Application field 'articles' and also request to fetch any topic and comment or body in the instance tree
 			query = 
 			{
 				ownerFieldName: "articles",
@@ -30,6 +34,8 @@
 			};
 			instanceHelper.callbackInstances( query, function (data, textStatus)
 	        {
+				// Performing DOM construction using JQuery
+
 	          	var articlesContentTarget = $('#articlesContent');
 	          	articlesContentTarget.empty();
 
@@ -77,6 +83,7 @@
 		}
 		
 		
+		// Create a Comment with Article as owner and then reload
         function createComment( article, commentTitle, commentBody )
 		{
 			var query = 
@@ -101,6 +108,7 @@
         </script>
         
 
+		<!-- Templates used to build the result DOM -->
 
 		<div id="templates" style="display:none" >
 	
