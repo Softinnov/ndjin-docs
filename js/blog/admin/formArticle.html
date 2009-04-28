@@ -7,7 +7,7 @@
 
 		
         <script type="text/javascript" src="http://ndjin.googlecode.com/svn/trunk/js/lib/model.js"></script>
-        <script type="text/javascript" src="/ndjin/js/lib/instanceHelper.js"></script>
+        <script type="text/javascript" src="http://ndjin.googlecode.com/svn/trunk/js/lib/instanceHelper.js"></script>
     </head>
 	
     <body>
@@ -31,15 +31,21 @@
 			});
 		});
 		
+
+		
+		// Load Articles and build the dom copying article template elements
 		function loadArticles()
 		{
+			// we want max 100 Articles from Application field 'articles'
 			query = 
 			{
 				ownerFieldName: "articles",
 				count: 100,
 			};
+			
 			instanceHelper.callbackInstances( query, function (data, textStatus)
 	        {
+				// Performing DOM construction using JQuery
 	          	var articlesContentTarget = $('#articlesContent');
 	          	articlesContentTarget.empty();
 
@@ -67,8 +73,10 @@
 		}
 		
 
+		// Load Topics and build the DOM from the template
 		function loadTopics()
 		{
+			// we want max 100 Topics from Application field 'topics'
 			query = 
 			{
 				ownerFieldName: "topics",
@@ -76,6 +84,7 @@
 			};
 			instanceHelper.callbackInstances( query, function (data, textStatus)
 	        {
+				// Performing DOM construction using JQuery
 	          	var topicContentTarget = $('#articleFormTopic');
 	          	topicContentTarget.empty();
 
@@ -93,7 +102,7 @@
 
 
 
-
+		// Delete an article and reload them
 		function deleteArticle( article )
 		{
 			var query = 
@@ -116,7 +125,7 @@
 
 
 
-
+		// Create an article with a relation with a Topic instance
         function createArticle( articleTitle, articleTopic, articleAbstract, articleBody )
 		{
 			var query = 
@@ -143,7 +152,7 @@
         </script>
         
 
-
+		<!-- Templates used to build the result DOM -->
 		<div id="templates" style="display:none" >
 	
 			<div class="articlesContent">
