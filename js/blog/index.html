@@ -14,7 +14,7 @@
         <script>
     	var applicationDomainName = "your-application-domain-name";
 		var instanceHelper = new InstanceHelper( applicationDomainName, true );
-        
+		
 		$(document).ready(function()
 		{
 			loadArticles();
@@ -25,12 +25,12 @@
 		function loadArticles()
 		{
 			
-			// we want max 100 Articles from Application field 'articles' and also request to fetch any topic and comment or body in the instance tree
+			// we want max 100 Articles from Application field 'articles' and also request to fetch comments/body
 			query = 
 			{
 				ownerFieldName: "articles",
 				count: 100,
-				deepFieldNames: ['topic', 'comments', 'body']
+				deepFieldNames: ['comments', 'body']
 			};
 			instanceHelper.callbackInstances( query, function (data, textStatus)
 	        {
