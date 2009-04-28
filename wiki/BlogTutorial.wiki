@@ -3,20 +3,9 @@
 
 = Prerequisite =
 
-You need to register an [http://openid.net/get/ OpenID] and create an application site on [http://ndjin.net ndjin platform].
-Once your application site your have URL to refer to it such as: `http://[your application site name].ndjin.net/ng/`
-
 You can get the source of this tutorial [http://code.google.com/p/ndjin/source/browse/#svn/trunk/js/blog here].
 
-= Authenticate yourself =
-
-You have to authenticate yourself to get the required right to operate on your application site.
-Just make a request with your browser to the url `http://[your application site name].ndjin.net/ng/auth` and pass 2 parameters:
-  * openID: your OpenID (such as `https://me.yahoo.com/[your login]` for Yahoo or `https://www.google.com/accounts/o8/id/[your google email]` for Google)
-  * returnURL: the URL your browser will be redirected after authenticated
-
-For example :
-http://yourdomainname.ndjin.net/ng/auth?openID=yourOpenId&returnURL=http://yourhost/currentpage
+Check [5MinutesTutorial] especially the 'Authenticate' and 'Prerequisite'.
 
 
 = Create Your Model =
