@@ -33,7 +33,7 @@ function Model(appName, asyncRequest ){
 	
     this.getDataTypeIdByName = function( name )
 	{
-		var dataType = getDataTypeByName( name );
+		var dataType = this.getDataTypeByName( name );
 		if( dataType ) return dataType._id;
 	}
 	

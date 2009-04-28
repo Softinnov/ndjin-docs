@@ -20,7 +20,7 @@
 			
 			var dataType = {
 				name: "Contact",
-				inheritedDataTypeId: model.getDataTypeByName( 'Object' )._id,
+				inheritedDataTypeId: model.getDataTypeIdByName( 'Object' ),
 				fields: [
 					{ name: 'name', dataTypeId: model.getDataTypeIdByName( 'Text' ), min: 0, max: 1, unique: false, preview: true },
 					{ name: 'telephone', dataTypeId: model.getDataTypeIdByName( 'Text' ), min: 0, max: 1, unique: false, preview: false },
@@ -30,7 +30,7 @@
 			
 			// Model Part : we create a contact collection and set it as Application field
 			var applicationDataType = model.getDataTypeByName( 'Application' );
-			applicationDataType.fields.push( { name: 'contacts', dataTypeId: model.getDataTypeByName( 'Contact' )._id, min: 0, max: 100, unique: false, preview: false } );
+			applicationDataType.fields.push( { name: 'contacts', dataTypeId: model.getDataTypeIdByName( 'Contact' ), min: 0, max: 100, unique: false, preview: false } );
 			model.createOrUpdateDataType( applicationDataType );			
 
 
