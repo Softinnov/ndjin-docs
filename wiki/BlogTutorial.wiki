@@ -73,3 +73,66 @@ model.createOrUpdateDataType( dataType );
 }}}
 
 As you can see here, we define the relation topic and comments relations just as any primitive field.
+
+
+
+= Create Admin Forms =
+
+You can check JS the sources for the [http://code.google.com/p/ndjin/source/browse/trunk/js/blog/admin/formTopic.html topic] and [http://code.google.com/p/ndjin/source/browse/trunk/js/blog/admin/formArticle.html article] form.
+
+
+
+We focus on Article creation function:
+{{{
+function createArticle( articleTitle, articleTopic, articleAbstract, articleBody )
+{
+	var query = 
+	{ 
+		ownerFieldName: 'articles',
+		appliedTransitionNames: ['New', 'Store'],
+		instance: 
+		{
+			title: articleTitle,
+			abstract: articleAbstract,
+			body: articleBody,
+			topic: articleTopic
+		},
+		deepUpdateFieldNames: ['topic']
+	};
+	
+	instanceHelper.callBackApplyTransition( query, function(data, textStatus)
+	{
+		loadArticles();					
+	}
+	);
+}
+}}}
+
+Here you can see that we specify a `deepUpdateFieldNames` to allow the creation of an article and the link of the selected topic at the same time.
+
+
+
+
+= Create Main View Page =
+
+
+You can check JS the source [http://code.google.com/p/ndjin/source/browse/trunk/js/blog/index.html here].
+
+
+We focus on article list query:
+
+{{{
+query = 
+{
+	ownerFieldName: "articles",
+	count: 100,
+	deepFieldNames: ['comments', 'body']
+};
+instanceHelper.callbackInstances( query, function (data, textStatus)
+{
+	/// ...
+}}}}
+
+Here you can see that we specify a `deepFieldNames ` to fetch in one query all the comments and body fields. 
+By default each relation instance get only the field set as 'preview' fetched.
+
