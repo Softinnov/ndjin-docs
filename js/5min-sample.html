@@ -12,10 +12,10 @@
 	
     <body>
         <script>
-        	var applicationSiteURL = "http://localhost:8080/ng/main";
+        	var applicationDomainName = "your-application-domain-name";
 			
 			// Model Part : we create a Contact object
-            var model = new Model( applicationSiteURL, false );
+            var model = new Model( applicationDomainName, false );
             model.init();
 			
 			var dataType = {
@@ -38,7 +38,7 @@
 
 			
 			
-			var instanceHelper = new InstanceHelper( applicationSiteURL, false );
+			var instanceHelper = new InstanceHelper( applicationDomainName, false );
 			
 			// Instance Part - we create an instance of Contact and append it in Application 'contacts' collection 
 			var query = 
