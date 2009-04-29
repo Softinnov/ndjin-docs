@@ -38,7 +38,7 @@ When a transition is applied, a list of operation can be executed. There are two
   * InternalService Operations: global scope operation implemented inside the engine
   * DataType/Class Field Operations: operations implemented as member of a class (using scripting language)
 
-|| Transition || Applied Service ||
+|| *Transition* || *Executed Operations* ||
 || New (1) || Instance Create - Instance Edit ||
 || Store (2) || User Level Requirement Member - Instance Update - Instance Append to collection ||
 || Cancel (3) || Instance Cancel Edition ||
