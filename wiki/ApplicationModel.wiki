@@ -32,3 +32,9 @@ http://ndjin.googlecode.com/svn/trunk/docs/objectStates.png
 
 When a class (dataType) extends an existing class, it inherit of its states. So basically any classe extending `Object` class automatically gets all its states.
 Of course each state could be overloaded.
+
+When a transition is applied, a list of operation can be executed. There are two types of operations: 
+  * InternalService Operations: global scope operation implemented inside the engine
+  * DataType/Class Field Operations: operations implemented as member of a class (using scripting language)
+
+
