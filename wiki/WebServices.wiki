@@ -18,8 +18,8 @@ Available webservices group are:
 
 === Direct webservices ===
 
-Direct webservice can be called using direct HTTP request.
-http://[you application site name].ndjin.net/ng/service/[name]
+Direct webservice can be called using direct HTTP request:
+`http://[you application site name].ndjin.net/ng/service/[name]`
 
 Direct webservice are:
   * [auth]: web browser authentication 
