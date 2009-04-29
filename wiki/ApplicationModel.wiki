@@ -35,7 +35,7 @@ When a class (dataType) extends an existing class, it inherit of its states. So 
 Of course each state could be overloaded or you can modify object state model itself to get custom behavious.
 
 When a transition is applied, a list of operation can be executed. There are two types of operations: 
-  * InternalService Operations: global scope operation implemented inside the engine
+  * InternalServices Operations: global scope operation implemented inside the engine
   * DataType/Class Field Operations: operations implemented as member of a class (using scripting language)
 
 || *Transition* || *Executed Operations* ||
@@ -53,6 +53,6 @@ When a transition is applied, a list of operation can be executed. There are two
 || Cancel (12) || Instance Cancel Edition ||
 || Delete (13) || User Level Requirement Member - Instance Delete ||
 
-By default, operations applied during transition on object are comming from InternalService.
+By default, operations applied during transition on object are comming from InternalServices.
 
 As you can see, anyone can view content of an object instance when it is in 'Stored' or 'Edited' state, but only members can edit/update values.
