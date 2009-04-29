@@ -1,0 +1,28 @@
+#summary Ndjin internal Services
+
+= Instance - Services =
+
+
+Create
+Edit
+Update
+Append to collection
+Remove from collection
+Delete
+Cancel Edition
+Deep copy From Source Instance
+
+
+
+
+= User Level Requirement - Services =
+
+Administrator
+Editor
+Member
+User: Current session has been authenticated with an account
+Captcha: Current session has been validated with a captcha
+Owner: Current instance has 'ownerUser' field and current user is this owner
+Has View Level: Current instance has 'viewLevel' field and current member has level greater or equal
+
+
