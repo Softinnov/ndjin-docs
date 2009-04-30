@@ -51,7 +51,7 @@ When a transition is applied, a list of operation can be executed. There are two
 || Update (10) || User Level Requirement Member - Instance Update ||
 || Cancel (11) || Instance Cancel Edition ||
 
-_To simplify we grouped transitions operations descriptions, but you should be aware that 'View' transition from Stored state is not the same as 'View' transition from Edited_ 
+_To simplify we grouped transitions operations descriptions, but you should be aware that 'View' transition from 'Stored' state is not the same as 'View' transition from 'Edited' state._ 
 
 By default, operations applied during transition on object are comming from InternalServices.
 
