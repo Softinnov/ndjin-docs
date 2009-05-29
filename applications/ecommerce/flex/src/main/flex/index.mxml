@@ -1,0 +1,37 @@
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml"
+        layout="vertical" verticalAlign="middle" horizontalAlign="center"
+        initialize="onInitialize()"
+        xmlns:local="*" xmlns:view="net.ndjin.ecommerce.view.*">
+
+
+<mx:Script>
+<![CDATA[
+	import mx.controls.ComboBox;
+	import net.ndjin.ecommerce.ApplicationLanguage;
+	import org.swizframework.Swiz;
+	
+	public var applicationLanguage:ApplicationLanguage;
+	
+	private function onInitialize() : void {
+	    // load up swiz beans
+	    Swiz.loadBeans( [ Beans ] );
+		applicationLanguage = Swiz.getBean("applicationLanguage") as ApplicationLanguage;
+	}
+]]>
+</mx:Script>    	
+
+
+	<mx:ComboBox change="applicationLanguage.dataLanguage=(event.currentTarget as ComboBox).selectedItem.toString()">
+		<mx:dataProvider>
+			<mx:Array>
+				<mx:String>en</mx:String>
+				<mx:String>fr</mx:String>
+			</mx:Array>
+		</mx:dataProvider>
+	</mx:ComboBox>
+
+	<view:ProductScreen>
+	</view:ProductScreen>	
+	
+</mx:Application>
+

@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" creationComplete="creationCompleteHandler()" xmlns:ui="net.ndjin.ui.*">
+<mx:Script>
+	<![CDATA[
+		import net.ndjin.ecommerce.controller.AuthenticationController;
+		import org.swizframework.Swiz;
+		import mx.core.Application;
+		import net.ndjin.ecommerce.ApplicationLanguage;
+		import net.ndjin.ecommerce.model.ProductSpecific;
+		import net.ndjin.ecommerce.model.Product;
+		import net.ndjin.ecommerce.controller.ProductController;
+	
+		[Bindable]
+		[Autowire(bean="productController")]
+		public var productController:ProductController;
+
+		[Bindable]
+		[Autowire(bean="authenticationController")]
+		public var authenticationController:AuthenticationController;
+
+	
+		[Bindable(event='selectedProduct')]
+		private var selectedProduct:Product;
+		
+		[Bindable(event='selectedProductSpecific')]
+		private var selectedProductSpecific:ProductSpecific;
+		
+		private var productDetailIndex:Number;
+		
+		private var uploadedFileNames:Array = [];
+	
+	
+		private function creationCompleteHandler():void
+		{
+			
+			
+			Application.application.applicationLanguage.addEventListener( ApplicationLanguage.DATA_LANGUAGE_UPDATED, function( event:Event ):void
+			{
+				productDataGrid.invalidateList();
+				productSpecificDataGrid.invalidateList();
+				productOptionDataGrid.invalidateList();
+				
+				
+				dispatchEvent(new Event('selectedProduct') );
+				
+			});
+		}
+		
+	
+		private function uploadCompleteHandler(event:Event):void
+		{
+			uploadedFileNames.push( fileUpload.fileName );
+			authenticationController.getUploadedFilesURL(uploadedFileNames);
+			
+			uploadBox.visible = false;
+			uploadBox.width = 0;
+	
+	        uploadProgress.setProgress(0, 100);
+	        cancelUpload.enabled = false;
+		}
+		
+		
+	]]>
+</mx:Script>
+	
+	
+	<mx:HBox width="100%">
+		<mx:DataGrid id="productDataGrid" dataProvider="{productController.products}" width="100%" height="100%" rowCount="5"
+			change="
+			selectedProduct=productDataGrid.selectedItem as Product; 
+			productSpecificDataGrid.dataProvider = selectedProduct.productSpecifics;
+			productDetailIndex = 0;
+			productSpecificDataGrid.selectedIndex = productDetailIndex;
+			dispatchEvent(new Event('selectedProduct') );
+			"
+			updateComplete="
+					 productSpecificDataGrid.selectedIndex=productDetailIndex;
+				"
+			>
+			<mx:columns>
+				<mx:DataGridColumn headerText="Name" dataField="name" />
+			</mx:columns>
+		</mx:DataGrid>
+		
+		<mx:VBox width="100%">
+
+
+			<mx:Form id="productForm" width="100%">
+				<mx:FormItem label="Sub Product" width="100%">
+				<mx:List id="productSpecificDataGrid" width="100%" height="100%" rowCount="3"
+					change="
+					productDetailIndex = productSpecificDataGrid.selectedIndex;
+					selectedProductSpecific=productSpecificDataGrid.selectedItem as ProductSpecific;
+					dispatchEvent(new Event('selectedProductSpecific') );"
+
+					valueCommit="
+					selectedProductSpecific=productSpecificDataGrid.selectedItem as ProductSpecific;
+					dispatchEvent(new Event('selectedProductSpecific') );"
+					
+					labelField="reference"
+					>
+				</mx:List>
+				</mx:FormItem>
+				<mx:FormItem label="Reference">
+					<mx:TextInput text="{selectedProductSpecific.reference}" 
+						change="selectedProductSpecific.reference = (event.currentTarget as TextInput).text"/>
+				</mx:FormItem>
+
+				<mx:FormItem label="Common Name">
+					<mx:TextInput text="{selectedProduct.name}"
+						change="selectedProduct.name = (event.currentTarget as TextInput).text; productController.products.itemUpdated(selectedProduct)"/>
+				</mx:FormItem>
+				<mx:FormItem label="Common Description">
+					<mx:TextArea text="{selectedProduct.description}"/>
+				</mx:FormItem>
+				<mx:FormItem label="Specific Description">
+					<mx:TextArea text="{selectedProductSpecific.description}"/>
+				</mx:FormItem>
+
+				<mx:FormItem label="Pictures">
+					<mx:List dataProvider="{authenticationController.uploadedFilesURL}" labelField="url"/>
+						
+					<ui:FileUpload id="fileUpload" url="{Beans.baseURL}/upload"
+						 creationComplete="fileUpload.init(uploadBox, uploadProgress, cancelUpload, uploadCompleteHandler);" />
+					<mx:Button id="startUpload" label="Upload..." click="fileUpload.startUpload();" />
+				
+					<mx:HBox id="uploadBox" visible="false" width="0">
+						<mx:Button id="cancelUpload" label="Cancel" click="fileUpload.cancelUpload();" enabled="false" />
+						<mx:Box verticalAlign="middle">
+							<mx:ProgressBar id="uploadProgress" mode="manual" width="100"/>
+						</mx:Box>
+					</mx:HBox>
+				</mx:FormItem>
+				
+				<mx:FormItem label="Tax" textAlign="right">
+					<mx:TextInput text="{selectedProduct.tax}"/>
+				</mx:FormItem>
+				
+				<mx:FormItem label="Price" textAlign="right">
+					<mx:TextInput text="{selectedProductSpecific.price}"/>
+				</mx:FormItem>
+
+
+				<mx:FormItem label="Options" width="100%">
+					<mx:DataGrid id="productOptionDataGrid" dataProvider="{selectedProductSpecific.productOptions}" width="100%" height="100%" rowCount="5"
+						
+						>
+						<mx:columns>
+							<mx:DataGridColumn headerText="Option" dataField="productType" />
+							<mx:DataGridColumn headerText="Value" dataField="value" />
+						</mx:columns>
+					</mx:DataGrid>					
+				</mx:FormItem>
+
+				
+			</mx:Form>
+			
+		</mx:VBox>
+		
+		
+	</mx:HBox>
+	
+	
+	
+	
+		
+	<mx:Button label="Load" click="productController.load()"/>
+</mx:VBox>

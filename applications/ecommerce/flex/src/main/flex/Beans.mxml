@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<BeanLoader xmlns="org.swizframework.util.*" 
+			xmlns:mx="http://www.adobe.com/2006/mxml" 
+			xmlns:ecommerce="net.ndjin.ecommerce.*" 
+			xmlns:controller="net.ndjin.ecommerce.controller.*" 
+			xmlns:json="net.ndjin.ecommerce.json.*">
+<mx:Script>
+	<![CDATA[
+		public static const baseURL:String ="http://localhost:8080/ng/ecom";
+	]]>
+</mx:Script>	
+	
+	<controller:ProductController id="productController">
+		<controller:jsonService>
+			<json:JSONService serviceURL="{baseURL}/service/InstanceService"/>
+		</controller:jsonService>
+	</controller:ProductController>
+
+	<controller:AuthenticationController id="authenticationController">
+		<controller:jsonService>
+			<json:JSONService serviceURL="{baseURL}/service/AuthenticationService"/>
+		</controller:jsonService>
+	</controller:AuthenticationController>
+
+	<ecommerce:ApplicationLanguage id="applicationLanguage" dataLanguage="en"/>
+
+</BeanLoader>
