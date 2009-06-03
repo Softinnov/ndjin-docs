@@ -22,7 +22,7 @@ http://yourdomainname.ndjin.net/ng/auth?openID=yourOpenId&returnURL=http://yourh
 
 = Create your model =
 
-Each new application site start we a default ApplicationModel you can modify to provide you own model.
+Each new application site starts with a default ApplicationModel you can modify to provide you own model.
 
 You just need to edit a new web page hosted behind any web server.
 
