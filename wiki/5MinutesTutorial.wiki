@@ -117,7 +117,7 @@ var instances = instanceHelper.getInstances( query );
 
 And delete those instances (if any).
 {{{
-for( var i=0; i&lt;instances.length; i++ ){
+for( var i=0; i<instances.length; i++ ){
         var instance = instances[i];
         var query = {
                 ownerFieldName: 'contacts',
