@@ -55,7 +55,7 @@
         <dependency>
             <groupId>org.swizframework</groupId>
             <artifactId>swiz</artifactId>
-            <version>0.6.1.b2</version>
+            <version>0.6.2</version>
 			<type>swc</type>
         </dependency>
 

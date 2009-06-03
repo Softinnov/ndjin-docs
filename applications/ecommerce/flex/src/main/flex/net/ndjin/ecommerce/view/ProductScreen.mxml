@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" creationComplete="creationCompleteHandler()" xmlns:ui="net.ndjin.ui.*">
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" creationComplete="creationCompleteHandler()" xmlns:ui="net.ndjin.ecommerce.ui.*">
+
 <mx:Script>
 	<![CDATA[
 		import net.ndjin.ecommerce.controller.AuthenticationController;
@@ -9,18 +10,31 @@
 		import net.ndjin.ecommerce.model.ProductSpecific;
 		import net.ndjin.ecommerce.model.Product;
 		import net.ndjin.ecommerce.controller.ProductController;
+		import net.ndjin.ecommerce.controller.CategoryController;
 	
 		[Bindable]
 		[Autowire(bean="productController")]
 		public var productController:ProductController;
 
 		[Bindable]
+		[Autowire(bean="categoryController")]
+		public var categoryController:CategoryController;
+
+		[Bindable]
 		[Autowire(bean="authenticationController")]
 		public var authenticationController:AuthenticationController;
 
 	
+		
 		[Bindable(event='selectedProduct')]
-		private var selectedProduct:Product;
+		private function set selectedProduct( product:Product ):void
+		{
+			productController.selectedProduct = product;
+		}
+		private function get selectedProduct():Product
+		{
+			return productController.selectedProduct;
+		}
 		
 		[Bindable(event='selectedProductSpecific')]
 		private var selectedProductSpecific:ProductSpecific;
@@ -32,7 +46,23 @@
 	
 		private function creationCompleteHandler():void
 		{
-			
+			Swiz.addEventListener( ProductController.SELECTED_PRODUCT_EVENT, function( event:Event ):void
+			{
+				
+				if( productController.selectedProduct != null )
+				{
+					productForm.visible = true;
+					productSpecificDataGrid.dataProvider = productController.selectedProduct.productSpecifics;
+					productDetailIndex = 0;
+					productSpecificDataGrid.selectedIndex = productDetailIndex;
+				}
+				else
+				{
+					productDataGrid.selectedIndex = -1;
+					productForm.visible = false;
+				}
+				dispatchEvent(new Event('selectedProduct') );
+			});
 			
 			Application.application.applicationLanguage.addEventListener( ApplicationLanguage.DATA_LANGUAGE_UPDATED, function( event:Event ):void
 			{
@@ -59,48 +89,65 @@
 	        cancelUpload.enabled = false;
 		}
 		
+		private function newProduct():void
+		{
+			productDataGrid.selectedIndex = -1;
+			productController.createNew();
+		}
 		
+		
+		private function productTypeValueLabel( item:Object, column:DataGridColumn ):String
+		{
+			if( item != null && item.value ) return item.value.name;
+			return null;
+		}
+		
+		// selectedProduct=productDataGrid.selectedItem as Product
 	]]>
 </mx:Script>
 	
 	
 	<mx:HBox width="100%">
 		<mx:DataGrid id="productDataGrid" dataProvider="{productController.products}" width="100%" height="100%" rowCount="5"
-			change="
-			selectedProduct=productDataGrid.selectedItem as Product; 
-			productSpecificDataGrid.dataProvider = selectedProduct.productSpecifics;
-			productDetailIndex = 0;
-			productSpecificDataGrid.selectedIndex = productDetailIndex;
-			dispatchEvent(new Event('selectedProduct') );
-			"
-			updateComplete="
-					 productSpecificDataGrid.selectedIndex=productDetailIndex;
-				"
+			change="productController.edit( productDataGrid.selectedItem._id )"
+			updateComplete="productSpecificDataGrid.selectedIndex=productDetailIndex"
 			>
 			<mx:columns>
 				<mx:DataGridColumn headerText="Name" dataField="name" />
+				<mx:DataGridColumn headerText="State" dataField="state" />
 			</mx:columns>
 		</mx:DataGrid>
 		
 		<mx:VBox width="100%">
 
 
-			<mx:Form id="productForm" width="100%">
-				<mx:FormItem label="Sub Product" width="100%">
-				<mx:List id="productSpecificDataGrid" width="100%" height="100%" rowCount="3"
-					change="
-					productDetailIndex = productSpecificDataGrid.selectedIndex;
-					selectedProductSpecific=productSpecificDataGrid.selectedItem as ProductSpecific;
-					dispatchEvent(new Event('selectedProductSpecific') );"
+			<mx:Form id="productForm" width="100%" visible="false">
+				<mx:FormItem label="Categories" width="100%">
+					<mx:HBox>
+						<mx:List id="productCategoriesDataGrid" width="100" rowCount="3"/>
+						<mx:VBox height="100%" verticalAlign="middle">
+							<mx:Button label="&lt;" width="20" paddingLeft="0" paddingRight="0"/>
+							<mx:Button label="&gt;" width="20" paddingLeft="0" paddingRight="0"/>
+						</mx:VBox>
+						<mx:List id="productCategoriesSourceDataGrid" dataProvider="{categoryController.categories}" width="100" rowCount="3" labelField="name"/>						
+					</mx:HBox>
 
-					valueCommit="
-					selectedProductSpecific=productSpecificDataGrid.selectedItem as ProductSpecific;
-					dispatchEvent(new Event('selectedProductSpecific') );"
-					
-					labelField="reference"
-					>
-				</mx:List>
 				</mx:FormItem>
+				<mx:FormItem label="Product References">
+					<mx:List id="productSpecificDataGrid" width="100" rowCount="3"
+						change="
+						productDetailIndex = productSpecificDataGrid.selectedIndex;
+						selectedProductSpecific=productSpecificDataGrid.selectedItem as ProductSpecific;
+						dispatchEvent(new Event('selectedProductSpecific') );"
+	
+						valueCommit="
+						selectedProductSpecific=productSpecificDataGrid.selectedItem as ProductSpecific;
+						dispatchEvent(new Event('selectedProductSpecific') );"
+						
+						labelField="reference"
+						/>						
+				</mx:FormItem>
+
 				<mx:FormItem label="Reference">
 					<mx:TextInput text="{selectedProductSpecific.reference}" 
 						change="selectedProductSpecific.reference = (event.currentTarget as TextInput).text"/>
@@ -118,18 +165,25 @@
 				</mx:FormItem>
 
 				<mx:FormItem label="Pictures">
-					<mx:List dataProvider="{authenticationController.uploadedFilesURL}" labelField="url"/>
+					<mx:List dataProvider="{authenticationController.uploadedFilesURL}" 
+						rowCount="3" rowHeight="50"	width="100"
+						itemRenderer="net.ndjin.ecommerce.ui.SimpleImageItemRenderer" />
+
 						
 					<ui:FileUpload id="fileUpload" url="{Beans.baseURL}/upload"
 						 creationComplete="fileUpload.init(uploadBox, uploadProgress, cancelUpload, uploadCompleteHandler);" />
-					<mx:Button id="startUpload" label="Upload..." click="fileUpload.startUpload();" />
-				
-					<mx:HBox id="uploadBox" visible="false" width="0">
-						<mx:Button id="cancelUpload" label="Cancel" click="fileUpload.cancelUpload();" enabled="false" />
-						<mx:Box verticalAlign="middle">
-							<mx:ProgressBar id="uploadProgress" mode="manual" width="100"/>
-						</mx:Box>
+						 
+						 
+					<mx:HBox>
+						<mx:Button id="startUpload" label="Upload..." click="fileUpload.startUpload();" />
+						<mx:HBox id="uploadBox" visible="false" width="0">
+							<mx:Button id="cancelUpload" label="Cancel" click="fileUpload.cancelUpload();" enabled="false" />
+							<mx:Box verticalAlign="middle">
+								<mx:ProgressBar id="uploadProgress" mode="manual" width="100"/>
+							</mx:Box>
+						</mx:HBox>
 					</mx:HBox>
+				
 				</mx:FormItem>
 				
 				<mx:FormItem label="Tax" textAlign="right">
@@ -142,17 +196,24 @@
 
 
 				<mx:FormItem label="Options" width="100%">
-					<mx:DataGrid id="productOptionDataGrid" dataProvider="{selectedProductSpecific.productOptions}" width="100%" height="100%" rowCount="5"
+					<mx:DataGrid id="productOptionDataGrid" dataProvider="{selectedProductSpecific.productOptions}" width="100%" height="100%" rowCount="3"
 						
 						>
 						<mx:columns>
 							<mx:DataGridColumn headerText="Option" dataField="productType" />
-							<mx:DataGridColumn headerText="Value" dataField="value" />
+							<mx:DataGridColumn headerText="Value" labelFunction="productTypeValueLabel" />
 						</mx:columns>
 					</mx:DataGrid>					
 				</mx:FormItem>
 
 				
+				<mx:FormItem width="100%">
+					<mx:HBox>
+						<mx:Button label="Update" click="productController.load()"/>
+						<mx:Button label="Cancel" click="productController.cancelSelected()"/>
+						<mx:Button label="Delete" click="productController.load()"/>
+					</mx:HBox>
+				</mx:FormItem>
 			</mx:Form>
 			
 		</mx:VBox>
@@ -163,6 +224,7 @@
 	
 	
 	
-		
-	<mx:Button label="Load" click="productController.load()"/>
+	<mx:HBox>
+		<mx:Button label="New" click="newProduct()"/>
+	</mx:HBox>
 </mx:VBox>

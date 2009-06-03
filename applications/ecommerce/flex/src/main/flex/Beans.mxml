@@ -16,6 +16,13 @@
 		</controller:jsonService>
 	</controller:ProductController>
 
+	<controller:CategoryController id="categoryController">
+		<controller:jsonService>
+			<json:JSONService serviceURL="{baseURL}/service/InstanceService"/>
+		</controller:jsonService>
+	</controller:CategoryController>
+
+
 	<controller:AuthenticationController id="authenticationController">
 		<controller:jsonService>
 			<json:JSONService serviceURL="{baseURL}/service/AuthenticationService"/>

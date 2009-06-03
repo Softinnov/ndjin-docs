@@ -11,16 +11,7 @@ package net.ndjin.ecommerce.model
 		public var _id:Number;
 		public var productionOptionTypeId:Number;
 		
-		private var _value:Object;
-		public function get value():String
-		{
-			return _value[applicationLanguage.dataLanguage];
-		}
-		public function set value(text:String):void
-		{
-			if( !_value ) _value = {};
-			_value[applicationLanguage.dataLanguage] = text;	
-		}
+		public var value:ProductTypeValue;
 
 		public var productType:ProductType;
 
@@ -28,8 +19,8 @@ package net.ndjin.ecommerce.model
 		{
 			_id = jsonObject._id;
 			if( jsonObject.productOptionType ) productionOptionTypeId = jsonObject.productOptionType[0]._id;
-			_value = jsonObject.value;
-			productType = new ProductType( jsonObject.productType[0] );
+			if( jsonObject.value) value =  new ProductTypeValue( jsonObject.value[0] );
+			if( jsonObject.productType) productType = new ProductType( jsonObject.productType[0] );
 		}
 
 	}

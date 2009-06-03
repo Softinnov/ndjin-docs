@@ -1,4 +1,4 @@
-package net.ndjin.ui
+package net.ndjin.ecommerce.ui
 {
 	import flash.events.*;
 	import flash.net.FileFilter;

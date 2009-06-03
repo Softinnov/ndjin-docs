@@ -1,10 +1,10 @@
 package net.ndjin.ecommerce.model
 {
 	import mx.core.Application;
+	
 	import net.ndjin.ecommerce.ApplicationLanguage;
 	
-	
-	public class Category
+	public class ProductTypeValue
 	{
 		private static var applicationLanguage:ApplicationLanguage = Application.application.applicationLanguage;
 		
@@ -22,14 +22,18 @@ package net.ndjin.ecommerce.model
 			_name[applicationLanguage.dataLanguage] = value;	
 		}
 
-		
-		public function Category( jsonObject:Object )
+
+		public function ProductTypeValue( jsonObject:Object )
 		{
 			_id = jsonObject._id;
 			_name = jsonObject.name;
+			
 		}
-		
-		
+
+		public function toString():String
+		{
+			return name;
+		}
 
 	}
 }

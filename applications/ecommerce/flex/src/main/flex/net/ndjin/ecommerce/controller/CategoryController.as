@@ -1,0 +1,56 @@
+package net.ndjin.ecommerce.controller
+{
+	import flash.events.Event;
+	import flash.events.EventDispatcher;
+	
+	import mx.collections.ArrayCollection;
+	
+	import net.ndjin.ecommerce.json.JSONService;
+	import net.ndjin.ecommerce.model.Category;
+	
+	import org.swizframework.factory.IInitializingBean;
+	
+	public class CategoryController extends EventDispatcher implements IInitializingBean
+	{
+		public var jsonService:JSONService;
+		
+		[Bindable(name='categories')]
+		public var categories:ArrayCollection;
+		
+		
+		public function initialize():void
+		{
+			load();
+		}
+
+		public function load():void
+		{	
+			var data:Object = {
+				packagePath: "/eCommerce",
+				ownerFieldName: "categories",
+				deepFieldNames: ["categories" ],
+				start: 0,
+				count: 100
+			};
+
+			jsonService.query("getInstances", data, function( result:Object, queryData:Object ):void
+			{
+				var array:Array = [];
+				for each( var o:Object in result.instances )
+				{
+					var category:Category = new Category( o );
+					array.push( category );
+				}
+				categories = new ArrayCollection( array );
+				dispatchEvent( new Event( 'categories' )) ;
+			});
+		}
+		
+		public function createNew():void
+		{
+			
+		}
+		
+
+	}
+}
