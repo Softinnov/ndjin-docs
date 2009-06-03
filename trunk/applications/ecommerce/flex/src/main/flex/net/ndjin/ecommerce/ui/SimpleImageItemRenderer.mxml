@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Box xmlns:mx="http://www.adobe.com/2006/mxml" horizontalScrollPolicy="off" verticalScrollPolicy="off" width="100%">
+	<mx:Script>
+		<![CDATA[
+			import net.ndjin.util.S3Utils;
+		]]>
+	</mx:Script>
+	
+	<mx:Image width="100%" height="100%" source="{S3Utils.getPublicURL( data.url )}" horizontalAlign="center"/>
+</mx:Box>

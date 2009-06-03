@@ -12,6 +12,8 @@ package net.ndjin.ecommerce.model
 
 		public var _id:Number;
 
+		public var state:String;
+
 		private var _name:Object;
 		
 		public function get name():String
