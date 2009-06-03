@@ -15,7 +15,7 @@ Common ApplicationModel dataTypes/classes primitives are:
 || *Name* || *Description* ||
 ||Text||UTF-8 string||
 ||Number||any kind of numbers||
-||Date||represented in milisecond since EPOC||
+||Date||represented in millisecond since EPOC||
 ||File||any kind of file||
 
 
@@ -31,8 +31,8 @@ Specific classes are:
 
 http://ndjin.googlecode.com/svn/trunk/docs/objectStates.png
 
-When a class (dataType) extends an existing class, it inherit of its states. So basically any classe extending `Object` class automatically gets all its states.
-Of course each state could be overloaded or you can modify object state model itself to get custom behavious.
+When a class (dataType) extends an existing class, it inherit of its states. So basically any class extending `Object` class automatically gets all its states.
+Of course each state could be overloaded or you can modify object state model itself to get custom behaviors.
 
 When a transition is applied, a list of operation can be executed. There are two types of operations: 
   * InternalServices Operations: global scope operation implemented inside the engine
@@ -53,6 +53,6 @@ When a transition is applied, a list of operation can be executed. There are two
 
 _To simplify we grouped transitions operations descriptions, but you should be aware that 'View' transition from 'Stored' state is not the same as 'View' transition from 'Edited' state._ 
 
-By default, operations applied during transition on object are comming from InternalServices.
+By default, operations applied during transition on object are coming from InternalServices.
 
 As you can see, anyone can view content of an object instance when it is in 'Stored' or 'Edited' state, but only members can edit/update values.
