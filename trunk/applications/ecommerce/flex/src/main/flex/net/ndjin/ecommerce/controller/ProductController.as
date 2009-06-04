@@ -89,14 +89,14 @@ package net.ndjin.ecommerce.controller
 			
 		}
 
-		public function edit( id:Number ):void
+		public function edit( sourceProduct:Product ):void
 		{
 			var data:Object = {
 				packagePath: "/eCommerce",
 				ownerFieldName: "products",
 				deepFieldNames: ["productSpecifics", "productOptions"],
 				appliedTransitionName: "Edit",
-				instance: { _id: id }
+				instance: { _id: sourceProduct._id }
 			};
 			
 			
@@ -104,23 +104,25 @@ package net.ndjin.ecommerce.controller
 			{
 				var product:Product = new Product( result.instance )
 				selectedProduct = product; 
+				sourceProduct.state = "Edited";
 			});
 			
 		}
 		
-		public function cancelSelected():void
+		public function cancel(  sourceProduct:Product ):void
 		{
 			var data:Object = {
 				packagePath: "/eCommerce",
 				ownerFieldName: "products",
 				appliedTransitionName: "Cancel",
-				instance: { _id: _selectedProduct._id }
+				instance: { _id: sourceProduct._id }
 			};
 			
 			
 			jsonService.query("applyTransitionToInstance", data, function( result:Object, queryData:Object ):void
 			{
-				selectedProduct = null; 
+				selectedProduct = null;
+				sourceProduct.state = "Stored";
 			});
 			
 		}

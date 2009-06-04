@@ -109,12 +109,12 @@
 	
 	<mx:HBox width="100%">
 		<mx:DataGrid id="productDataGrid" dataProvider="{productController.products}" width="100%" height="100%" rowCount="5"
-			change="productController.edit( productDataGrid.selectedItem._id )"
+			change="productController.edit( productDataGrid.selectedItem as Product )"
 			updateComplete="productSpecificDataGrid.selectedIndex=productDetailIndex"
 			>
 			<mx:columns>
 				<mx:DataGridColumn headerText="Name" dataField="name" />
-				<mx:DataGridColumn headerText="State" dataField="state" />
+				<mx:DataGridColumn headerText="State" dataField="state" width="50"/>
 			</mx:columns>
 		</mx:DataGrid>
 		
@@ -210,7 +210,7 @@
 				<mx:FormItem width="100%">
 					<mx:HBox>
 						<mx:Button label="Update" click="productController.load()"/>
-						<mx:Button label="Cancel" click="productController.cancelSelected()"/>
+						<mx:Button label="Cancel" click="productController.cancel( productDataGrid.selectedItem as Product )"/>
 						<mx:Button label="Delete" click="productController.load()"/>
 					</mx:HBox>
 				</mx:FormItem>
