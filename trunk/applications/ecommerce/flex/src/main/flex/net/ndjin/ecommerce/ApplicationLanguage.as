@@ -3,6 +3,8 @@ package net.ndjin.ecommerce
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	
+	import org.swizframework.Swiz;
+	
 	public class ApplicationLanguage extends EventDispatcher
 	{
 		public static const DATA_LANGUAGE_UPDATED:String = "dataLanguage";
@@ -17,7 +19,7 @@ package net.ndjin.ecommerce
 		public function set dataLanguage(language:String):void
 		{
 			_dataLanguage = language;
-			dispatchEvent( new Event( DATA_LANGUAGE_UPDATED ) );
+			Swiz.dispatchEvent( new Event( DATA_LANGUAGE_UPDATED ) );
 		}
 		
 	}

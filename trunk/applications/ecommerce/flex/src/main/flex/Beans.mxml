@@ -22,12 +22,21 @@
 		</controller:jsonService>
 	</controller:CategoryController>
 
+	<controller:ProductTypeController id="productTypeController">
+		<controller:jsonService>
+			<json:JSONService serviceURL="{baseURL}/service/InstanceService"/>
+		</controller:jsonService>
+	</controller:ProductTypeController>
+
 
 	<controller:AuthenticationController id="authenticationController">
 		<controller:jsonService>
 			<json:JSONService serviceURL="{baseURL}/service/AuthenticationService"/>
 		</controller:jsonService>
 	</controller:AuthenticationController>
+
+
+
 
 	<ecommerce:ApplicationLanguage id="applicationLanguage" dataLanguage="en"/>
 

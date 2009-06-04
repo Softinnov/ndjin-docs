@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:HBox xmlns:mx="http://www.adobe.com/2006/mxml" creationComplete="creationCompleteHandler()">
+
+<mx:Script>
+	<![CDATA[
+		import org.swizframework.Swiz;
+		import net.ndjin.ecommerce.ApplicationLanguage;
+		import net.ndjin.ecommerce.model.ProductType;
+		import net.ndjin.ecommerce.model.Product;
+		import net.ndjin.ecommerce.model.ProductOption;
+		import mx.collections.ArrayCollection;
+		import net.ndjin.ecommerce.controller.ProductTypeController;
+		[Bindable]
+		[Autowire(bean="productTypeController")]
+		public var productTypeController:ProductTypeController;
+
+
+		[Bindable]
+		public var productOptions:ArrayCollection;
+		
+		private function creationCompleteHandler():void
+		{
+			Swiz.addEventListener( ApplicationLanguage.DATA_LANGUAGE_UPDATED, function( event:Event ):void
+			{
+				productOptionDataGrid.invalidateList();
+				productTypesDataGrid.invalidateList();
+			});
+		}
+	
+		private function productTypeToProductOption( event:Event ):void
+		{
+			if( productTypesDataGrid.selectedItem )
+			{
+				var productType:ProductType = productTypesDataGrid.selectedItem as ProductType;
+				if( ! containsProductType( productType ) )
+				{
+					var productOption:ProductOption = new ProductOption( {} );
+					productOption.productType = productType;
+					productOption.value = productType.values[0];
+					productOptions.addItem( productOption );
+				}
+				productTypesDataGrid.selectedIndex = -1;
+				
+			}
+		}
+		
+		private function containsProductType( productType:ProductType ):Boolean
+		{
+			for each( var productOption:ProductOption in productOptions )
+			{
+				if( productOption.productType._id == productType._id ) return true;
+			}
+			return false;
+		}
+		
+		private function removeProductTypeFromProductOption( event:Event ):void
+		{
+			if( productOptionDataGrid.selectedItem )
+			{
+				productOptions.removeItemAt( productOptions.getItemIndex( productOptionDataGrid.selectedItem ) );
+				productOptionDataGrid.selectedIndex = -1;
+			}
+		}
+	]]>
+</mx:Script>
+						
+	<mx:DataGrid id="productOptionDataGrid" dataProvider="{productOptions}" 
+		width="100%" height="100%" rowCount="3" headerHeight="0"
+		
+		>
+		<mx:columns>
+			<mx:DataGridColumn dataField="productType" />
+			<mx:DataGridColumn  
+				editable="true"	editorDataField="value" itemRenderer="net.ndjin.ecommerce.view.ProductOptionComboBoxItemRenderer"/>
+		</mx:columns>
+	</mx:DataGrid>
+	<mx:VBox height="100%" verticalAlign="middle">
+		<mx:Button label="&lt;" width="20" paddingLeft="0" paddingRight="0" visible="{productTypesDataGrid.selectedItem != null}" 
+			click="productTypeToProductOption(event)"/>
+		<mx:Button label="&gt;" width="20" paddingLeft="0" paddingRight="0" visible="{productOptionDataGrid.selectedItem != null}"
+			click="removeProductTypeFromProductOption(event)"/>
+	</mx:VBox>
+	<mx:List id="productTypesDataGrid" dataProvider="{productTypeController.productTypes}" width="100" height="100%" rowCount="3" labelField="name"/>						
+										
+
+</mx:HBox>
