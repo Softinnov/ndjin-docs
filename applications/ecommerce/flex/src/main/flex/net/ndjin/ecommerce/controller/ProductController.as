@@ -110,6 +110,26 @@ package net.ndjin.ecommerce.controller
 			});
 			
 		}
+		public function view( sourceProduct:Product ):void
+		{
+			if( sourceProduct == null ) sourceProduct = selectedProduct;
+			
+			var data:Object = {
+				packagePath: "/eCommerce",
+				ownerFieldName: "products",
+				deepFieldNames: ["productSpecifics", "productOptions"],
+				appliedTransitionName: "View",
+				instance: { _id: sourceProduct._id }
+			};
+			
+			
+			jsonService.query("applyTransitionToInstance", data, function( result:Object, queryData:Object ):void
+			{
+				var product:Product = new Product( result.instance )
+				selectedProduct = product; 
+			});
+			
+		}
 		
 		public function cancel( sourceProduct:Product ):void
 		{

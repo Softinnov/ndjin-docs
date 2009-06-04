@@ -1,11 +1,14 @@
 <mx:Application xmlns:mx="http://www.adobe.com/2006/mxml"
         layout="vertical" verticalAlign="middle" horizontalAlign="center"
         initialize="onInitialize()"
-        xmlns:local="*" xmlns:view="net.ndjin.ecommerce.view.*">
+        xmlns:local="*" xmlns:view="net.ndjin.ecommerce.view.*"
+        backgroundColor="#F9F9F9"
+>
 
 
 <mx:Script>
 <![CDATA[
+	import mx.controls.Alert;
 	import mx.controls.ComboBox;
 	import net.ndjin.ecommerce.ApplicationLanguage;
 	import org.swizframework.Swiz;
@@ -16,6 +19,8 @@
 	    // load up swiz beans
 	    Swiz.loadBeans( [ Beans ] );
 		applicationLanguage = Swiz.getBean("applicationLanguage") as ApplicationLanguage;
+		
+		
 	}
 ]]>
 </mx:Script>    	
@@ -30,8 +35,11 @@
 		</mx:dataProvider>
 	</mx:ComboBox>
 
-	<view:ProductScreen>
-	</view:ProductScreen>	
+	<mx:TabNavigator  height="100%" width="100%">
+		<view:ProductScreen label="Products">
+		</view:ProductScreen>	
+		
+	</mx:TabNavigator>
 	
 </mx:Application>
 
