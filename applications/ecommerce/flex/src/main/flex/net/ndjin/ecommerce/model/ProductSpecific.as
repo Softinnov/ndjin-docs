@@ -1,5 +1,6 @@
 package net.ndjin.ecommerce.model
 {
+	import mx.collections.ArrayCollection;
 	import mx.core.Application;
 	
 	import net.ndjin.ecommerce.ApplicationLanguage;
@@ -25,7 +26,7 @@ package net.ndjin.ecommerce.model
 		}
 
 		public var price:Number;
-		public var productOptions:Array;
+		public var productOptions:ArrayCollection;
 
 		public function ProductSpecific( jsonObject:Object )
 		{
@@ -39,7 +40,7 @@ package net.ndjin.ecommerce.model
 			{
 				array.push( new ProductOption( o ) );
 			}
-			productOptions = array;
+			productOptions = new ArrayCollection( array );
 		}
 
 	}

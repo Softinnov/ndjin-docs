@@ -91,6 +91,8 @@ package net.ndjin.ecommerce.controller
 
 		public function edit( sourceProduct:Product ):void
 		{
+			if( sourceProduct == null ) sourceProduct = selectedProduct;
+			
 			var data:Object = {
 				packagePath: "/eCommerce",
 				ownerFieldName: "products",
@@ -109,8 +111,9 @@ package net.ndjin.ecommerce.controller
 			
 		}
 		
-		public function cancel(  sourceProduct:Product ):void
+		public function cancel( sourceProduct:Product ):void
 		{
+			if( sourceProduct == null ) sourceProduct = selectedProduct;
 			var data:Object = {
 				packagePath: "/eCommerce",
 				ownerFieldName: "products",

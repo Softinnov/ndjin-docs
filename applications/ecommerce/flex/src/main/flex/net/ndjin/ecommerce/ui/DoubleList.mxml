@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:HBox xmlns:mx="http://www.adobe.com/2006/mxml" creationComplete="creationCompleteHandler()">
+
+<mx:Script>
+	<![CDATA[
+		import net.ndjin.ecommerce.ApplicationLanguage;
+		import org.swizframework.Swiz;
+		import mx.collections.ArrayCollection;
+		
+		[Bindable]
+		public var sourceDataProvider:ArrayCollection;
+		[Bindable]
+		public var targetDataProvider:ArrayCollection;
+		[Bindable]
+		public var labelField:String;
+		
+		public var idField:String;
+		
+		private function creationCompleteHandler():void
+		{
+			Swiz.addEventListener( ApplicationLanguage.DATA_LANGUAGE_UPDATED, function( event:Event ):void
+			{
+				targetDataGrid.invalidateList();
+				sourceDataGrid.invalidateList();
+			});
+		}
+
+		
+		private function sourceToTarget( event:Event ):void
+		{
+			if( sourceDataGrid.selectedItem )
+			{
+				if( !targetContains( sourceDataGrid.selectedItem ) )
+				{
+					targetDataProvider.addItem( sourceDataGrid.selectedItem ); 
+					//sourceDataProvider.removeItemAt( sourceDataProvider.getItemIndex( sourceDataGrid.selectedItem ) );
+				}
+				sourceDataGrid.selectedIndex = -1;
+			}
+		}
+		
+		private function targetToSource( event:Event ):void
+		{
+			if( targetDataGrid.selectedItem )
+			{
+				targetDataProvider.removeItemAt( targetDataProvider.getItemIndex( targetDataGrid.selectedItem ) );
+				targetDataGrid.selectedIndex = -1;
+			}
+			
+		}
+		
+		private function targetContains( item:Object ):Boolean
+		{
+			var id:Object = item[idField]; 
+			for each( var o:Object in targetDataProvider )
+			{
+				if( o[idField] == id ) return true;
+			}
+			return false;
+		}
+		
+		
+	]]>
+</mx:Script>
+	<mx:List id="targetDataGrid" width="100" rowCount="3" dataProvider="{targetDataProvider}" labelField="{labelField}"/>
+	<mx:VBox height="100%" verticalAlign="middle">
+		<mx:Button label="&lt;" width="20" paddingLeft="0" paddingRight="0" visible="{sourceDataGrid.selectedItem != null}" 
+			click="sourceToTarget(event)"/>
+		<mx:Button label="&gt;" width="20" paddingLeft="0" paddingRight="0" visible="{targetDataGrid.selectedItem != null}"
+			click="targetToSource(event)"/>
+	</mx:VBox>
+	<mx:List id="sourceDataGrid" dataProvider="{sourceDataProvider}" width="100" rowCount="3" labelField="{labelField}"/>						
+
+</mx:HBox>

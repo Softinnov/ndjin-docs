@@ -63,6 +63,15 @@ package net.ndjin.ecommerce.model
 				array.push( new ProductSpecific( o ) );
 			}
 			productSpecifics = new ArrayCollection( array );
+
+			array = [];
+			for each( o in jsonObject.categories )
+			{
+				array.push( new Category( o ) );
+			}
+			categories = new ArrayCollection( array );
+
+
 		}
 		
 		

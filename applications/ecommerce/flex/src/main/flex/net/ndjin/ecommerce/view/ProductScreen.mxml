@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" creationComplete="creationCompleteHandler()" xmlns:ui="net.ndjin.ecommerce.ui.*">
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" creationComplete="creationCompleteHandler()" xmlns:ui="net.ndjin.ecommerce.ui.*" xmlns:view="net.ndjin.ecommerce.view.*">
 
 <mx:Script>
 	<![CDATA[
+		import net.ndjin.ecommerce.controller.ProductTypeController;
 		import net.ndjin.ecommerce.controller.AuthenticationController;
 		import org.swizframework.Swiz;
-		import mx.core.Application;
 		import net.ndjin.ecommerce.ApplicationLanguage;
 		import net.ndjin.ecommerce.model.ProductSpecific;
 		import net.ndjin.ecommerce.model.Product;
@@ -19,6 +19,7 @@
 		[Bindable]
 		[Autowire(bean="categoryController")]
 		public var categoryController:CategoryController;
+
 
 		[Bindable]
 		[Autowire(bean="authenticationController")]
@@ -64,11 +65,10 @@
 				dispatchEvent(new Event('selectedProduct') );
 			});
 			
-			Application.application.applicationLanguage.addEventListener( ApplicationLanguage.DATA_LANGUAGE_UPDATED, function( event:Event ):void
+			Swiz.addEventListener( ApplicationLanguage.DATA_LANGUAGE_UPDATED, function( event:Event ):void
 			{
 				productDataGrid.invalidateList();
 				productSpecificDataGrid.invalidateList();
-				productOptionDataGrid.invalidateList();
 				
 				
 				dispatchEvent(new Event('selectedProduct') );
@@ -123,15 +123,8 @@
 
 			<mx:Form id="productForm" width="100%" visible="false">
 				<mx:FormItem label="Categories" width="100%">
-					<mx:HBox>
-						<mx:List id="productCategoriesDataGrid" width="100" rowCount="3"/>
-						<mx:VBox height="100%" verticalAlign="middle">
-							<mx:Button label="&lt;" width="20" paddingLeft="0" paddingRight="0"/>
-							<mx:Button label="&gt;" width="20" paddingLeft="0" paddingRight="0"/>
-						</mx:VBox>
-						<mx:List id="productCategoriesSourceDataGrid" dataProvider="{categoryController.categories}" width="100" rowCount="3" labelField="name"/>						
-					</mx:HBox>
-
+					<ui:DoubleList sourceDataProvider="{categoryController.categories}" targetDataProvider="{selectedProduct.categories}"
+						 labelField="name" idField="_id"/>
 				</mx:FormItem>
 				<mx:FormItem label="Product References">
 					<mx:List id="productSpecificDataGrid" width="100" rowCount="3"
@@ -196,14 +189,7 @@
 
 
 				<mx:FormItem label="Options" width="100%">
-					<mx:DataGrid id="productOptionDataGrid" dataProvider="{selectedProductSpecific.productOptions}" width="100%" height="100%" rowCount="3"
-						
-						>
-						<mx:columns>
-							<mx:DataGridColumn headerText="Option" dataField="productType" />
-							<mx:DataGridColumn headerText="Value" labelFunction="productTypeValueLabel" />
-						</mx:columns>
-					</mx:DataGrid>					
+					<view:ProductOptionSelector id="productOptionSelector" productOptions="{selectedProductSpecific.productOptions}"/>
 				</mx:FormItem>
 
 				
@@ -225,6 +211,6 @@
 	
 	
 	<mx:HBox>
-		<mx:Button label="New" click="newProduct()"/>
+		<mx:Button label="New" click="newProduct()" visible="{!productForm.visible}"/>
 	</mx:HBox>
 </mx:VBox>

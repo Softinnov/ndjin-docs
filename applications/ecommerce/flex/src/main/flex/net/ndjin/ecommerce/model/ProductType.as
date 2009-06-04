@@ -1,5 +1,6 @@
 package net.ndjin.ecommerce.model
 {
+	import mx.collections.ArrayCollection;
 	import mx.core.Application;
 	
 	import net.ndjin.ecommerce.ApplicationLanguage;
@@ -22,11 +23,20 @@ package net.ndjin.ecommerce.model
 			_name[applicationLanguage.dataLanguage] = value;	
 		}
 
+		public var values:ArrayCollection;
 
 		public function ProductType( jsonObject:Object )
 		{
 			_id = jsonObject._id;
 			_name = jsonObject.name;
+
+			var array:Array = [];
+			if( jsonObject.values ) for each( var o:Object in jsonObject.values )
+			{
+				array.push( new ProductTypeValue( o ) );
+			}
+			values = new ArrayCollection( array );
+			
 			
 		}
 
