@@ -1,4 +1,4 @@
-#summary Ndjin authentication webservice
+#summary Ndjin session management webservice
 
 = getSessionInfo =
 
