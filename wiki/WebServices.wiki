@@ -12,7 +12,7 @@ Request URL should be formatted as: `http://[you application site name].ndjin.ne
 For example: `http://myapp.ndjin.net/ng/service/AuthenticationService/getSessionInfo`
 
 Available webservices group are:
-  * AuthenticationService: user authentication
+  * SessionService: user session/authentication operations
   * ModelService: application model operations
   * InstanceService: object instances operations 
 
