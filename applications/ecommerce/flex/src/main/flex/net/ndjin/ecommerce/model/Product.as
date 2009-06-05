@@ -41,7 +41,7 @@ package net.ndjin.ecommerce.model
 		
 		public var productSpecifics:ArrayCollection;
 		
-		public var pictures:Array;
+		public var pictures:ArrayCollection;
 		public var tax:Number;
 		
 		public var categories:ArrayCollection;
@@ -49,10 +49,11 @@ package net.ndjin.ecommerce.model
 		public function Product( jsonObject:Object )
 		{
 			_id = jsonObject._id;
+			state = jsonObject._stateName;
 			_name = jsonObject.name;
 			_description = jsonObject.description;
 			
-			pictures = jsonObject.pictures;
+			pictures = new ArrayCollection( jsonObject.pictures );
 			if( jsonObject.tax ) tax = jsonObject.tax;
 			else tax = 0;
 			

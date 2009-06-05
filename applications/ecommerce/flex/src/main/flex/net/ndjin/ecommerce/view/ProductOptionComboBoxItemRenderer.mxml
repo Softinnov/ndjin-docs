@@ -8,7 +8,7 @@
 		import net.ndjin.ecommerce.controller.ProductTypeController;
 		import net.ndjin.ecommerce.model.ProductOption;
 		import net.ndjin.ecommerce.model.ProductTypeValue;
-		import net.ndjin.ecommerce.controller.AuthenticationController;
+		import net.ndjin.ecommerce.controller.SessionController;
 		
 		private var _data:Object;
 		

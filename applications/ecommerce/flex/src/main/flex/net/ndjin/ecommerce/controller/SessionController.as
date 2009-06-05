@@ -1,6 +1,5 @@
 package net.ndjin.ecommerce.controller
 {
-	import com.adobe.utils.ArrayUtil;
 	
 	import flash.events.EventDispatcher;
 	
@@ -8,13 +7,13 @@ package net.ndjin.ecommerce.controller
 	
 	import net.ndjin.ecommerce.json.JSONService;
 	
-	public class AuthenticationController extends EventDispatcher
+	public class SessionController extends EventDispatcher
 	{
 		public var jsonService:JSONService;
 		[Bindable]
 		public var uploadedFilesURL:ArrayCollection;
 	
-		public function getUploadedFilesURL( fileNames:Array ):void
+		public function getUploadedFilesURL( files:ArrayCollection ):void
 		{	
 			jsonService.query("getSessionInfo", null, function( result:Object, queryData:Object ):void
 			{
@@ -27,15 +26,20 @@ package net.ndjin.ecommerce.controller
 					for( var key:Object in o )
 					{
 						var name:String = key.toString();
-						if( ArrayUtil.arrayContainsValue( fileNames, name ) )
+						for each( var fileObject:Object in files )
 						{
-							array.push( { name: name, url: o[name] } );
+							if( fileObject.name == name )
+							{
+								array.push( o[name] );
+								fileObject.url = o[name];
+							}
 						}
 					}
 					uploadedFilesURL = new ArrayCollection( array );
 				}
 			});
 		}
+		
 
 	}
 }

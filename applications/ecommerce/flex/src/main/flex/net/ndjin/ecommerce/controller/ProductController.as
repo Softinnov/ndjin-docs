@@ -37,7 +37,19 @@ package net.ndjin.ecommerce.controller
 			load();
 		}
 
-
+		private function replaceProduct( product:Product ):void
+		{
+			var i:int = 0;
+			for each( var productItem:Product in products )
+			{
+				if( product._id == productItem._id )
+				{
+				 	products.setItemAt( product, i );
+				 	break;
+				}
+				i++;
+			}
+		}
 
 
 		public function load():void
@@ -98,15 +110,16 @@ package net.ndjin.ecommerce.controller
 				ownerFieldName: "products",
 				deepFieldNames: ["productSpecifics", "productOptions"],
 				appliedTransitionName: "Edit",
+				viewStateName: true,
 				instance: { _id: sourceProduct._id }
 			};
 			
 			
 			jsonService.query("applyTransitionToInstance", data, function( result:Object, queryData:Object ):void
 			{
-				var product:Product = new Product( result.instance )
-				selectedProduct = product; 
-				sourceProduct.state = "Edited";
+				var product:Product = new Product( result.instance );
+				replaceProduct( product );
+				selectedProduct = product;
 			});
 			
 		}
@@ -119,13 +132,15 @@ package net.ndjin.ecommerce.controller
 				ownerFieldName: "products",
 				deepFieldNames: ["productSpecifics", "productOptions"],
 				appliedTransitionName: "View",
+				viewStateName: true,
 				instance: { _id: sourceProduct._id }
 			};
 			
 			
 			jsonService.query("applyTransitionToInstance", data, function( result:Object, queryData:Object ):void
 			{
-				var product:Product = new Product( result.instance )
+				var product:Product = new Product( result.instance );
+				replaceProduct( product );
 				selectedProduct = product; 
 			});
 			
@@ -138,14 +153,16 @@ package net.ndjin.ecommerce.controller
 				packagePath: "/eCommerce",
 				ownerFieldName: "products",
 				appliedTransitionName: "Cancel",
+				viewStateName: true,
 				instance: { _id: sourceProduct._id }
 			};
 			
 			
 			jsonService.query("applyTransitionToInstance", data, function( result:Object, queryData:Object ):void
 			{
+				var product:Product = new Product( result.instance );
 				selectedProduct = null;
-				sourceProduct.state = "Stored";
+				replaceProduct( product );
 			});
 			
 		}
