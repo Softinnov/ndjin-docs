@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:List xmlns:mx="http://www.adobe.com/2006/mxml" dataProvider="{twinDataProvider}">
+<mx:Script>
+	<![CDATA[
+		import mx.events.CollectionEvent;
+		import com.adobe.utils.ArrayUtil;
+		import mx.collections.ArrayCollection;
+		
+		
+		[Bindable]
+		private var twinDataProvider:ArrayCollection = new ArrayCollection();
+		
+		
+		private var _data1:Array;
+		public function set dataProvider1( ds:ArrayCollection ):void
+		{
+			if( ds == null ) return;
+			_data1 = ds.source;
+			register( ds );
+		} 
+
+
+		private var _data2:Array;
+		public function set dataProvider2( ds:ArrayCollection ):void
+		{
+			if( ds == null ) return;
+			_data2 = ds.source;
+			register( ds );
+		} 
+		
+		private function register( ds:ArrayCollection ):void
+		{
+			ds.addEventListener(CollectionEvent.COLLECTION_CHANGE, function( event:Event ):void
+			{
+				updateDataProvider();
+			});
+			updateDataProvider();			
+		} 
+		
+		private function updateDataProvider():void
+		{
+			if( _data1 && _data2 ) twinDataProvider = new ArrayCollection( _data1.concat( _data2.slice() ) );
+			else if( _data1 ) twinDataProvider = new ArrayCollection( _data1 );
+			else if( _data2 ) twinDataProvider = new ArrayCollection( _data2 );
+		}
+	]]>
+</mx:Script>
+</mx:List>

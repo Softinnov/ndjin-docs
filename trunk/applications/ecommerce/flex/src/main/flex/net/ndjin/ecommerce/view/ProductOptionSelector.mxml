@@ -10,6 +10,8 @@
 		import net.ndjin.ecommerce.model.ProductOption;
 		import mx.collections.ArrayCollection;
 		import net.ndjin.ecommerce.controller.ProductTypeController;
+		
+		
 		[Bindable]
 		[Autowire(bean="productTypeController")]
 		public var productTypeController:ProductTypeController;

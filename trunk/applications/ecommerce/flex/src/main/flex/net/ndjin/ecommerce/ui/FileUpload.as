@@ -6,8 +6,6 @@ package net.ndjin.ecommerce.ui
 	import flash.net.URLRequest;
 	import flash.net.URLVariables;
 	
-	import mx.containers.Box;
-	import mx.controls.Button;
 	import mx.controls.ProgressBar;
 	import mx.core.UIComponent;
 	import mx.managers.CursorManager;
@@ -17,55 +15,36 @@ package net.ndjin.ecommerce.ui
 
     public class FileUpload extends UIComponent 
     {
-        // Hard-code the URL of the remote upload script.
-        public var url:String;
+        private var url:String;
         public var fileName:String;
         public var parameters:URLVariables = new URLVariables();
         
         private var fileReference:FileReference;
             
         
-        private var pb:ProgressBar;
-        private var btn:Button;
-        private var uploadbox:Box;
+        private var progressBar:ProgressBar;
         private var completeHandler:Function;
         
         public var filterName:String = "Images (*.jpg, *.jpeg, *.gif, *.png)";
         public var filterExtension:String = "*.jpg; *.jpeg; *.gif; *.png";
         
-        public function FileUpload() 
+        [Bindable]
+		public var uploading:Boolean = false;
+
+        public function init( url: String, progressBar:ProgressBar = null, completeHandler:Function = null ):void 
         {
-
-        }
-
-        /**
-         * Set references to the components, and add listeners for the SELECT,
-         * OPEN, PROGRESS, and COMPLETE events.
-         */
-
-        public function init( uploadbox:Box = null, pb:ProgressBar = null, btn:Button=null, completeHandler:Function = null ):void 
-        {
-
-            // Set up the references to the progress bar and cancel button, which are passed from the calling script.
-            this.btn = btn;
-            
+			this.url = url;
             
             fileReference = new FileReference();
             fileReference.addEventListener(Event.SELECT, selectHandler);
             
-            if( uploadbox )
+            if( progressBar )
             {
-            	this.uploadbox=uploadbox;
-            	fileReference.addEventListener(Event.OPEN, openHandler);
-            }
-            if( pb )
-            {
-            	this.pb = pb;
+            	this.progressBar = progressBar;
        			fileReference.addEventListener(ProgressEvent.PROGRESS, progressHandler);
             }
            
             this.completeHandler = completeHandler;
-            
             fileReference.addEventListener(Event.COMPLETE, localCompleteHandler);
         }
 
@@ -73,29 +52,18 @@ package net.ndjin.ecommerce.ui
 
 		private function localCompleteHandler( event:Event ):void
 		{
+			uploading = false;
 			CursorManager.removeBusyCursor();
 			completeHandler( event );
 		}
 
 
 
-        /**
-         * Immediately cancel the upload in progress and disable the cancel button.
-         */
-        public function cancelUpload():void {
+        public function cancelUpload():void 
+        {
             fileReference.cancel();
-            //pb.label = "UPLOAD CANCELLED";
-            if( btn ) btn.enabled = false;
-            if( uploadbox )
-            {
-            	uploadbox.visible = false;
-            	uploadbox.width = 0;
-            }
         }
 
-        /**
-         * Launch the browse dialog box which allows the user to select a file to upload to the server.
-         */
         public function startUpload():void {
             fileReference.cancel();
             var imageTypes:FileFilter = new FileFilter(filterName, filterExtension);
@@ -114,29 +82,14 @@ package net.ndjin.ecommerce.ui
 			
             fileReference.upload(request);
             CursorManager.setBusyCursor();
+        	uploading = true;
             fileName = fileReference.name;
         }
 
-
-        /**
-         * When the OPEN event has dispatched, change the progress bar's label 
-         * and enable the "Cancel" button, which allows the user to abort the 
-         * upload operation.
-         */
-        private function openHandler(event:Event):void {
-            //pb.label = "UPLOADING";
-            if( btn ) btn.enabled = true;
-            uploadbox.visible = true;
-            uploadbox.width = uploadbox.measuredWidth;
-        }
-
-        /**
-         * While the file is uploading, update the progress bar's status and label.
-         */
-        private function progressHandler(event:ProgressEvent):void {
-            //pb.label = "%3%%";
-        	if( event.bytesLoaded == event.bytesTotal ) pb.label = "Server Process...";
-            else pb.setProgress(event.bytesLoaded, event.bytesTotal);
+        private function progressHandler(event:ProgressEvent):void 
+        {
+        	if( event.bytesLoaded == event.bytesTotal ) progressBar.label = "Server Process...";
+            else progressBar.setProgress( event.bytesLoaded, event.bytesTotal );
         }
 
 	}

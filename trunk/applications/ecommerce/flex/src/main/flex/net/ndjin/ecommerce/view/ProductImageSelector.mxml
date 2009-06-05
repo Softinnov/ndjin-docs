@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:ui="net.ndjin.ecommerce.ui.*"
+	creationComplete="creationCompleteHandler()">
+
+<mx:Script>
+	<![CDATA[
+		import org.swizframework.Swiz;
+		import net.ndjin.ecommerce.ui.FileUpload;
+		import net.ndjin.ecommerce.model.Product;
+		import mx.collections.ArrayCollection;
+		import net.ndjin.ecommerce.controller.ProductController;
+		import net.ndjin.ecommerce.controller.SessionController;
+		
+		[Bindable]
+		[Autowire(bean="sessionController")]
+		public var sessionController:SessionController;
+		
+		
+		[Bindable]
+		[Autowire(bean="productController")]
+		public var productController:ProductController;
+
+		[Bindable]
+		public var product:Product;
+
+		private var uploadedFiles:ArrayCollection = new ArrayCollection();
+	
+	
+		[Bindable]
+		private var fileUpload:FileUpload;
+		private function creationCompleteHandler():void
+		{
+			fileUpload = new FileUpload();
+			fileUpload.init( (Swiz.getBean("baseURL") as String )+'/upload', uploadProgress, function (event:Event):void
+			{
+				uploadedFiles.addItem( {name: fileUpload.fileName } );
+				sessionController.getUploadedFilesURL(uploadedFiles);
+				
+	//			uploadBox.visible = false;
+	//			uploadBox.width = 0;
+		
+		        uploadProgress.setProgress(0, 100);
+		        cancelUpload.enabled = false;
+	  	
+			});
+		}
+		
+		
+		private function removePicture():void
+		{
+			var selectedURL:String = imagesList.selectedItem as String;
+			if( selectedURL )
+			{
+				var index:Number = product.pictures.getItemIndex( selectedURL );
+				if( index >= 0 )
+				{
+					product.pictures.removeItemAt( index );
+				}
+				else
+				{	
+					sessionController.uploadedFilesURL.removeItemAt( sessionController.uploadedFilesURL.getItemIndex( selectedURL ) );
+					for each( var fileObject:Object in uploadedFiles )
+					{
+						if( fileObject.url == selectedURL )
+						{
+							uploadedFiles.removeItemAt( uploadedFiles.getItemIndex( fileObject ) );
+							break; 
+						}
+					}
+				}
+			}
+		}
+
+
+		private function getSelectedIndex( uploading:Boolean ):int
+		{
+			if( uploading ) return 1; 
+			return 0;
+		}
+	]]>
+</mx:Script>
+
+	<mx:HBox verticalAlign="middle">
+		<ui:TwinDataProviderList id="imagesList" dataProvider1="{sessionController.uploadedFilesURL}"  dataProvider2="{product.pictures}"
+			rowCount="3" rowHeight="50"	width="100"
+			itemRenderer="net.ndjin.ecommerce.ui.SimpleImageItemRenderer"
+			 />
+			 
+		 <mx:VBox height="100%" verticalAlign="middle">
+		 	<mx:ViewStack id="viewStack" selectedIndex="{getSelectedIndex( fileUpload.uploading )}" resizeToContent="true">
+			 	<mx:VBox horizontalAlign="center">
+					<mx:Button label="Remove" visible="{imagesList.selectedItem != null}" 
+						click="removePicture()"/>
+					<mx:Button id="startUpload" label="Upload"
+						click="fileUpload.startUpload()" />
+			 	</mx:VBox>
+
+				<mx:HBox horizontalAlign="center">
+					<mx:Button id="cancelUpload" label="Cancel" 
+							click="fileUpload.cancelUpload();"  />
+					
+					<mx:ProgressBar id="uploadProgress" mode="manual" width="100" />
+				</mx:HBox>		 		
+		 	</mx:ViewStack>
+				 
+		 	
+		 </mx:VBox>
+		 
+	</mx:HBox>
+
+		 
+				
+</mx:VBox>

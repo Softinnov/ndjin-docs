@@ -6,9 +6,9 @@
 			xmlns:json="net.ndjin.ecommerce.json.*">
 <mx:Script>
 	<![CDATA[
-		public static const baseURL:String ="http://localhost:8080/ng/ecom";
 	]]>
 </mx:Script>	
+	<mx:String id="baseURL">http://localhost:8080/ng/ecom</mx:String>
 	
 	<controller:ProductController id="productController">
 		<controller:jsonService>
@@ -29,11 +29,11 @@
 	</controller:ProductTypeController>
 
 
-	<controller:AuthenticationController id="authenticationController">
+	<controller:SessionController id="sessionController">
 		<controller:jsonService>
-			<json:JSONService serviceURL="{baseURL}/service/AuthenticationService"/>
+			<json:JSONService serviceURL="{baseURL}/service/SessionService"/>
 		</controller:jsonService>
-	</controller:AuthenticationController>
+	</controller:SessionController>
 
 
 

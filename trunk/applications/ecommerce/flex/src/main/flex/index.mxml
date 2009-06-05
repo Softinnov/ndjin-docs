@@ -1,8 +1,12 @@
 <mx:Application xmlns:mx="http://www.adobe.com/2006/mxml"
+        xmlns:local="*" 
+        xmlns:view="net.ndjin.ecommerce.view.*"
+	
         layout="vertical" verticalAlign="middle" horizontalAlign="center"
-        initialize="onInitialize()"
-        xmlns:local="*" xmlns:view="net.ndjin.ecommerce.view.*"
+		horizontalScrollPolicy="off" verticalScrollPolicy="off"
         backgroundColor="#F9F9F9"
+
+        initialize="onInitialize()"
 >
 
 
@@ -35,9 +39,10 @@
 		</mx:dataProvider>
 	</mx:ComboBox>
 
-	<mx:TabNavigator  height="100%" width="100%">
-		<view:ProductScreen label="Products">
-		</view:ProductScreen>	
+	<mx:TabNavigator height="100%" width="100%">
+		<mx:Canvas label="Products" height="100%" width="100%" horizontalScrollPolicy="off" verticalScrollPolicy="auto">
+			<view:ProductScreen horizontalScrollPolicy="off" verticalScrollPolicy="off" />
+		</mx:Canvas>
 		
 	</mx:TabNavigator>
 	
