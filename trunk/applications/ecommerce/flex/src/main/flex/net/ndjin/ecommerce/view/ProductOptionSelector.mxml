@@ -61,6 +61,7 @@
 			{
 				productOptions.removeItemAt( productOptions.getItemIndex( productOptionDataGrid.selectedItem ) );
 				productOptionDataGrid.selectedIndex = -1;
+				productTypesDataGrid.selectedIndex = -1;
 			}
 		}
 	]]>
@@ -77,7 +78,8 @@
 		</mx:columns>
 	</mx:DataGrid>
 	<mx:VBox height="100%" verticalAlign="middle">
-		<mx:Button label="&lt;" width="20" paddingLeft="0" paddingRight="0" visible="{productTypesDataGrid.selectedItem != null}" 
+		<mx:Button label="&lt;" width="20" paddingLeft="0" paddingRight="0" 
+			visible="{productTypesDataGrid.selectedItem != null &amp;&amp; !containsProductType( productTypesDataGrid.selectedItem as ProductType)}" 
 			click="productTypeToProductOption(event)"/>
 		<mx:Button label="&gt;" width="20" paddingLeft="0" paddingRight="0" visible="{productOptionDataGrid.selectedItem != null}"
 			click="removeProductTypeFromProductOption(event)"/>

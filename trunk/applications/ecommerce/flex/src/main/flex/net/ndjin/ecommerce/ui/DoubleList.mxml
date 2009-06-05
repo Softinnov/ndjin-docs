@@ -45,6 +45,7 @@
 			{
 				targetDataProvider.removeItemAt( targetDataProvider.getItemIndex( targetDataGrid.selectedItem ) );
 				targetDataGrid.selectedIndex = -1;
+				sourceDataGrid.selectedIndex = -1;
 			}
 			
 		}
@@ -64,7 +65,8 @@
 </mx:Script>
 	<mx:List id="targetDataGrid" width="100" rowCount="3" dataProvider="{targetDataProvider}" labelField="{labelField}"/>
 	<mx:VBox height="100%" verticalAlign="middle">
-		<mx:Button label="&lt;" width="20" paddingLeft="0" paddingRight="0" visible="{sourceDataGrid.selectedItem != null}" 
+		<mx:Button label="&lt;" width="20" paddingLeft="0" paddingRight="0" 
+			visible="{sourceDataGrid.selectedItem != null &amp;&amp; !targetContains( sourceDataGrid.selectedItem )}" 
 			click="sourceToTarget(event)"/>
 		<mx:Button label="&gt;" width="20" paddingLeft="0" paddingRight="0" visible="{targetDataGrid.selectedItem != null}"
 			click="targetToSource(event)"/>
