@@ -19,12 +19,10 @@
 	
 	public var applicationLanguage:ApplicationLanguage;
 	
-	private function onInitialize() : void {
-	    // load up swiz beans
+	private function onInitialize() : void 
+	{
 	    Swiz.loadBeans( [ Beans ] );
 		applicationLanguage = Swiz.getBean("applicationLanguage") as ApplicationLanguage;
-		
-		
 	}
 ]]>
 </mx:Script>    	
