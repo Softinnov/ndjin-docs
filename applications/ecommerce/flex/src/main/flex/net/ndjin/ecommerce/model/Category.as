@@ -30,6 +30,12 @@ package net.ndjin.ecommerce.model
 		}
 		
 		
-
+		public function toJSONObject():Object
+		{
+			return { 
+				_id: _id, 
+				name: _name
+				};
+		}
 	}
 }

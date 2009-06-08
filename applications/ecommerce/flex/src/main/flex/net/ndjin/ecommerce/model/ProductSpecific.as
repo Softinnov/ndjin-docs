@@ -42,6 +42,22 @@ package net.ndjin.ecommerce.model
 			}
 			productOptions = new ArrayCollection( array );
 		}
+		
+		
+		public function toJSONObject():Object
+		{
+			var obj:Object = {
+				_id : _id,
+				reference: reference,
+				description: _description,
+				price: price
+			}
+			if( _id )
+			{
+				obj._dirty = true;
+			}
+			return obj;
+		}
 
 	}
 }

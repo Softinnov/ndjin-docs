@@ -43,20 +43,38 @@ package net.ndjin.ecommerce.model
 		
 		public var pictures:ArrayCollection;
 		public var tax:Number;
+		public var weight:Number;
 		
 		public var categories:ArrayCollection;
 		
+		
+		
+		// Files {name:'', url:'' } uploaded and to be joined to the update		
+		public var uploadedFiles:ArrayCollection;
+
+		
 		public function Product( jsonObject:Object )
 		{
+			uploadedFiles = new ArrayCollection();
+			
+			
 			_id = jsonObject._id;
 			state = jsonObject._stateName;
 			_name = jsonObject.name;
 			_description = jsonObject.description;
 			
-			pictures = new ArrayCollection( jsonObject.pictures );
+			if( jsonObject.pictures )
+			{
+				if( jsonObject.pictures is Array ) pictures = new ArrayCollection( jsonObject.pictures );
+				else pictures = new ArrayCollection( [jsonObject.pictures] );
+			}
+			else pictures = new ArrayCollection();
+			
 			if( jsonObject.tax ) tax = jsonObject.tax;
 			else tax = 0;
 			
+			if( jsonObject.weight ) weight = jsonObject.weight;
+			else weight = 0;
 				
 			var array:Array = [];
 			for each( var o:Object in jsonObject.productSpecifics )
@@ -75,6 +93,33 @@ package net.ndjin.ecommerce.model
 
 		}
 		
+		
+		public function toJSONObject():Object
+		{
+			
+			var picturesArray:Array = pictures.source;
+			for each( var file:Object in uploadedFiles.source )
+			{
+				picturesArray.push( file.name );			
+			}
+			
+			
+			var productSpecificsArray:Array = [];
+			for each( var productSpecific:ProductSpecific in productSpecifics )
+			{
+				productSpecificsArray.push( productSpecific.toJSONObject() );
+			}
+			
+			return { 
+				_id: _id, 
+				name: _name,
+				description: _description,
+				tax: tax,
+				weight: weight,
+				pictures: picturesArray,
+				productSpecifics: productSpecificsArray
+				};
+		}
 		
 
 	}
