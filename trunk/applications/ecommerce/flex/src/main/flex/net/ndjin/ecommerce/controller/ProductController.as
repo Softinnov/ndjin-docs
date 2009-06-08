@@ -6,6 +6,7 @@ package net.ndjin.ecommerce.controller
 	import mx.collections.ArrayCollection;
 	
 	import net.ndjin.ecommerce.json.JSONService;
+	import net.ndjin.ecommerce.model.Category;
 	import net.ndjin.ecommerce.model.Product;
 	
 	import org.swizframework.Swiz;
@@ -17,6 +18,11 @@ package net.ndjin.ecommerce.controller
 		public static var SELECTED_PRODUCT_EVENT:String = "Product.selectedProduct";
 
 		public var jsonService:JSONService;
+		
+		[Bindable]
+		[Autowire(bean="productController")]
+		public var productController:ProductController;
+
 		
 		[Bindable(name='products')]
 		public var products:ArrayCollection;
@@ -165,6 +171,60 @@ package net.ndjin.ecommerce.controller
 				replaceProduct( product );
 			});
 			
+		}
+
+
+		public function remove( sourceProduct:Product ):void
+		{
+			
+		}
+	
+		public function update( sourceProduct:Product ):void
+		{
+			if( sourceProduct == null ) sourceProduct = selectedProduct;
+			
+						
+			var items:Array = [];
+			for each( var categorie:Category in sourceProduct.categories )
+			{
+				var item:Object = {
+					packagePath: "/eCommerce",
+					ownerId: categorie._id,
+					ownerFieldName: "products",
+					appliedTransitionName: "Append",
+					instance: { _id: sourceProduct._id }			
+				}
+				items.push( item ); 
+			}
+			
+			
+			jsonService.query("applyBatchTransitionsToInstance", { items: items }, function( result:Object, queryData:Object ):void
+			{
+				updateProduct( sourceProduct );
+			});
+			
+			
+		}
+
+		private function updateProduct( sourceProduct:Product ):void
+		{						
+			var data:Object = {
+				packagePath: "/eCommerce",
+				ownerFieldName: "products",
+				appliedTransitionName: "Update",
+				deepUpdateFieldNames: ["productSpecifics"],
+				viewStateName: true,
+				instance: sourceProduct.toJSONObject()
+			};
+			
+			
+			jsonService.query("applyTransitionToInstance", data, function( result:Object, queryData:Object ):void
+			{
+				var product:Product = new Product( result.instance );
+				selectedProduct = null;
+				replaceProduct( product );
+			});
+
 		}
 
 	}

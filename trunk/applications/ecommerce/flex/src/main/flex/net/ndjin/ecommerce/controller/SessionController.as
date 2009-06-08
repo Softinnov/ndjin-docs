@@ -10,6 +10,7 @@ package net.ndjin.ecommerce.controller
 	public class SessionController extends EventDispatcher
 	{
 		public var jsonService:JSONService;
+		
 		[Bindable]
 		public var uploadedFilesURL:ArrayCollection;
 	

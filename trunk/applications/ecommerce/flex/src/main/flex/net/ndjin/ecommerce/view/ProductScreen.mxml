@@ -82,7 +82,28 @@
 			productController.createNew();
 		}
 		
+		private function addReference():void
+		{
+			var productSpecific:ProductSpecific = new ProductSpecific({reference:'', descripton: {}, price: 0 } );
+			selectedProduct.productSpecifics.addItem( productSpecific );
+			selectedProductSpecific = productSpecific;
+			productDetailIndex = selectedProduct.productSpecifics.source.length-1;
+			dispatchEvent(new Event('selectedProductSpecific') );
+			productSpecificDataGrid.selectedItem = productSpecific;
+			referenceTextInput.setFocus();
+		}
 		
+		private function removeReference():void
+		{
+			if( selectedProduct.productSpecifics.source.length > 1 )
+			{
+				selectedProduct.productSpecifics.removeItemAt( selectedProduct.productSpecifics.getItemIndex( selectedProductSpecific ) );
+				productDetailIndex = 0;
+				selectedProductSpecific = selectedProduct.productSpecifics.getItemAt( 0 ) as ProductSpecific;
+				dispatchEvent(new Event('selectedProductSpecific') );
+			}
+
+		}
 		
 		private function productTypeValueLabel( item:Object, column:DataGridColumn ):String
 		{
@@ -133,22 +154,31 @@
 						 labelField="name" idField="_id"/>
 				</mx:FormItem>
 				<mx:FormItem label="Product References">
-					<mx:List id="productSpecificDataGrid" width="100" rowCount="3"
-						change="
-						productDetailIndex = productSpecificDataGrid.selectedIndex;
-						selectedProductSpecific=productSpecificDataGrid.selectedItem as ProductSpecific;
-						dispatchEvent(new Event('selectedProductSpecific') );"
-	
-						valueCommit="
-						selectedProductSpecific=productSpecificDataGrid.selectedItem as ProductSpecific;
-						dispatchEvent(new Event('selectedProductSpecific') );"
-						
-						labelField="reference"
-						/>						
+				
+					<mx:HBox>
+						<mx:List id="productSpecificDataGrid" width="100" rowCount="3"
+							change="
+							productDetailIndex = productSpecificDataGrid.selectedIndex;
+							selectedProductSpecific=productSpecificDataGrid.selectedItem as ProductSpecific;
+							dispatchEvent(new Event('selectedProductSpecific') );"
+		
+							valueCommit="
+							selectedProductSpecific=productSpecificDataGrid.selectedItem as ProductSpecific;
+							dispatchEvent(new Event('selectedProductSpecific') );"
+							
+							labelField="reference"
+							/>						
+						<mx:VBox height="100%" horizontalAlign="center" verticalAlign="middle">
+							<mx:Button label="Remove" visible="{productSpecificDataGrid.selectedItem != null &amp;&amp; selectedProduct.productSpecifics.source.length &gt; 1}"
+								click="removeReference()"
+								/>
+							<mx:Button label="Add" click="addReference()"/>
+						</mx:VBox>						
+					</mx:HBox>
 				</mx:FormItem>
 
 				<mx:FormItem label="Reference">
-					<mx:TextInput text="{selectedProductSpecific.reference}" 
+					<mx:TextInput id="referenceTextInput" text="{selectedProductSpecific.reference}" 
 						change="selectedProductSpecific.reference = (event.currentTarget as TextInput).text"/>
 				</mx:FormItem>
 
@@ -157,22 +187,26 @@
 						change="selectedProduct.name = (event.currentTarget as TextInput).text; productController.products.itemUpdated(selectedProduct)"/>
 				</mx:FormItem>
 				<mx:FormItem label="Common Description">
-					<mx:TextArea text="{selectedProduct.description}"/>
+					<mx:TextArea text="{selectedProduct.description}"  change="selectedProduct.description = (event.currentTarget as TextInput).text"/>
 				</mx:FormItem>
 				<mx:FormItem label="Specific Description">
-					<mx:TextArea text="{selectedProductSpecific.description}"/>
+					<mx:TextArea text="{selectedProductSpecific.description}" change="selectedProductSpecific.description = (event.currentTarget as TextInput).text"/>
 				</mx:FormItem>
 
 				<mx:FormItem label="Pictures">
 					<view:ProductImageSelector product="{selectedProduct}" />
 				</mx:FormItem>
 				
-				<mx:FormItem label="Tax" textAlign="right">
-					<mx:TextInput text="{selectedProduct.tax}"/>
+				<mx:FormItem label="Weight" textAlign="right">
+					<mx:TextInput text="{selectedProduct.weight}" change="selectedProduct.weight = parseFloat( (event.currentTarget as TextInput).text )"/>
 				</mx:FormItem>
 				
+				<mx:FormItem label="Tax" textAlign="right">
+					<mx:TextInput text="{selectedProduct.tax}" change="selectedProduct.tax = parseFloat( (event.currentTarget as TextInput).text )"/>
+				</mx:FormItem>
+
 				<mx:FormItem label="Price" textAlign="right">
-					<mx:TextInput text="{selectedProductSpecific.price}"/>
+					<mx:TextInput text="{selectedProductSpecific.price}" change="selectedProductSpecific.price = parseFloat( (event.currentTarget as TextInput).text )"/>
 				</mx:FormItem>
 
 
@@ -183,9 +217,9 @@
 				
 				<mx:FormItem width="100%">
 					<mx:HBox>
-						<mx:Button label="Update" click="productController.load()"/>
+						<mx:Button label="Update" click="productController.update( productDataGrid.selectedItem as Product )"/>
 						<mx:Button label="Cancel" click="productController.cancel( productDataGrid.selectedItem as Product )"/>
-						<mx:Button label="Delete" click="productController.load()"/>
+						<mx:Button label="Delete" click="productController.remove( productDataGrid.selectedItem as Product )"/>
 					</mx:HBox>
 				</mx:FormItem>
 			</mx:Form>

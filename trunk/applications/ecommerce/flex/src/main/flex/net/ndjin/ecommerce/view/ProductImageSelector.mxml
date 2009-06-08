@@ -20,11 +20,18 @@
 		[Autowire(bean="productController")]
 		public var productController:ProductController;
 
-		[Bindable]
-		public var product:Product;
-
-		private var uploadedFiles:ArrayCollection = new ArrayCollection();
-	
+		private var _product:Product;
+		[Bindable(event='product')]
+		public function set product( product:Product ):void
+		{
+			sessionController.uploadedFilesURL = new ArrayCollection();
+			_product = product;
+			dispatchEvent( new Event( 'product' ) );
+		}
+		public function get product():Product
+		{
+			return _product;
+		}
 	
 		[Bindable]
 		private var fileUpload:FileUpload;
@@ -33,12 +40,9 @@
 			fileUpload = new FileUpload();
 			fileUpload.init( (Swiz.getBean("baseURL") as String )+'/upload', uploadProgress, function (event:Event):void
 			{
-				uploadedFiles.addItem( {name: fileUpload.fileName } );
-				sessionController.getUploadedFilesURL(uploadedFiles);
+				product.uploadedFiles.addItem( {name: fileUpload.fileName } );
+				sessionController.getUploadedFilesURL(product.uploadedFiles);
 				
-	//			uploadBox.visible = false;
-	//			uploadBox.width = 0;
-		
 		        uploadProgress.setProgress(0, 100);
 		        cancelUpload.enabled = false;
 	  	
@@ -59,11 +63,11 @@
 				else
 				{	
 					sessionController.uploadedFilesURL.removeItemAt( sessionController.uploadedFilesURL.getItemIndex( selectedURL ) );
-					for each( var fileObject:Object in uploadedFiles )
+					for each( var fileObject:Object in product.uploadedFiles )
 					{
 						if( fileObject.url == selectedURL )
 						{
-							uploadedFiles.removeItemAt( uploadedFiles.getItemIndex( fileObject ) );
+							product.uploadedFiles.removeItemAt( product.uploadedFiles.getItemIndex( fileObject ) );
 							break; 
 						}
 					}
