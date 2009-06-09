@@ -12,6 +12,9 @@
 
 <mx:Script>
 <![CDATA[
+	import mx.managers.PopUpManager;
+	import net.ndjin.ecommerce.view.AuthenticationScreen;
+	import net.ndjin.ecommerce.controller.SessionController;
 	import mx.controls.Alert;
 	import mx.controls.ComboBox;
 	import net.ndjin.ecommerce.ApplicationLanguage;
@@ -21,12 +24,15 @@
 	
 	private function onInitialize() : void 
 	{
+		Swiz.addEventListener( SessionController.HAS_NOT_MEMBER_LEVEL_EVENT, function( event:Event ):void{
+			var authenticationScreen:AuthenticationScreen = PopUpManager.createPopUp( main, AuthenticationScreen, true ) as AuthenticationScreen;
+		});
 	    Swiz.loadBeans( [ Beans ] );
 		applicationLanguage = Swiz.getBean("applicationLanguage") as ApplicationLanguage;
 	}
 ]]>
 </mx:Script>    	
-
+<mx:Box id="main">
 
 	<mx:ComboBox change="applicationLanguage.dataLanguage=(event.currentTarget as ComboBox).selectedItem.toString()">
 		<mx:dataProvider>
@@ -43,6 +49,8 @@
 		</mx:Canvas>
 		
 	</mx:TabNavigator>
+	
+</mx:Box>
 	
 </mx:Application>
 

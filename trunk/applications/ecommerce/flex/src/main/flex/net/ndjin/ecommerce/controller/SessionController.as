@@ -1,16 +1,30 @@
 package net.ndjin.ecommerce.controller
 {
 	
+	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	
 	import mx.collections.ArrayCollection;
 	
 	import net.ndjin.ecommerce.json.JSONService;
 	
-	public class SessionController extends EventDispatcher
-	{
-		public var jsonService:JSONService;
+	import org.swizframework.Swiz;
+	import org.swizframework.factory.IInitializingBean;
+	
 		
+		
+	public class SessionController extends EventDispatcher implements IInitializingBean
+	{
+		public static var HAS_MEMBER_LEVEL_EVENT:String = "SessionController.hasMemberLevel";
+		public static var HAS_NOT_MEMBER_LEVEL_EVENT:String = "SessionController.hasNotMemberLevel";
+	
+		public var jsonService:JSONService;
+	
+		public function initialize():void
+		{
+		loadUserLevel();
+		}
+	
 		[Bindable]
 		public var uploadedFilesURL:ArrayCollection;
 	
@@ -41,6 +55,23 @@ package net.ndjin.ecommerce.controller
 			});
 		}
 		
+
+
+		public function loadUserLevel():void
+		{
+			jsonService.query("getSessionInfo", null, function( result:Object, queryData:Object ):void
+			{
+				if( result.member && result.member.level <= 10 )
+				{
+					Swiz.dispatchEvent( new Event( HAS_MEMBER_LEVEL_EVENT ) );
+				}
+				else
+				{
+					Swiz.dispatchEvent( new Event( HAS_NOT_MEMBER_LEVEL_EVENT ) );
+				}
+			});
+			
+		}
 
 	}
 }
