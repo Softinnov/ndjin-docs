@@ -6,6 +6,8 @@
 
 <mx:Script>
 	<![CDATA[
+		import net.ndjin.ecommerce.model.Category;
+		import mx.events.DynamicEvent;
 		import mx.collections.ArrayCollection;
 		import org.swizframework.Swiz;
 		import net.ndjin.ecommerce.controller.ProductTypeController;
@@ -50,7 +52,7 @@
 				
 				if( productController.selectedProduct != null )
 				{
-					productForm.visible = true;
+					productTabs.visible = true;
 					productSpecificDataGrid.dataProvider = productController.selectedProduct.productSpecifics;
 					productDetailIndex = 0;
 					productSpecificDataGrid.selectedIndex = productDetailIndex;
@@ -58,7 +60,7 @@
 				else
 				{
 					productDataGrid.selectedIndex = -1;
-					productForm.visible = false;
+					productTabs.visible = false;
 				}
 				dispatchEvent(new Event('selectedProduct') );
 			});
@@ -105,6 +107,15 @@
 
 		}
 		
+		private function addCategory( event:DynamicEvent ):void
+		{
+			categoryController.addProductToCategory( selectedProduct, event.item as Category );
+		}
+		private function removeCategory( event:DynamicEvent ):void
+		{
+			categoryController.removeProductFromCategory( selectedProduct, event.item as Category );			
+		}
+		
 		private function productTypeValueLabel( item:Object, column:DataGridColumn ):String
 		{
 			if( item != null && item.value ) return item.value.name;
@@ -142,17 +153,14 @@
 				</mx:columns>
 			</mx:DataGrid>
 			
-			<mx:Button label="New" click="newProduct()" visible="{!productForm.visible}"/>
+			<mx:Button label="New" click="newProduct()" visible="{!productTabs.visible}"/>
 		</mx:VBox>
 		
-		<mx:VBox>
 
-
-			<mx:Form id="productForm" width="100%" visible="false">
-				<mx:FormItem label="Categories" width="100%">
-					<ui:DoubleList sourceDataProvider="{categoryController.categories}" targetDataProvider="{selectedProduct.categories}"
-						 labelField="name" idField="_id"/>
-				</mx:FormItem>
+		<mx:TabNavigator id="productTabs" height="100%" width="100%" visible="false" resizeToContent="true">
+			<mx:Form label="Product Form" width="100%" horizontalScrollPolicy="off" verticalScrollPolicy="off" 
+				paddingBottom="5" paddingTop="5" paddingLeft="5" paddingRight="5">
+			
 				<mx:FormItem label="Product References">
 				
 					<mx:HBox>
@@ -187,10 +195,10 @@
 						change="selectedProduct.name = (event.currentTarget as TextInput).text; productController.products.itemUpdated(selectedProduct)"/>
 				</mx:FormItem>
 				<mx:FormItem label="Common Description">
-					<mx:TextArea text="{selectedProduct.description}"  change="selectedProduct.description = (event.currentTarget as TextInput).text"/>
+					<mx:TextArea text="{selectedProduct.description}"  change="selectedProduct.description = (event.currentTarget as TextArea).text"/>
 				</mx:FormItem>
 				<mx:FormItem label="Specific Description">
-					<mx:TextArea text="{selectedProductSpecific.description}" change="selectedProductSpecific.description = (event.currentTarget as TextInput).text"/>
+					<mx:TextArea text="{selectedProductSpecific.description}" change="selectedProductSpecific.description = (event.currentTarget as TextArea).text"/>
 				</mx:FormItem>
 
 				<mx:FormItem label="Pictures">
@@ -223,8 +231,17 @@
 					</mx:HBox>
 				</mx:FormItem>
 			</mx:Form>
+
+			<mx:Box label="Categories Assignment" horizontalScrollPolicy="off" verticalScrollPolicy="off" verticalAlign="middle" horizontalAlign="center"
+				paddingBottom="20" paddingTop="20" paddingLeft="20" paddingRight="20">
+				<ui:DoubleList sourceDataProvider="{categoryController.categories}" targetDataProvider="{selectedProduct.categories}"
+							addedToTarget="addCategory( event )" removedFromTarget="removeCategory( event )"
+							labelField="name" idField="_id"/>
+				
+			</mx:Box>
+	
+		</mx:TabNavigator>
 			
-		</mx:VBox>
 		
 		
 	</mx:HBox>

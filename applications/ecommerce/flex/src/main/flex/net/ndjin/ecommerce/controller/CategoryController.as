@@ -7,6 +7,7 @@ package net.ndjin.ecommerce.controller
 	
 	import net.ndjin.ecommerce.json.JSONService;
 	import net.ndjin.ecommerce.model.Category;
+	import net.ndjin.ecommerce.model.Product;
 	
 	import org.swizframework.factory.IInitializingBean;
 	
@@ -51,6 +52,38 @@ package net.ndjin.ecommerce.controller
 			
 		}
 		
+		
+		public function addProductToCategory( product:Product, category:Category ):void
+		{
+			var data:Object = {
+				packagePath: "/eCommerce",
+				sourceOwnerId: category._id,
+				sourceOwnerFieldName: "products",
+				appliedTransitionName: "Append",
+				avoidDuplicate: true,
+				instance: { _id: product._id }			
+			}
+			jsonService.query("applyTransitionsToInstance", data, function( result:Object, queryData:Object ):void
+			{
+				
+			});
+
+		}
+		public function removeProductFromCategory( product:Product, category:Category ):void
+		{
+			var data:Object = {
+				packagePath: "/eCommerce",
+				sourceOwnerId: category._id,
+				sourceOwnerFieldName: "products",
+				appliedTransitionName: "Remove",
+				instance: { _id: product._id }			
+			}
+			jsonService.query("applyTransitionsToInstance", data, function( result:Object, queryData:Object ):void
+			{
+				
+			});
+			
+		}
 
 	}
 }

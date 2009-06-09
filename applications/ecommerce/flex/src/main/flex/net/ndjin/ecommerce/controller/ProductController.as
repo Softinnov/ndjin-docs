@@ -183,36 +183,11 @@ package net.ndjin.ecommerce.controller
 		{
 			if( sourceProduct == null ) sourceProduct = selectedProduct;
 			
-						
-			var items:Array = [];
-			for each( var categorie:Category in sourceProduct.categories )
-			{
-				var item:Object = {
-					packagePath: "/eCommerce",
-					ownerId: categorie._id,
-					ownerFieldName: "products",
-					appliedTransitionName: "Append",
-					instance: { _id: sourceProduct._id }			
-				}
-				items.push( item ); 
-			}
-			
-			
-			jsonService.query("applyBatchTransitionsToInstance", { items: items }, function( result:Object, queryData:Object ):void
-			{
-				updateProduct( sourceProduct );
-			});
-			
-			
-		}
-
-		private function updateProduct( sourceProduct:Product ):void
-		{						
 			var data:Object = {
 				packagePath: "/eCommerce",
 				ownerFieldName: "products",
 				appliedTransitionName: "Update",
-				deepUpdateFieldNames: ["productSpecifics"],
+				deepUpdateFieldNames: ["productSpecifics", "productOptions", "productType", "value" ],
 				viewStateName: true,
 				instance: sourceProduct.toJSONObject()
 			};
@@ -224,8 +199,9 @@ package net.ndjin.ecommerce.controller
 				selectedProduct = null;
 				replaceProduct( product );
 			});
-
+			
 		}
+
 
 	}
 }

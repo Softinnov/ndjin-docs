@@ -73,8 +73,9 @@
 		>
 		<mx:columns>
 			<mx:DataGridColumn dataField="productType" />
-			<mx:DataGridColumn  
-				editable="true"	editorDataField="value" itemRenderer="net.ndjin.ecommerce.view.ProductOptionComboBoxItemRenderer"/>
+			<mx:DataGridColumn  dataField="value"
+				editable="true"	editorDataField="value" rendererIsEditor="true"
+				itemRenderer="net.ndjin.ecommerce.view.ProductOptionComboBoxItemRenderer"/>
 		</mx:columns>
 	</mx:DataGrid>
 	<mx:VBox height="100%" verticalAlign="middle">

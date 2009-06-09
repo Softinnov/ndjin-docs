@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:ComboBox xmlns:mx="http://www.adobe.com/2006/mxml" labelField="name"
-	change="result = selectedItem as ProductTypeValue" >
+	change="changeHandler()" >
 
 <mx:Script>
 	<![CDATA[
@@ -10,32 +10,34 @@
 		import net.ndjin.ecommerce.model.ProductTypeValue;
 		import net.ndjin.ecommerce.controller.SessionController;
 		
-		private var _data:Object;
 		
 		[Bindable]
 		[Autowire(bean="productTypeController")]
 		public var productTypeController:ProductTypeController;
 
-		[Bindable]
-		public var result:ProductTypeValue;
+		private function changeHandler():void
+		{
+			_productOption.value = selectedItem as ProductTypeValue;
+		}
 
 
-
+		private var _productOption:ProductOption;
+		
 		override public function set data( value:Object ):void
 		{
-			var productOption:ProductOption = value as ProductOption;
-			if( productOption != null )
+			_productOption = value as ProductOption;
+			if( _productOption != null )
 			{
 				if( productTypeController )
 				{
 					for each( var productType:ProductType in productTypeController.productTypes )
 					{
-						if(  productType._id == productOption.productType._id )
+						if(  productType._id == _productOption.productType._id )
 						{
 							dataProvider = productType.values;
 							for each ( var productTypeValue:ProductTypeValue in productType.values )
 							{
-								if( productOption.value && productTypeValue._id == productOption.value._id )
+								if( _productOption.value && productTypeValue._id == _productOption.value._id )
 								{
 								 	selectedItem = productTypeValue;
 								 	break;
@@ -47,6 +49,11 @@
 			}
 		}
 		
+		
+		override public function get data():Object
+		{
+			return _productOption;
+		}
 		
 	]]>
 </mx:Script>
