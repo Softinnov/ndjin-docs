@@ -30,6 +30,7 @@ package net.ndjin.ecommerce.model
 		public var _description:Object;
 		public function get description():String
 		{
+			if( !_description ) _description = {};
 			return _description[applicationLanguage.dataLanguage];
 		}
 		public function set description(value:String):void

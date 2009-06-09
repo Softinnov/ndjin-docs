@@ -1,11 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:HBox xmlns:mx="http://www.adobe.com/2006/mxml" creationComplete="creationCompleteHandler()">
 
+<mx:Metadata>
+	[Event(name="addedToTarget", type="mx.events.DynamicEvent")]
+	[Event(name="removedFromTarget", type="mx.events.DynamicEvent")]	
+</mx:Metadata>
+
 <mx:Script>
 	<![CDATA[
+		import mx.events.DynamicEvent;
 		import net.ndjin.ecommerce.ApplicationLanguage;
 		import org.swizframework.Swiz;
 		import mx.collections.ArrayCollection;
+
+
 		
 		[Bindable]
 		public var sourceDataProvider:ArrayCollection;
@@ -25,6 +33,7 @@
 			});
 		}
 
+	
 		
 		private function sourceToTarget( event:Event ):void
 		{
@@ -34,6 +43,10 @@
 				{
 					targetDataProvider.addItem( sourceDataGrid.selectedItem ); 
 					//sourceDataProvider.removeItemAt( sourceDataProvider.getItemIndex( sourceDataGrid.selectedItem ) );
+					
+					var dynaEvent:DynamicEvent = new DynamicEvent("addedToTarget");
+					dynaEvent.item = sourceDataGrid.selectedItem;
+					dispatchEvent(dynaEvent);
 				}
 				sourceDataGrid.selectedIndex = -1;
 			}
@@ -43,9 +56,15 @@
 		{
 			if( targetDataGrid.selectedItem )
 			{
+				var dynaEvent:DynamicEvent = new DynamicEvent("removedFromTarget");
+				dynaEvent.item = targetDataGrid.selectedItem;
+				dispatchEvent(dynaEvent);
+
 				targetDataProvider.removeItemAt( targetDataProvider.getItemIndex( targetDataGrid.selectedItem ) );
 				targetDataGrid.selectedIndex = -1;
 				sourceDataGrid.selectedIndex = -1;
+
+
 			}
 			
 		}
@@ -63,7 +82,7 @@
 		
 	]]>
 </mx:Script>
-	<mx:List id="targetDataGrid" width="100" rowCount="3" dataProvider="{targetDataProvider}" labelField="{labelField}"/>
+	<mx:List id="targetDataGrid" width="200" rowCount="10" dataProvider="{targetDataProvider}" labelField="{labelField}"/>
 	<mx:VBox height="100%" verticalAlign="middle">
 		<mx:Button label="&lt;" width="20" paddingLeft="0" paddingRight="0" 
 			visible="{sourceDataGrid.selectedItem != null &amp;&amp; !targetContains( sourceDataGrid.selectedItem )}" 
@@ -71,6 +90,6 @@
 		<mx:Button label="&gt;" width="20" paddingLeft="0" paddingRight="0" visible="{targetDataGrid.selectedItem != null}"
 			click="targetToSource(event)"/>
 	</mx:VBox>
-	<mx:List id="sourceDataGrid" dataProvider="{sourceDataProvider}" width="100" rowCount="3" labelField="{labelField}"/>						
+	<mx:List id="sourceDataGrid" dataProvider="{sourceDataProvider}" width="200" rowCount="10" labelField="{labelField}"/>						
 
 </mx:HBox>

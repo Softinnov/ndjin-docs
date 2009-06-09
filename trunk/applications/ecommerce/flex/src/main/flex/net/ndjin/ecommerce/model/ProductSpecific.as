@@ -17,6 +17,7 @@ package net.ndjin.ecommerce.model
 		public var _description:Object;
 		public function get description():String
 		{
+			if( !_description ) _description = {};
 			return _description[applicationLanguage.dataLanguage];
 		}
 		public function set description(value:String):void
@@ -46,11 +47,22 @@ package net.ndjin.ecommerce.model
 		
 		public function toJSONObject():Object
 		{
+			var productOptionsArray:Array = [];
+			for each( var productOption:ProductOption in productOptions )
+			{
+				productOptionsArray.push( { _id: productOption._id, 
+					productType: { _id: productOption.productType._id, name: productOption.productType.name },
+					value: { _id: productOption.value._id, name: productOption.value.name } 
+					} );
+			}
+
+			
 			var obj:Object = {
 				_id : _id,
 				reference: reference,
 				description: _description,
-				price: price
+				price: price,
+				productOptions: productOptionsArray
 			}
 			if( _id )
 			{
