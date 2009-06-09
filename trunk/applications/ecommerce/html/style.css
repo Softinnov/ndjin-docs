@@ -1,0 +1,45 @@
+
+
+/************************************* Main structure *************************/
+* {
+    margin: 0;
+	
+}
+
+html.busy, html.busy * 
+{  
+   cursor: wait !important;  
+} 
+.content
+{
+	display: block;
+	width: 100%;
+}
+
+.box
+{
+	border: solid;
+	border-width: 1px;
+	padding: 5px 5px; 	
+}
+
+.button
+{
+	background-color:#ccc;
+	border: solid;
+	border-width: 1px;
+	padding: 1px 1px; 
+}
+.button:active
+{ 
+	background-color:#eee;
+	border: dashed;
+	border-width: 1px;
+	padding: 1px 1px; 
+}
+
+.alertMessage
+{
+	color: red;
+}
+ 
