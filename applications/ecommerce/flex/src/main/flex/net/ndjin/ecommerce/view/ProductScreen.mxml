@@ -82,6 +82,7 @@
 		{
 			productDataGrid.selectedIndex = -1;
 			productController.createNew();
+			referenceTextInput.setFocus();
 		}
 		
 		private function addReference():void

@@ -6,7 +6,6 @@ package net.ndjin.ecommerce.controller
 	import mx.collections.ArrayCollection;
 	
 	import net.ndjin.ecommerce.json.JSONService;
-	import net.ndjin.ecommerce.model.Category;
 	import net.ndjin.ecommerce.model.Product;
 	
 	import org.swizframework.Swiz;
@@ -40,7 +39,10 @@ package net.ndjin.ecommerce.controller
 		
 		public function initialize():void
 		{
-			load();
+			Swiz.addEventListener( SessionController.HAS_MEMBER_LEVEL_EVENT, function( event:Event ):void {
+				 load(); 
+			 });
+
 		}
 
 		private function replaceProduct( product:Product ):void
@@ -94,6 +96,7 @@ package net.ndjin.ecommerce.controller
 			var data:Object = {
 				packagePath: "/eCommerce",
 				ownerFieldName: "products",
+				viewStateName: true,
 				appliedTransitionName: "New"
 			};
 			
@@ -102,7 +105,8 @@ package net.ndjin.ecommerce.controller
 			{
 				var product:Product = new Product( { name: {}, description: {}, tax: 0, productSpecifics: [ {reference:"", descripton: {}, price: 0 } ] } )
 				product._id = result.instance._id;
-				selectedProduct = product; 
+				product.state = result.instance._stateName;
+				selectedProduct = product;
 			});
 			
 		}
@@ -173,11 +177,31 @@ package net.ndjin.ecommerce.controller
 			
 		}
 
-
 		public function remove( sourceProduct:Product ):void
 		{
-			
+			if( sourceProduct == null ) sourceProduct = selectedProduct;
+			var data:Object = {
+				packagePath: "/eCommerce",
+				ownerFieldName: "products",
+				instance: { _id: sourceProduct._id }
+			};
+
+			if( sourceProduct.state == "Created" )
+			{
+				data.appliedTransitionName = "Cancel";	
+			}
+			else
+			{
+				data.appliedTransitionName = "Delete";
+			}
+
+			jsonService.query("applyTransitionToInstance", data, function( result:Object, queryData:Object ):void
+			{
+				selectedProduct = null;
+				load();
+			});
 		}
+		
 	
 		public function update( sourceProduct:Product ):void
 		{
@@ -186,18 +210,26 @@ package net.ndjin.ecommerce.controller
 			var data:Object = {
 				packagePath: "/eCommerce",
 				ownerFieldName: "products",
-				appliedTransitionName: "Update",
 				deepUpdateFieldNames: ["productSpecifics", "productOptions", "productType", "value" ],
 				viewStateName: true,
 				instance: sourceProduct.toJSONObject()
 			};
 			
+			if( sourceProduct.state == "Created" )
+			{
+				data.appliedTransitionName = "Store";	
+			}
+			else
+			{
+				data.appliedTransitionName = "Update";
+			}
 			
 			jsonService.query("applyTransitionToInstance", data, function( result:Object, queryData:Object ):void
 			{
 				var product:Product = new Product( result.instance );
 				selectedProduct = null;
 				replaceProduct( product );
+				if( data.appliedTransitionName == "Store" ) load();
 			});
 			
 		}

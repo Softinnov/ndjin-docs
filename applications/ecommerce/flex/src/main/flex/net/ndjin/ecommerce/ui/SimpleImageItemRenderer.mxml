@@ -7,6 +7,6 @@
 	</mx:Script>
 	
 	<mx:Image id="image" width="100%" height="100%" source="{S3Utils.getPublicURL( data.toString() )}" horizontalAlign="center"
-		doubleClick="navigateToURL( new URLRequest( image.source as String ), '_blank' ) " doubleClickEnabled="true"
+		doubleClick="navigateToURL( new URLRequest( image.source as String ), '_blank' )" doubleClickEnabled="true"
 		/>
 </mx:Box>

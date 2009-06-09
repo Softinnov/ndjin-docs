@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" title="Authentication Required"
+	creationComplete="creationCompleteHandler()">
+<mx:Script>
+<![CDATA[
+	import org.swizframework.Swiz;
+	import mx.managers.PopUpManager;
+
+	private function creationCompleteHandler():void
+	{
+		PopUpManager.centerPopUp(this);	
+	}
+
+
+	private function authenticate():void
+	{
+		var url:String = Swiz.getBean("baseURL") + "/auth";
+		var request:URLRequest = new URLRequest(url);
+
+		var parameters:URLVariables = new URLVariables();
+	  	parameters.openID = openidTextInput.text;
+	  	parameters.returnURL = ExternalInterface.call('window.location.href.toString');
+	  	
+		request.data = parameters;
+		
+		navigateToURL( request, '_self' );
+		
+	}	
+]]>
+</mx:Script>
+<mx:Form>
+	<mx:FormHeading label="Enter you OpenID"/>
+	
+	<mx:FormItem label="OpenID">
+		<mx:HBox>
+			<mx:TextInput id="openidTextInput" keyDown="if( (event as KeyboardEvent).keyCode == 13 ) authenticate() " width="400"/>
+			<mx:Button label="Go" click="authenticate()"/>		
+		</mx:HBox>
+	</mx:FormItem>
+	
+	<mx:FormItem>
+		<mx:HBox>
+			<mx:Button label="Use Google" click=" openidTextInput.text='https://www.google.com/accounts/o8/id'; authenticate()" />
+			<mx:Button label="Use Yahoo" click=" openidTextInput.text='https://me.yahoo.com/'; authenticate()" />
+		</mx:HBox>
+	</mx:FormItem>
+	
+</mx:Form>
+</mx:TitleWindow>

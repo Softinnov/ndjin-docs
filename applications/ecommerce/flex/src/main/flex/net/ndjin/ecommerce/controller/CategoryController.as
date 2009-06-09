@@ -9,6 +9,7 @@ package net.ndjin.ecommerce.controller
 	import net.ndjin.ecommerce.model.Category;
 	import net.ndjin.ecommerce.model.Product;
 	
+	import org.swizframework.Swiz;
 	import org.swizframework.factory.IInitializingBean;
 	
 	public class CategoryController extends EventDispatcher implements IInitializingBean
@@ -21,7 +22,9 @@ package net.ndjin.ecommerce.controller
 		
 		public function initialize():void
 		{
-			load();
+			Swiz.addEventListener( SessionController.HAS_MEMBER_LEVEL_EVENT, function( event:Event ):void {
+				 load(); 
+			 });
 		}
 
 		public function load():void

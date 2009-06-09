@@ -7,7 +7,7 @@
 <mx:Script>
 	<![CDATA[
 	]]>
-</mx:Script>	
+</mx:Script>
 	<mx:String id="baseURL">http://localhost:8080/ng/ecom</mx:String>
 	
 	<controller:ProductController id="productController">
