@@ -118,7 +118,7 @@ package net.ndjin.ecommerce.controller
 			var data:Object = {
 				packagePath: "/eCommerce",
 				ownerFieldName: "products",
-				deepFieldNames: ["productSpecifics", "productOptions"],
+				deepViewFieldNames: ["productSpecifics", "productOptions"],
 				appliedTransitionName: "Edit",
 				viewStateName: true,
 				instance: { _id: sourceProduct._id }
@@ -140,7 +140,7 @@ package net.ndjin.ecommerce.controller
 			var data:Object = {
 				packagePath: "/eCommerce",
 				ownerFieldName: "products",
-				deepFieldNames: ["productSpecifics", "productOptions"],
+				deepViewFieldNames: ["productSpecifics", "productOptions"],
 				appliedTransitionName: "View",
 				viewStateName: true,
 				instance: { _id: sourceProduct._id }
