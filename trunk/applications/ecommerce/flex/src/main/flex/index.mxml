@@ -2,7 +2,6 @@
         xmlns:local="*" 
         xmlns:view="net.ndjin.ecommerce.view.*"
 	
-        layout="vertical" verticalAlign="middle" horizontalAlign="center"
 		horizontalScrollPolicy="off" verticalScrollPolicy="off"
         backgroundColor="#F9F9F9"
 
@@ -32,7 +31,7 @@
 	}
 ]]>
 </mx:Script>    	
-<mx:Box id="main">
+<mx:Box id="main" height="100%" width="100%" verticalAlign="middle" horizontalAlign="center">
 
 	<mx:ComboBox change="applicationLanguage.dataLanguage=(event.currentTarget as ComboBox).selectedItem.toString()">
 		<mx:dataProvider>

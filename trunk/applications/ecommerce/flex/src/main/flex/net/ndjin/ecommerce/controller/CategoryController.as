@@ -32,7 +32,7 @@ package net.ndjin.ecommerce.controller
 			var data:Object = {
 				packagePath: "/eCommerce",
 				ownerFieldName: "categories",
-				deepFieldNames: ["categories" ],
+				deepViewFieldNames: ["categories" ],
 				start: 0,
 				count: 100
 			};
