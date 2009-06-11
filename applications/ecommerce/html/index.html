@@ -31,11 +31,37 @@
 
 
 		<div name="products">
-			<p name="product">
-				<b name="name"></b>
-			</p>
+			<div name="product">
+				<p name="name"></p>
+				<p name="description"></p>
+				<p>Tax: <span name="tax"></span></p>
+
+				<table border="1">
+					<tr name="productSpecifics">
+						<td name="productSpecific">
+							<p name="reference"></p>
+							<p name="description"></p>
+							<p>Price: <span name="price"></span></p>
+							<input type="button" name="addToCart" value="Add to cart" />
+						</td>
+					</tr>
+				</table>
+
+				<hr />
+			</div>
 		</div>
 
+		<div name="cart">
+			<div name="cartItems">
+				<div name="cartItem">
+					<p name="name"></p>
+					<p name="reference"></p>
+					<p name="quantity"></p>
+					<input type="button" name="removeFromCart" value="Remove from cart" />
+					<hr/>
+				</div>
+			</div>
+		</div>
 
 	</div>
 	<!-- ########################################################################### -->
@@ -48,7 +74,14 @@
 		
 		<div name="categories"></div>
 		
-		<div name="products"></div>		
+		<h4>Products</h4>
+		
+		<div name="products"></div>
+		
+		<h4>Cart</h4>
+		<div name="cart"></div>
+		
+		
 	</div>
 				
 	
