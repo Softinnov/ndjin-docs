@@ -8,10 +8,9 @@ function ProductView( template, target )
 	this.products;
 	
 	
-	
 	dispatcher.addEventListener( LANGUAGE_CHANGED_EVENT, this, function( that, data )
 	{
-		that.displayProducts( that.products );
+		if( that.products )	that.displayProducts( that.products );
 	});
 	
 	

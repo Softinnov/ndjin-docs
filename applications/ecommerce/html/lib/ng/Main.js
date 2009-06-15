@@ -4,6 +4,9 @@ document.write('<script type="text/javascript" src="./lib/swfaddress.js"></scrip
 
 document.write('<script type="text/javascript" src="./lib/ng/JSONService.js"></script>'); 
 document.write('<script type="text/javascript" src="./lib/ng/Dispatcher.js"></script>'); 
+
+document.write('<script type="text/javascript" src="./lib/ng/LanguageView.js"></script>'); 
+document.write('<script type="text/javascript" src="./lib/ng/SessionController.js"></script>'); 
 document.write('<script type="text/javascript" src="./lib/ng/CategoryController.js"></script>'); 
 document.write('<script type="text/javascript" src="./lib/ng/CategoryView.js"></script>'); 
 document.write('<script type="text/javascript" src="./lib/ng/ProductView.js"></script>'); 
@@ -17,79 +20,121 @@ var baseURL = "http://localhost:8080/ng/ecom";
 var ndjinURL = baseURL;
 var ndjinServiceURL = ndjinURL+ "/service";
 
-var lang = 'en';
-
-var LANGUAGE_CHANGED_EVENT = "LANGUAGE_CHANGED_EVENT"
-
+var CHECKOUT_PAGE = 'co';
 
 $(document).ready(function()
 {
 	globalAjaxCursorChange();
 	
-	var cartView = new CartView( $('#templates *[name=cart] *[name=cartItems]'), $('#content div[name=cart]') );
-	var cartController = new CartController( cartView );
-
-	var categoryView = new CategoryView( $('#templates div[name=categories] ul'), $('#content div[name=categories]'))
-	var categoryController = new CategoryController( categoryView );
-	
-	var productView = new ProductView( $('#templates *[name=products] *[name=product]'), $('#content div[name=products]') );
-	var productController = new ProductController( productView );
-	
-	categoryController.loadAll();
+	var languageView = new LanguageView( $('#languageCombobox' ) );
 	
 	
 	
+	var cartController = new CartController();
+	var categoryController = new CategoryController();
+	var productController = new ProductController();
+	var sessionController = new SessionController();
+		
 	
-	
-	$('#languageCombobox').change( function( e )
-	{
-		var l = $('#languageCombobox option:selected"').text();
-		dispatcher.dispatch( LANGUAGE_CHANGED_EVENT, l );
-	});
-
-
-
 	SWFAddress.onChange = function() 
 	{
-		var cat = SWFAddress.getParameter( "cat" );		
-		if( cat )
-		{
-			var categoryId = parseInt( cat );
-			if( productController.currentCategoryId != categoryId )
-			{
-				dispatcher.dispatch( PRODUCT_CATEGORY_CHANGED_EVENT, categoryId );
-			}
-		}
 		
 		var l = SWFAddress.getParameter( "l" );
 		if( l && lang != l ) 
 		{
-			$('#languageCombobox option:contains('+l+')').attr('selected', true );
 			lang = l;
 			dispatcher.dispatch( LANGUAGE_CHANGED_EVENT, l );
 		}
+		
+		
+		var p = SWFAddress.getParameter( "p" );
+		if( p && p == CHECKOUT_PAGE )
+		{
+			$('#content').hide();
+			$('#checkout').show();
+
+			if( !sessionController.getOpenId() )
+			{
+				$('#signInForm').show();
+			}
+			else
+			{
+				$('#signInForm').hide();
+			}
+
+		}
+		else
+		{
+			$('#content').show();
+			$('#checkout').hide();
+			
+			var cartView = new CartView( $('#templates *[name=cart] *[name=cartItems]'), $('#content div[name=cart]') );
+			cartController.views.push( cartView );
+		
+			var categoryView = new CategoryView( $('#templates div[name=categories] ul'), $('#content div[name=categories]'))
+			categoryController.views.push( categoryView );
+
+			var productView = new ProductView( $('#templates *[name=products] *[name=product]'), $('#content div[name=products]') );
+			productController.views.push( productView );
+			
+			categoryController.loadAll();
+			
+			$('#viewCartButton').click( function ()
+			{ 
+				cartController.loadCart();
+			});
+			$('#hideCartButton').click( function ()
+			{ 
+				cartView.hide();
+			});
+			$('#checkoutButton').click( function ()
+			{ 
+				SWFAddress.setValue( getAddressValue( null, null, CHECKOUT_PAGE ) );
+			});
+
+
+			var c = SWFAddress.getParameter( "c" );		
+			if( c )
+			{
+				var categoryId = parseInt( c );
+				if( productController.currentCategoryId != categoryId )
+				{
+					dispatcher.dispatch( PRODUCT_CATEGORY_CHANGED_EVENT, categoryId );
+				}
+			}
+			
+
+		}
 	} 
 	
+	
+
 
 	dispatcher.addEventListener( LANGUAGE_CHANGED_EVENT, this, function( that, data )
 	{
-		var cat = SWFAddress.getParameter( "cat" );	
-		SWFAddress.setValue( getAddressValue( data, cat ) );
+		SWFAddress.setValue( getAddressValue( data, null, null ) );
 	});
 	dispatcher.addEventListener( PRODUCT_CATEGORY_CHANGED_EVENT, this, function( that, data )
 	{
-		var l = SWFAddress.getParameter( "l" );
-		SWFAddress.setValue( getAddressValue( l, data ) );
+		SWFAddress.setValue( getAddressValue( null, data, null ) );
 	});
+	
+	
 	
 }); // document
 
 
-function getAddressValue( l, cat )
+function getAddressValue( l, cat, page )
 {
 	var value = '?';
+	if( l == null ) l = SWFAddress.getParameter( "l" );
 	if( l ) value += 'l='+l;
-	if( cat ) value+='&cat='+cat;
+	
+	if( cat == null ) cat = SWFAddress.getParameter( "c" );
+	if( cat ) value+='&c='+cat;
+
+	if( page == null ) page = SWFAddress.getParameter( "p" );
+	if( page ) value+='&p='+page;
 	return value;
 }
 

@@ -1,10 +1,10 @@
 var PRODUCT_CATEGORY_CHANGED_EVENT = "PRODUCT_CATEGORY_CHANGED_EVENT";
 
 
-function ProductController( view )
+function ProductController()
 {
 	this.products;
-	this.view = view;
+	this.views = [];
 	this.jsonService = new JSONService( baseURL+'/service/InstanceService' );
 	
 	this.currentCategoryId;
@@ -59,7 +59,10 @@ function ProductController( view )
 			that.products = data.result.instances;
 			if( that.products )
 			{
-				that.view.displayProducts( that.products );
+				$.each( that.views, function( i, view )
+				{
+					view.displayProducts(that.products);
+				});
 			}
 		});
 		
