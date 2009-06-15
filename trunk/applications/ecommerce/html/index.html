@@ -22,7 +22,9 @@
 	<!-- Templates -->
 	<!-- ########################################################################### -->
 	<div id="templates"  style="display:none">
-		
+
+
+		<!-- Categories -->
 		<div name="categories">
 			<ul>
 				<li></li>
@@ -30,6 +32,7 @@
 		</div>
 
 
+		<!-- Products -->
 		<div name="products">
 			<div name="product">
 				<p name="name"></p>
@@ -51,6 +54,8 @@
 			</div>
 		</div>
 
+
+		<!-- Carts -->
 		<div name="cart">
 
 			<table border="1">
@@ -70,6 +75,49 @@
 			</table>
 		</div>
 
+
+		<!-- Order -->
+		<div name="order">
+
+			<table border="1">
+				<thead>
+					<tr><th>Name</th><th>Ref</th><th>Q</th><th>Tax</th><th>Price</th><th>&#160;</th></tr>
+				</thead>
+				<tbody  name="orderItems">>
+				<tr name="orderItem">
+					<td name="name"></td>
+					<td name="reference"></td>
+					<td name="quantity"></td>
+					<td name="tax"></td>
+					<td name="price"></td>
+				</tr>
+				</tbody>
+			</table>
+						
+			<table border="1">
+				<tr>
+					<td>Total</td>
+					<td name="priceSum"></td>
+				</tr>
+				<tr>
+					<td>Taxes</td>
+					<td name="taxSum"></td>
+				</tr>
+				<tr>
+					<td>Delivery</td>
+					<td name="deliveryCost"></td>
+				</tr>
+				
+				<tr>
+					<td>Total</td>
+					<td name="total"></td>
+				</tr>
+				
+			</table>			
+			
+		</div>
+
+
 	</div>
 	<!-- ########################################################################### -->
 	<!-- ########################################################################### -->
@@ -77,7 +125,7 @@
 	
 	<select id="languageCombobox"><option>en</option><option>fr</option></select>
 	
-	<div id="content">
+	<div id="content" style="display:none">
 		
 		<div name="categories"></div>
 		
@@ -87,9 +135,52 @@
 		
 		<h4>Cart</h4>
 		<div name="cart"></div>
-		<a href="checkout.html">Checkout</a>
+		
+		<input id="viewCartButton" type="button" name="View Cart" value="View Cart" />
+		<input id="hideCartButton" type="button" name="Hide Cart" value="Hide Cart" />
+		
+		<input id="checkoutButton" type="button" name="Checkout" value="Checkout" />
 		
 		
+	</div>
+
+	<div id="checkout" style="display:none">
+		
+		<div id="signInForm">
+		 	<form>
+				OpenID <input type="text" name="openId" />
+				<input type="button" value="Sign In" />
+			</form>
+		</div>
+		
+		<div id="customerForm">
+			<h5>Update customer account</h5>
+		 	<form>
+		 		<table>
+		 			<tr>
+			 			<td>FistName</td>
+						<td><input type="text" name="firstname" /></td>
+					</tr>
+		 			<tr>
+			 			<td>LastName</td>
+						<td><input type="text" name="lastname" /></td>
+					</tr>
+		 			<tr>
+			 			<td></td>
+						<td><input type="submit" value="Update" /></td>
+					</tr>
+
+	 			</table>
+				
+			</form>
+		</div>
+		
+		
+		<h4>Order</h4>
+		<div name="order"></div>
+		Shipping Coutry <select id="contryCombobox"><option>USA</option><option>France</option></select>
+
+		<input id="payButton" type="button" name="Pay" value="Pay" />
 	</div>
 				
 	

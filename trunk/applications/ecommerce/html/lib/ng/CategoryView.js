@@ -8,7 +8,7 @@ function CategoryView( template, target )
 	
 	dispatcher.addEventListener( LANGUAGE_CHANGED_EVENT, this, function( that, data )
 	{
-		that.displayCategories( that.categories );
+		if( that.categories ) that.displayCategories( that.categories );
 	});
 	
 	

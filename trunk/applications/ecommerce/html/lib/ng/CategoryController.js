@@ -1,7 +1,7 @@
-function CategoryController( view )
+function CategoryController()
 {
 	this.categories;
-	this.view = view;
+	this.views = [];
 	this.jsonService = new JSONService( baseURL+'/service/InstanceService' );
 	
 	this.loadAll = function ()
@@ -20,8 +20,10 @@ function CategoryController( view )
 			that.categories = data.result.instances;
 			if( that.categories )
 			{
-				
-				that.view.displayCategories( that.categories );
+				$.each( that.views, function( i, view )
+				{
+					view.displayCategories(that.categories);
+				});
 			}
 		});
 		

@@ -1,10 +1,13 @@
 var ADD_TO_CART_EVENT = "ADD_TO_CART_EVENT";
 var REMOVE_FROM_CART_EVENT = "REMOVE_FROM_CART_EVENT";
 
-function CartController( view )
+function CartController()
 {
+	this.views = [];
+	
+	
 	this.cart;
-	this.view = view;
+	
 	this.jsonService = new JSONService( baseURL+'/service/InstanceService' );
 	
 	
@@ -24,7 +27,7 @@ function CartController( view )
 	{
 		if ( this.cart == null)
 		{
-			this.loadCart( productId, specificId );
+			this.loadItemToCart( productId, specificId );
 		}
 		else
 		{
@@ -86,7 +89,10 @@ function CartController( view )
 		this.jsonService.query( 'applyTransitionToInstance', data, function( data )
 		{
 			that.cart = data.result.instance;
-			that.view.displayCart( that.cart );
+			$.each( that.views, function( i, view )
+			{
+				view.displayCart(that.cart);
+			});
 
 		});
 			
@@ -125,13 +131,46 @@ function CartController( view )
 		this.jsonService.query( 'applyTransitionToInstance', data, function( data )
 		{
 			that.cart = data.result.instance;
-			that.view.displayCart( that.cart );
+			$.each( that.views, function( i, view )
+			{
+				view.displayCart(that.cart);
+			});
 
 		});
 
 	}
 
-	this.loadCart = function( productId, specificId ) 
+	this.loadCart = function()
+	{
+		var data = 
+		{
+			packagePath: '/eCommerce',
+			ownerFieldName: 'carts',
+			filters: [{
+				fieldName: 'linkedSessionId',
+				operator: "=",
+				value: currentSessionId
+			}],
+			deepViewFieldNames: ['cartItems', 'productSpecific', 'product' ]
+		};
+		
+		
+		var that = this;
+		this.jsonService.query( 'getInstances', data, function( data )
+		{
+			if (data.result['instances']) 
+			{
+				that.cart = data.result.instances[0];
+				$.each( that.views, function( i, view )
+				{
+					view.displayCart(that.cart);
+				});
+			}
+		});
+	}
+
+
+	this.loadItemToCart = function( productId, specificId ) 
 	{
 		var data = 
 		{
@@ -157,14 +196,14 @@ function CartController( view )
 			}
 			else
 			{
-				that.createCart( productId, specificId  );
+				that.createCartWithItem( productId, specificId  );
 			}
 		});
 	
 	}
 
 
-	this.createCart = function( productId, specificId )
+	this.createCartWithItem = function( productId, specificId )
 	{
 		var data = 
 		{

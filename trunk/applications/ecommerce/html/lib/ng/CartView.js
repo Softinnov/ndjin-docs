@@ -11,7 +11,7 @@ function CartView( template, target )
 	
 	dispatcher.addEventListener( LANGUAGE_CHANGED_EVENT, this, function( that, data )
 	{
-		that.displayCart( that.cart );
+		if( that.cart )	that.displayCart( that.cart );
 	});
 	
 	this.displayCart = function ( value )
@@ -60,6 +60,9 @@ function CartView( template, target )
 		
 	}
 	
-	
+	this.hide = function()
+	{
+		this.target.empty();
+	}
 	
 }
