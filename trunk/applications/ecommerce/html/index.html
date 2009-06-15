@@ -13,7 +13,7 @@
 	
     <title>Ecommerce Sample Application</title>
 	<script type="text/javascript" src="./lib/jquery/jquery-1.3.2.min.js"></script>
-	<script type="text/javascript" src="./lib/ng.js"></script>
+	<script type="text/javascript" src="./lib/ng/Main.js"></script>
 	
 </head>
 <body>
@@ -52,15 +52,22 @@
 		</div>
 
 		<div name="cart">
-			<div name="cartItems">
-				<div name="cartItem">
-					<p name="name"></p>
-					<p name="reference"></p>
-					<p name="quantity"></p>
-					<input type="button" name="removeFromCart" value="Remove from cart" />
-					<hr/>
-				</div>
-			</div>
+
+			<table border="1">
+				<thead>
+					<tr><th>Name</th><th>Ref</th><th>Q</th><th>Tax</th><th>Price</th><th>&#160;</th></tr>
+				</thead>
+				<tbody  name="cartItems">
+				<tr name="cartItem">
+					<td name="name"></td>
+					<td name="reference"></td>
+					<td name="quantity"></td>
+					<td name="tax"></td>
+					<td name="price"></td>
+					<td><input type="button" name="removeFromCart" value="Remove from cart" /></td>
+				</tr>
+				</tbody>
+			</table>
 		</div>
 
 	</div>
@@ -80,6 +87,7 @@
 		
 		<h4>Cart</h4>
 		<div name="cart"></div>
+		<a href="checkout.html">Checkout</a>
 		
 		
 	</div>
