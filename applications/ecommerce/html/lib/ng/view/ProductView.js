@@ -14,7 +14,7 @@ function ProductView( template, target )
 	});
 	
 	
-	this.displayProducts = function ( value )
+	this.display = function ( value )
 	{
 		this.products = value;
 

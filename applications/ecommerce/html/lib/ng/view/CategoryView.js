@@ -13,7 +13,7 @@ function CategoryView( template, target )
 	
 	
 	
-	this.displayCategories = function ( value )
+	this.display = function ( value )
 	{
 		this.categories = value;
 

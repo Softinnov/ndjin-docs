@@ -22,7 +22,7 @@ function CategoryController()
 			{
 				$.each( that.views, function( i, view )
 				{
-					view.displayCategories(that.categories);
+					view.display(that.categories);
 				});
 			}
 		});
