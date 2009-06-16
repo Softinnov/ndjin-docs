@@ -24,7 +24,7 @@
 	<div id="templates"  style="display:none">
 
 
-		<!-- Categories -->
+		<!-- Categories ///////////////////// -->
 		<div name="categories">
 			<ul>
 				<li></li>
@@ -32,7 +32,7 @@
 		</div>
 
 
-		<!-- Products -->
+		<!-- Products ///////////////////// -->
 		<div name="products">
 			<div name="product">
 				<p name="name"></p>
@@ -55,7 +55,7 @@
 		</div>
 
 
-		<!-- Carts -->
+		<!-- Carts ///////////////////// -->
 		<div name="cart">
 
 			<table border="1">
@@ -76,7 +76,7 @@
 		</div>
 
 
-		<!-- Order -->
+		<!-- Order ///////////////////// -->
 		<div name="order">
 
 			<table border="1">
@@ -125,14 +125,18 @@
 	
 	<select id="languageCombobox"><option>en</option><option>fr</option></select>
 	
+
+	<!-- content ///////////////////// -->
 	<div id="content" style="display:none">
 		
+		<!-- categories ///////////////////// -->
 		<div name="categories"></div>
 		
+		<!-- Products ///////////////////// -->		
 		<h4>Products</h4>
-		
 		<div name="products"></div>
 		
+		<!-- Cart ///////////////////// -->
 		<h4>Cart</h4>
 		<div name="cart"></div>
 		
@@ -144,18 +148,24 @@
 		
 	</div>
 
+	<!-- Checkout ///////////////////// -->
 	<div id="checkout" style="display:none">
 		
-		<div id="signInForm">
+		<!-- signInForm ///////////////////// -->
+		<div id="signIn">
 		 	<form>
-				OpenID <input type="text" name="openId" />
-				<input type="button" value="Sign In" />
+				<img src="http://openid.net/wp-content/uploads/2007/10/openid_med_logo_text.png" width="84" height="28"/> <input type="text" name="openId" />
+				<input type="button" id="loginButton" value="Sign In" />
+				<input type="button" id="googleOpenIDButton" value="Google" />
+				<input type="button" id="yahooOpenIDButton" value="Yahoo" />
 			</form>
 		</div>
 		
-		<div id="customerForm">
+
+		<!-- customerForm ///////////////////// -->
+		<div id="customer">
 			<h5>Update customer account</h5>
-		 	<form>
+		 	<form id="customerForm">
 		 		<table>
 		 			<tr>
 			 			<td>FistName</td>
@@ -166,8 +176,71 @@
 						<td><input type="text" name="lastname" /></td>
 					</tr>
 		 			<tr>
+			 			<td>Email</td>
+						<td><input type="text" name="email" /></td>
+					</tr>
+
+
+					<tr>
+						<td>Shipping Address</td>
+						<td>
+					 		<table name="shippingAddress">
+					 			<tr>
+						 			<td>Street 1</td>
+									<td><input type="text" name="street1" /></td>
+								</tr>
+					 			<tr>
+						 			<td>Street 2</td>
+									<td><input type="text" name="street2" /></td>
+								</tr>
+					 			<tr>
+						 			<td>City</td>
+									<td><input type="text" name="city" /></td>
+								</tr>
+					 			<tr>
+						 			<td>ZipCode</td>
+									<td><input type="text" name="zipCode" /></td>
+								</tr>
+					 			<tr>
+						 			<td>Phone</td>
+									<td><input type="text" name="phone" /></td>
+								</tr>
+								
+							</table>							
+						</td>
+					</tr>
+					<tr>
+						<td>Billing Address</td>
+						<td>
+					 		<table name="billingAddress">
+					 			<tr>
+						 			<td>Street 1</td>
+									<td><input type="text" name="street1" /></td>
+								</tr>
+					 			<tr>
+						 			<td>Street 2</td>
+									<td><input type="text" name="street2" /></td>
+								</tr>
+					 			<tr>
+						 			<td>City</td>
+									<td><input type="text" name="city" /></td>
+								</tr>
+					 			<tr>
+						 			<td>ZipCode</td>
+									<td><input type="text" name="zipCode" /></td>
+								</tr>
+					 			<tr>
+						 			<td>Phone</td>
+									<td><input type="text" name="phone" /></td>
+								</tr>
+								
+							</table>							
+						</td>
+					</tr>
+
+		 			<tr>
 			 			<td></td>
-						<td><input type="submit" value="Update" /></td>
+						<td><input type="submit" name="updateCustomer" value="Update" /></td>
 					</tr>
 
 	 			</table>
@@ -176,10 +249,11 @@
 		</div>
 		
 		
+		
+		<!-- Order ///////////////////// -->
 		<h4>Order</h4>
 		<div name="order"></div>
-		Shipping Coutry <select id="contryCombobox"><option>USA</option><option>France</option></select>
-
+		
 		<input id="payButton" type="button" name="Pay" value="Pay" />
 	</div>
 				

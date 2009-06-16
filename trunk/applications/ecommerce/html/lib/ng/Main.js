@@ -9,10 +9,13 @@ document.write('<script type="text/javascript" src="./lib/ng/controller/SessionC
 document.write('<script type="text/javascript" src="./lib/ng/controller/CategoryController.js"></script>'); 
 document.write('<script type="text/javascript" src="./lib/ng/controller/ProductController.js"></script>'); 
 document.write('<script type="text/javascript" src="./lib/ng/controller/CartController.js"></script>'); 
+document.write('<script type="text/javascript" src="./lib/ng/controller/CustomerController.js"></script>'); 
+
 document.write('<script type="text/javascript" src="./lib/ng/view/LanguageView.js"></script>'); 
 document.write('<script type="text/javascript" src="./lib/ng/view/CategoryView.js"></script>'); 
 document.write('<script type="text/javascript" src="./lib/ng/view/ProductView.js"></script>'); 
 document.write('<script type="text/javascript" src="./lib/ng/view/CartView.js"></script>'); 
+document.write('<script type="text/javascript" src="./lib/ng/view/CustomerView.js"></script>'); 
 
 
 
@@ -20,11 +23,39 @@ var baseURL = "http://localhost:8080/ng/ecom";
 var ndjinURL = baseURL;
 var ndjinServiceURL = ndjinURL+ "/service";
 
+
 var CHECKOUT_PAGE = 'co';
 
 $(document).ready(function()
 {
 	globalAjaxCursorChange();
+	
+	function gotoOpenID( openId )
+	{
+		window.location = ndjinURL+"/auth?returnURL="+location.href+"&openID=" + openId;
+	}
+	$('#loginButton').click( function (){ 
+			gotoOpenID( $('#loginOpenID').val() );		
+	});
+	$('#loginOpenID').keypress(function (e){
+		if( e.which == 13 )
+		{
+			gotoOpenID( $('#loginOpenID').val() );
+		}
+	});
+	$('#googleOpenIDButton').click( function (){ 
+		gotoOpenID( "https://www.google.com/accounts/o8/id" );
+	});
+	$('#yahooOpenIDButton').click( function (){ 
+		gotoOpenID( "https://me.yahoo.com/" );
+	});
+	
+	
+	$('#logoutButton').click( function (){ 
+		logout();		
+	});
+
+
 	
 	var languageView = new LanguageView( $('#languageCombobox' ) );
 	
@@ -33,7 +64,6 @@ $(document).ready(function()
 	var cartController = new CartController();
 	var categoryController = new CategoryController();
 	var productController = new ProductController();
-	var sessionController = new SessionController();
 		
 	
 	SWFAddress.onChange = function() 
@@ -53,13 +83,22 @@ $(document).ready(function()
 			$('#content').hide();
 			$('#checkout').show();
 
+
+			var sessionController = new SessionController();
+			var customerController = new CustomerController();
+			var customerView = new CustomerView( $('#customer') );
+			customerController.views.push( customerView );
+
 			if( !sessionController.getOpenId() )
 			{
-				$('#signInForm').show();
+				$('#signIn').show();
+				customerView.hide();
 			}
 			else
 			{
-				$('#signInForm').hide();
+				$('#signIn').hide();
+				customerView.show();
+				customerController.loadCustomer();
 			}
 
 		}

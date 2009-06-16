@@ -61,7 +61,7 @@ function ProductController()
 			{
 				$.each( that.views, function( i, view )
 				{
-					view.displayProducts(that.products);
+					view.display(that.products);
 				});
 			}
 		});

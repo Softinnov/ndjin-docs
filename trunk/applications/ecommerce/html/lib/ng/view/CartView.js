@@ -3,18 +3,16 @@ function CartView( template, target )
 	this.template = template;
 	this.target = target;
 	
-	this.cartController;
-	
 	this.cart;
 	
 	
 	
 	dispatcher.addEventListener( LANGUAGE_CHANGED_EVENT, this, function( that, data )
 	{
-		if( that.cart )	that.displayCart( that.cart );
+		if( that.cart )	that.display( that.cart );
 	});
 	
-	this.displayCart = function ( value )
+	this.display = function ( value )
 	{
 		this.cart = value;
 		if (value != null)

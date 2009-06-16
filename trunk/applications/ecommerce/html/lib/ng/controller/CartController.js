@@ -91,7 +91,7 @@ function CartController()
 			that.cart = data.result.instance;
 			$.each( that.views, function( i, view )
 			{
-				view.displayCart(that.cart);
+				view.display(that.cart);
 			});
 
 		});
@@ -133,7 +133,7 @@ function CartController()
 			that.cart = data.result.instance;
 			$.each( that.views, function( i, view )
 			{
-				view.displayCart(that.cart);
+				view.display(that.cart);
 			});
 
 		});
@@ -163,7 +163,7 @@ function CartController()
 				that.cart = data.result.instances[0];
 				$.each( that.views, function( i, view )
 				{
-					view.displayCart(that.cart);
+					view.display(that.cart);
 				});
 			}
 		});
