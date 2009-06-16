@@ -5,14 +5,14 @@ document.write('<script type="text/javascript" src="./lib/swfaddress.js"></scrip
 document.write('<script type="text/javascript" src="./lib/ng/JSONService.js"></script>'); 
 document.write('<script type="text/javascript" src="./lib/ng/Dispatcher.js"></script>'); 
 
-document.write('<script type="text/javascript" src="./lib/ng/LanguageView.js"></script>'); 
-document.write('<script type="text/javascript" src="./lib/ng/SessionController.js"></script>'); 
-document.write('<script type="text/javascript" src="./lib/ng/CategoryController.js"></script>'); 
-document.write('<script type="text/javascript" src="./lib/ng/CategoryView.js"></script>'); 
-document.write('<script type="text/javascript" src="./lib/ng/ProductView.js"></script>'); 
-document.write('<script type="text/javascript" src="./lib/ng/ProductController.js"></script>'); 
-document.write('<script type="text/javascript" src="./lib/ng/CartView.js"></script>'); 
-document.write('<script type="text/javascript" src="./lib/ng/CartController.js"></script>'); 
+document.write('<script type="text/javascript" src="./lib/ng/controller/SessionController.js"></script>'); 
+document.write('<script type="text/javascript" src="./lib/ng/controller/CategoryController.js"></script>'); 
+document.write('<script type="text/javascript" src="./lib/ng/controller/ProductController.js"></script>'); 
+document.write('<script type="text/javascript" src="./lib/ng/controller/CartController.js"></script>'); 
+document.write('<script type="text/javascript" src="./lib/ng/view/LanguageView.js"></script>'); 
+document.write('<script type="text/javascript" src="./lib/ng/view/CategoryView.js"></script>'); 
+document.write('<script type="text/javascript" src="./lib/ng/view/ProductView.js"></script>'); 
+document.write('<script type="text/javascript" src="./lib/ng/view/CartView.js"></script>'); 
 
 
 
