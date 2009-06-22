@@ -59,12 +59,18 @@ package net.ndjin.ecommerce.controller
 		public function addProductToCategory( product:Product, category:Category ):void
 		{
 			var data:Object = {
-				packagePath: "/eCommerce",
-				sourceOwnerId: category._id,
-				sourceOwnerFieldName: "products",
-				appliedTransitionName: "Append",
-				avoidDuplicate: true,
-				instance: { _id: product._id }			
+				instance: { 
+					_id: product._id,
+					_applyTransitions: [{
+						name:  "Append", 
+						parameters: { 
+							ownerId: category._id, 
+							ownerFieldName: "products", 
+							packagePath: "/eCommerce", 
+							avoidDuplicate: true 
+						} 
+					}] 
+				}
 			}
 			jsonService.query("applyTransitionsToInstance", data, function( result:Object, queryData:Object ):void
 			{
@@ -75,11 +81,18 @@ package net.ndjin.ecommerce.controller
 		public function removeProductFromCategory( product:Product, category:Category ):void
 		{
 			var data:Object = {
-				packagePath: "/eCommerce",
-				sourceOwnerId: category._id,
-				sourceOwnerFieldName: "products",
-				appliedTransitionName: "Remove",
-				instance: { _id: product._id }			
+				instance: { 
+					_id: product._id,
+					_applyTransitions: [{
+						name:  "Remove", 
+						parameters: { 
+							ownerId: category._id, 
+							ownerFieldName: "products", 
+							packagePath: "/eCommerce", 
+							avoidDuplicate: true 
+						} 
+					}] 
+				}
 			}
 			jsonService.query("applyTransitionsToInstance", data, function( result:Object, queryData:Object ):void
 			{
