@@ -75,27 +75,21 @@ function CustomerView( target )
 				
 				if( sa )
 				{
-					data.shippingAddress._applyTransitions = [ {name:'Update', parameters: { ownerId: that.customer._id, ownerFieldName: 'billingAddress' }} ];
+					data.shippingAddress._applyTransitions = [ {name:'Update'} ];
 					data.shippingAddress._id = sa._id;
 				}
 				else
 				{
-					data.shippingAddress._applyTransitions = [
-							{name:'New', parameters: { ownerId: that.customer._id, ownerFieldName: 'billingAddress' } },
-							{name:'Store', parameters: { ownerId: that.customer._id, ownerFieldName: 'billingAddress' } }  
-						];
+					data.shippingAddress._applyTransitions = [{name:'New'},{name:'Store'}];
 				}
 				if( ba )
 				{
-					data.billingAddress._applyTransitions = [ {name:'Update', parameters: { ownerId: that.customer._id, ownerFieldName: 'billingAddress' } } ];
+					data.billingAddress._applyTransitions = [ {name:'Update' } ];
 					data.billingAddress._id = ba._id;
 				}
 				else
 				{
-					data.billingAddress._applyTransitions = [
-						{name:'New', parameters: { ownerId: that.customer._id, ownerFieldName: 'billingAddress' } },
-						{name:'Store', parameters: { ownerId: that.customer._id, ownerFieldName: 'billingAddress' } }  
-						];
+					data.billingAddress._applyTransitions = [{name:'New'},{name:'Store'}];
 				}
 				
 				dispatcher.dispatch( CUSTOMER_UPDATE_EVENT, data );
