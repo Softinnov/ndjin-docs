@@ -43,46 +43,48 @@ function CartController()
 	this.addToCurrentCart = function( productId, specificId )
 	{
 		
-		if( !this.cart.cartItems )
-		{
-			this.cart.cartItems = [];
+		var cart = {
+			_applyTransitions: [{name:'Update'}],
+			_id: this.cart._id,
+			cartItems : [] 
 		}
+
 		
-		var foundCartItem = false;
-		$.each( this.cart.cartItems, function( i, item )
+		if( this.cart.cartItems ) $.each( this.cart.cartItems, function( i, item )
 		{
 			var itemSpecificId = item.productSpecific[0]._id;
 			if( itemSpecificId == specificId )
 			{
-				foundCartItem = true;
-				item._dirty = true;
-				if( isNaN(item.quantity)  ) item.quantity = 1;
-				else item.quantity ++;
+				var quantity = 1;
+				if( !isNaN(item.quantity)  ) quantity = item.quantity + 1;
+				
+				cart.cartItems.push( {
+					_applyTransitions: [{name:'Update'}],
+					_id: item._id,
+					quantity: quantity							
+				} );
 			}
-			item.productSpecific = { _id: itemSpecificId };		
 			
 		});
 		
-		if( !foundCartItem )
+		if( cart.cartItems.length == 0 )
 		{
-			this.cart.cartItems.push( {
+			cart.cartItems.push( {
+				_applyTransitions: [{name:'New'},{name:'Store'}],
 				quantity: 1,
-				_dirty: true,
 				productSpecific: 
 				{
+					_applyTransitions: [{name:'Append'}],
 					_id: specificId
 				}			
 			} );
 		}
 	
+
 		var data = 
 		{
-			packagePath: '/eCommerce',
-			ownerFieldName: 'carts',
-			deepUpdateFieldNames: ['cartItems', 'productSpecific' ],
 			deepViewFieldNames: ['cartItems', 'productSpecific', 'product' ],
-			instance: this.cart,
-			appliedTransitionNames: [ 'Edit', 'Update' ]
+			instance: cart
 		};
 		
 		var that = this;
@@ -102,28 +104,28 @@ function CartController()
 	
 	this.removeFromCurrentCart = function(productId, specificId)
 	{
+		var cart = {
+			_applyTransitions: [{name:'Update'}],
+			_id: this.cart._id,
+			cartItems : [] 
+		}
 		
-		var cartItems = [];
-		$.each( this.cart.cartItems, function( i, item )
+		if( this.cart.cartItems ) $.each( this.cart.cartItems, function( i, item )
 		{
 			var itemSpecificId = item.productSpecific[0]._id;
-			if( itemSpecificId != specificId )
+			if( itemSpecificId == specificId )
 			{
-				item.productSpecific = { _id: itemSpecificId };		
-				cartItems.push( item );
+				cart.cartItems.push( {
+					_applyTransitions: [{name:'Delete'}],
+					_id: item._id
+				} );
 			}
 		});
-		
-		this.cart.cartItems = cartItems;
-	
+
 		var data = 
 		{
-			packagePath: '/eCommerce',
-			ownerFieldName: 'carts',
-			deepUpdateFieldNames: ['cartItems', 'productSpecific' ],
 			deepViewFieldNames: ['cartItems', 'productSpecific', 'product' ],
-			instance: this.cart,
-			appliedTransitionNames: [ 'Edit', 'Update' ]
+			instance: cart,
 		};
 		
 
@@ -205,11 +207,22 @@ function CartController()
 
 	this.createCartWithItem = function( productId, specificId )
 	{
-		var data = 
-		{
-			packagePath: '/eCommerce',
-			ownerFieldName: 'carts',
-			appliedTransitionNames: [ 'New', 'Store' ]
+		var data = {
+			instance: {
+				_applyTransitions: [{
+					name: 'New',
+					parameters: {
+						packagePath: '/eCommerce',
+						ownerFieldName: 'carts'
+					}
+				}, {
+					name: 'Store',
+					parameters: {
+						packagePath: '/eCommerce',
+						ownerFieldName: 'carts'
+					}
+				}]
+			}
 		};
 		
 		
