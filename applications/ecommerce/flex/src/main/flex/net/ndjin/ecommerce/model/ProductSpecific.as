@@ -28,6 +28,7 @@ package net.ndjin.ecommerce.model
 
 		public var price:Number;
 		public var productOptions:ArrayCollection;
+		public var removeProductOptions:ArrayCollection;
 
 		public function ProductSpecific( jsonObject:Object )
 		{
@@ -42,18 +43,23 @@ package net.ndjin.ecommerce.model
 				array.push( new ProductOption( o ) );
 			}
 			productOptions = new ArrayCollection( array );
+			removeProductOptions = new ArrayCollection();
 		}
 		
 		
 		public function toJSONObject():Object
 		{
 			var productOptionsArray:Array = [];
+			
 			for each( var productOption:ProductOption in productOptions )
 			{
-				productOptionsArray.push( { _id: productOption._id, 
-					productType: { _id: productOption.productType._id, name: productOption.productType.name },
-					value: { _id: productOption.value._id, name: productOption.value.name } 
-					} );
+				productOptionsArray.push( productOption.toJSONObject() );
+			}
+			for each( var removeProductOption:ProductOption in removeProductOptions )
+			{
+				productOptionsArray.push(
+					{ _id: productOption._id, _applyTransitions: [ {name:  "Delete" }] }
+				 );
 			}
 
 			
@@ -66,8 +72,13 @@ package net.ndjin.ecommerce.model
 			}
 			if( _id )
 			{
-				obj._dirty = true;
+				obj._applyTransitions = [ {name:  "Update" }]
 			}
+			else
+			{
+				obj._applyTransitions = [ {name:  "New" }, {name:  "Store" }]
+			}
+			
 			return obj;
 		}
 

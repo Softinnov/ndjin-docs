@@ -41,6 +41,7 @@ package net.ndjin.ecommerce.model
 		
 		
 		public var productSpecifics:ArrayCollection;
+		public var removedProductSpecifics:ArrayCollection;
 		
 		public var pictures:ArrayCollection;
 		public var tax:Number;
@@ -83,7 +84,8 @@ package net.ndjin.ecommerce.model
 				array.push( new ProductSpecific( o ) );
 			}
 			productSpecifics = new ArrayCollection( array );
-
+			removedProductSpecifics = new ArrayCollection();
+			
 			array = [];
 			for each( o in jsonObject.categories )
 			{
@@ -110,6 +112,12 @@ package net.ndjin.ecommerce.model
 			{
 				productSpecificsArray.push( productSpecific.toJSONObject() );
 			}
+			for each( var removedProductSpecific:ProductSpecific in removedProductSpecifics )
+			{
+				productSpecificsArray.push( { _id: removedProductSpecific._id, _applyTransitions: [ {name:  "Delete" }] } );
+			}
+			
+			
 			
 			return { 
 				_id: _id, 

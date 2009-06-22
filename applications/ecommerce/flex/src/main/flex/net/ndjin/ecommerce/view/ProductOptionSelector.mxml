@@ -3,6 +3,7 @@
 
 <mx:Script>
 	<![CDATA[
+		import net.ndjin.ecommerce.model.ProductSpecific;
 		import org.swizframework.Swiz;
 		import net.ndjin.ecommerce.ApplicationLanguage;
 		import net.ndjin.ecommerce.model.ProductType;
@@ -16,9 +17,17 @@
 		[Autowire(bean="productTypeController")]
 		public var productTypeController:ProductTypeController;
 
+		
+		private var _productSpecific:ProductSpecific;
+		
+		public function set productSpecific( productSpecific:ProductSpecific ):void
+		{
+			_productSpecific = productSpecific;
+			productOptions = _productSpecific.productOptions;
+		}
 
 		[Bindable]
-		public var productOptions:ArrayCollection;
+		private var productOptions:ArrayCollection;
 		
 		private function creationCompleteHandler():void
 		{
@@ -59,7 +68,9 @@
 		{
 			if( productOptionDataGrid.selectedItem )
 			{
-				productOptions.removeItemAt( productOptions.getItemIndex( productOptionDataGrid.selectedItem ) );
+				var productOption:ProductOption = productOptionDataGrid.selectedItem as ProductOption;
+				if( productOption._id ) _productSpecific.removeProductOptions.addItem( productOption ); 
+				productOptions.removeItemAt( productOptions.getItemIndex( productOption ) );
 				productOptionDataGrid.selectedIndex = -1;
 				productTypesDataGrid.selectedIndex = -1;
 			}

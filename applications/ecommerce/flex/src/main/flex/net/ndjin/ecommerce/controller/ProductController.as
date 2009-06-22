@@ -94,10 +94,16 @@ package net.ndjin.ecommerce.controller
 		public function createNew():void
 		{
 			var data:Object = {
-				packagePath: "/eCommerce",
-				ownerFieldName: "products",
-				viewStateName: true,
-				appliedTransitionName: "New"
+				instance: { 
+					_applyTransitions: [{
+						name:  "New", 
+						parameters: { 
+							packagePath: "/eCommerce", 
+							ownerFieldName: "products"
+						} 
+					}] 
+				},
+				viewStateName: true
 			};
 			
 			
@@ -115,16 +121,16 @@ package net.ndjin.ecommerce.controller
 		{
 			if( sourceProduct == null ) sourceProduct = selectedProduct;
 			
+			
 			var data:Object = {
-				packagePath: "/eCommerce",
-				ownerFieldName: "products",
+				instance: { 
+					_id: sourceProduct._id,
+					_applyTransitions: [{name:  "Edit"}] 
+				},
 				deepViewFieldNames: ["productSpecifics", "productOptions"],
-				appliedTransitionName: "Edit",
-				viewStateName: true,
-				instance: { _id: sourceProduct._id }
+				viewStateName: true
 			};
-			
-			
+
 			jsonService.query("applyTransitionToInstance", data, function( result:Object, queryData:Object ):void
 			{
 				var product:Product = new Product( result.instance );
@@ -138,14 +144,13 @@ package net.ndjin.ecommerce.controller
 			if( sourceProduct == null ) sourceProduct = selectedProduct;
 			
 			var data:Object = {
-				packagePath: "/eCommerce",
-				ownerFieldName: "products",
+				instance: { 
+					_id: sourceProduct._id,
+					_applyTransitions: [{name:  "View"}] 
+				},
 				deepViewFieldNames: ["productSpecifics", "productOptions"],
-				appliedTransitionName: "View",
-				viewStateName: true,
-				instance: { _id: sourceProduct._id }
+				viewStateName: true
 			};
-			
 			
 			jsonService.query("applyTransitionToInstance", data, function( result:Object, queryData:Object ):void
 			{
@@ -158,13 +163,13 @@ package net.ndjin.ecommerce.controller
 		
 		public function cancel( sourceProduct:Product ):void
 		{
-			if( sourceProduct == null ) sourceProduct = selectedProduct;
 			var data:Object = {
-				packagePath: "/eCommerce",
-				ownerFieldName: "products",
-				appliedTransitionName: "Cancel",
-				viewStateName: true,
-				instance: { _id: sourceProduct._id }
+				instance: { 
+					_id: sourceProduct._id,
+					_applyTransitions: [{name:  "Cancel"}] 
+				},
+				deepViewFieldNames: ["productSpecifics", "productOptions"],
+				viewStateName: true
 			};
 			
 			
@@ -180,20 +185,24 @@ package net.ndjin.ecommerce.controller
 		public function remove( sourceProduct:Product ):void
 		{
 			if( sourceProduct == null ) sourceProduct = selectedProduct;
-			var data:Object = {
-				packagePath: "/eCommerce",
-				ownerFieldName: "products",
-				instance: { _id: sourceProduct._id }
-			};
 
+			var applyTransition:String;
 			if( sourceProduct.state == "Created" )
 			{
-				data.appliedTransitionName = "Cancel";	
+				applyTransition = "Cancel";	
 			}
 			else
 			{
-				data.appliedTransitionName = "Delete";
+				applyTransition = "Delete";
 			}
+
+			var data:Object = {
+				instance: { 
+					_id: sourceProduct._id,
+					_applyTransitions: [{name:  applyTransition }] 
+				}
+			};
+
 
 			jsonService.query("applyTransitionToInstance", data, function( result:Object, queryData:Object ):void
 			{

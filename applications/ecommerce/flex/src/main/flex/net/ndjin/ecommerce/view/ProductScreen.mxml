@@ -100,6 +100,7 @@
 		{
 			if( selectedProduct.productSpecifics.source.length > 1 )
 			{
+				selectedProduct.removedProductSpecifics.addItem( selectedProductSpecific );
 				selectedProduct.productSpecifics.removeItemAt( selectedProduct.productSpecifics.getItemIndex( selectedProductSpecific ) );
 				productDetailIndex = 0;
 				selectedProductSpecific = selectedProduct.productSpecifics.getItemAt( 0 ) as ProductSpecific;
@@ -220,7 +221,7 @@
 
 
 				<mx:FormItem label="Options" width="100%">
-					<view:ProductOptionSelector id="productOptionSelector" productOptions="{selectedProductSpecific.productOptions}"/>
+					<view:ProductOptionSelector id="productOptionSelector" productSpecific="{selectedProductSpecific}"/>
 				</mx:FormItem>
 
 				
