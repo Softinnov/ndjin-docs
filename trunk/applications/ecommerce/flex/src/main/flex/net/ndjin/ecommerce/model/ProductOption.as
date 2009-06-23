@@ -27,8 +27,8 @@ package net.ndjin.ecommerce.model
 			
 			var obj:Object = {
 				_id : _id,
-				value : { _id: value._id, _applyTransitions: [ {name:  "Append" }] },
-				productType: { _id: productType._id,  _applyTransitions: [ {name:  "Append" }] }
+				value : { _id: value._id, _applyTransitions: [ {name:  "Append", parameters: { replace: true } }] },
+				productType: { _id: productType._id,  _applyTransitions: [ {name:  "Append", parameters: { replace: true } }] }
 			}
 			
 			if( _id )
