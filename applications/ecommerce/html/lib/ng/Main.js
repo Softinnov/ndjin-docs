@@ -10,12 +10,14 @@ document.write('<script type="text/javascript" src="./lib/ng/controller/Category
 document.write('<script type="text/javascript" src="./lib/ng/controller/ProductController.js"></script>'); 
 document.write('<script type="text/javascript" src="./lib/ng/controller/CartController.js"></script>'); 
 document.write('<script type="text/javascript" src="./lib/ng/controller/CustomerController.js"></script>'); 
+document.write('<script type="text/javascript" src="./lib/ng/controller/OrderController.js"></script>'); 
 
 document.write('<script type="text/javascript" src="./lib/ng/view/LanguageView.js"></script>'); 
 document.write('<script type="text/javascript" src="./lib/ng/view/CategoryView.js"></script>'); 
 document.write('<script type="text/javascript" src="./lib/ng/view/ProductView.js"></script>'); 
 document.write('<script type="text/javascript" src="./lib/ng/view/CartView.js"></script>'); 
 document.write('<script type="text/javascript" src="./lib/ng/view/CustomerView.js"></script>'); 
+document.write('<script type="text/javascript" src="./lib/ng/view/OrderView.js"></script>'); 
 
 
 
@@ -32,7 +34,8 @@ $(document).ready(function()
 	
 	function gotoOpenID( openId )
 	{
-		window.location = ndjinURL+"/auth?returnURL="+location.href+"&openID=" + openId;
+		var url = ndjinURL+"/auth?returnURL="+escape( location.href )+"&openID=" + openId;
+		window.location = url;
 	}
 	$('#loginButton').click( function (){ 
 			gotoOpenID( $('#loginOpenID').val() );		
@@ -85,9 +88,15 @@ $(document).ready(function()
 
 
 			var sessionController = new SessionController();
+
 			var customerController = new CustomerController();
-			var customerView = new CustomerView( $('#customer') );
+			var customerView = new CustomerView( $('#customer') );			
 			customerController.views.push( customerView );
+
+			var orderController = new OrderController();
+			var orderView = new OrderView( $('#templates *[name=order] *[name=orderItems]'), $('#checkout div[name=order]')  );			
+			orderController.views.push( orderView );
+
 
 			if( !sessionController.getOpenId() )
 			{
@@ -99,6 +108,7 @@ $(document).ready(function()
 				$('#signIn').hide();
 				customerView.show();
 				customerController.loadCustomer();
+				orderController.createOrder( cartController.cart._id );
 			}
 
 		}
