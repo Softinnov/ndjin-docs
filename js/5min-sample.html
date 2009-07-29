@@ -43,12 +43,14 @@
 			// Instance Part - we create an instance of Contact and append it in Application 'contacts' collection 
 			var query = 
 			{ 
-				ownerFieldName: 'contacts',
-				appliedTransitionNames: ['New', 'Store'],
 				instance: 
 				{
 					name: 'MySelf',
-					telephone: '0123456789'
+					telephone: '0123456789',
+					_applyTransitions: [ 
+						{ name:'New',   parameters: { ownerFieldName: 'contacts' } },
+						{ name:'Store', parameters: { ownerFieldName: 'contacts' } }
+					]
 				}
 			};
 			var contact = instanceHelper.applyTransition( query );
@@ -58,12 +60,11 @@
 			// Instance Part - we update our instance of Contact
 			query = 
 			{ 
-				ownerFieldName: 'contacts',
-				appliedTransitionNames: ['Edit', 'Update'],
 				instance: 
 				{
 					_id: contact._id,
-					name: 'Noboby'
+					name: 'Noboby',
+					_applyTransitions: [ { name:'Update' } ]
 				}
 			};
 			contact = instanceHelper.applyTransition( query );
@@ -85,9 +86,10 @@
 				var instance = instances[i];
 				var query = 
 				{ 
-					ownerFieldName: 'contacts',
-					appliedTransitionNames: ['Delete' ],
-					instance: instance
+					instance: {
+						_id: instance._id,
+						_applyTransitions: [{ name: 'Delete'} ]
+					}
 				};
 				instanceHelper.applyTransition( query );
 			}
