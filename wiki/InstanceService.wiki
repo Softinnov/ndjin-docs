@@ -136,23 +136,22 @@ According to the current state of the instance and the transition defined at his
 When a transition is applied, an set of operation can be executed. Those operation may required some parameters to be properly executed.
 Those parameters should also be provided in input object.
 
-Each operation are individually executed inside a transaction meaning that if an instance is modified during the execution of an operation, all modified value are saved transactionnally.
-So the whole transition is not transaction (for performance reasons). If you need to have complete set of operation executed in a transactionnal context, you should define an operation that will itself call other operation, in this case the transaction will be propagated.
-If one operation fails (generating an exception) the transition is not applied but, each previous modifications that might have occurs in other operation, still remains. So it is better practice to set security and safety check operation on top of operations list and apply modification at last operation execution.
+Each operation are individually executed inside a transaction meaning that if an instance is modified during the execution of an operation, all modified value are saved transactionally.
+So the whole transition is not transaction (for performance reasons). If you need to have complete set of operations executed in a transactional context, you should define an operation that will itself call other operations, in this case the transaction will be propagated.
+If one operation fails (generating an exception) the transition is not applied but, each previous modifications that might have occurs in other operation, still remains. So it is better practice to set security and safety check operation on top of operations list and apply modifications at last operation execution.
 
 
 Input value
-  * instance: object instance on which transitions will be applied
-  * appliedTransitionNames: list of string containing the transition name successively applied to the given instance
-  * ownerFieldName: name of dataType field pointing to a a collection of instances (_will not be mandatory soon_)
+  * instance: object instance on which transitions will be applied. The transitions list applied to the instance is specified using `_applyTransitions` field inside that instance. Each transition item in that list must contain transition `name` and could have `parameters`.
 
 Optional input values
 
   * viewFieldNames: array of string containing field name that should be returned
   * deepFieldNames: array of string containing field name of sub instance (in case of an object relation association)
 
-Common instance operation optional input values
+Common operation transition parameters values
   * ownerId: instance id number of the owner (parent) of the instance (if none is provided, the query is performed on application singleton)
+  * ownerFieldName: name of dataType field pointing to a a collection of instances (used when should append instance to that collection) 
   * packagePath: field path string to a package singleton (in of having many package singleton in application)
 
 
@@ -166,19 +165,22 @@ Output values
 
 
 {{{
-// build the query to apply 'New' and 'Store' transitions on the given instance that will be appended to contacts property of Application singleton instance
-var query = { 
- ownerFieldName: 'contacts',
- appliedTransitionNames: ['New', 'Store'],
-  instance: {
-    name: 'MySelf',
-    telephone: '0123456789'
-  }
+// build the query to apply 'New' transition on the given instance that will be appended to products property of eCommerce package singleton.
+var query = {
+  instance: { 
+     _applyTransitions: [{
+	name:  "New", 
+	parameters: { 
+	  packagePath: "/eCommerce", 
+	  ownerFieldName: "products"
+	} 
+     }] 
+   } 
 };
 
 // do the HTTP request
 $.ajax({
-  url: "http://myapp.ndjin.net/ng/service/InstanceService/getInstances",
+  url: "http://myapp.ndjin.net/ng/service/InstanceService/applyTransitionToInstance",
   dataType: "jsonp",
   data: { requestDataType:'json', responseDataType:'jsonp', data: JSON.stringify( query ) },
   success: function (data, textStatus) {
