@@ -4,7 +4,7 @@
 
 || Security || Open ||
 || Input || void ||
-|| Output || `user`, `member`,`currentOpenId`, `captchaValid` ||
+|| Output || `user`, `member`,`currentOpenId`, `captchaValid`, `sessionInstance` ||
 
 Get the current user session info.
 If user is not authenticated the user is set as 'Anonymous'.
@@ -15,6 +15,7 @@ Optional output values
   * member: user member values
   * currentOpenId: current openid used to authenticated current session
   * captchaValid: true if the current session has passed a captcha or if has been successfully authenticated
+  * sessionInstance: instance associated with current session. May contain server-side user values. 
 
 
 = authenticate =
@@ -51,10 +52,10 @@ Optional output values
 || Input || void ||
 || Output || `user` ||
 
-Return current session user full description.
+Return current session authenticated user full description.
 
 Output value
-  * user: full content of the user
+  * user: full content of the user with fields name, apiKey, email, openids
 
 
 = logout =
