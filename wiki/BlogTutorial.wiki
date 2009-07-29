@@ -75,19 +75,28 @@ We focus on Article creation function:
 {{{
 function createArticle( articleTitle, articleTopic, articleAbstract, articleBody )
 {
+
 	var query = 
 	{ 
-		ownerFieldName: 'articles',
-		appliedTransitionNames: ['New', 'Store'],
 		instance: 
 		{
 			title: articleTitle,
 			abstract: articleAbstract,
 			body: articleBody,
-			topic: articleTopic
-		},
-		deepUpdateFieldNames: ['topic']
+			_applyTransitions: 
+			[ 
+				{ name:'New',   parameters: { ownerFieldName: 'articles' } },
+				{ name:'Store', parameters: { ownerFieldName: 'articles' } }
+			],
+			
+			topic : 
+			{
+				_id: articleTopic._id,
+				_applyTransitions: [ { name:'Append' } ]
+			}
+		}
 	};
+
 	
 	instanceHelper.callBackApplyTransition( query, function(data, textStatus)
 	{
