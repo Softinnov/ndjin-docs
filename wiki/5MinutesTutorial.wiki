@@ -76,15 +76,18 @@ var instanceHelper = new InstanceHelper( applicationDomainName, false );
 }}}
 
 Create an instance of 'Contact' and append it to the 'contacts' collection of your application singleton. As you can see we apply two transitions to the 'Contact' instance: 'New' and 'Store'.
-'New' instanciate one 'Contact', and 'Store' updates it with the given values, checks the assertion if any and appends it to the collection.
+'New' instantiate one 'Contact', and 'Store' updates it with the given values, checks the assertion if any and appends it to the collection.
 {{{
 var query = {
-        ownerFieldName: 'contacts',
-        appliedTransitionNames: ['New', 'Store'],
-        instance: {
-                name: 'MySelf',
-                phone: '0123456789'
-        }
+	instance: 
+	{
+		name: 'MySelf',
+		telephone: '0123456789',
+		_applyTransitions: [ 
+			{ name:'New',   parameters: { ownerFieldName: 'contacts' } },
+			{ name:'Store', parameters: { ownerFieldName: 'contacts' } }
+		]
+	}
 };
 
 var contact = instanceHelper.applyTransition( query );
@@ -95,12 +98,11 @@ Update the previous instance of 'Contact' . As you can see, we apply two transit
 Also, you might note that the instance '_id' is obviously required for those transitions.
 {{{
 query = {
-        ownerFieldName: 'contacts',
-        appliedTransitionNames: ['Edit', 'Update'],
-        instance: {
-                _id: contact._id,
-                name: 'Noboby'
-        }
+	instance: {
+		_id: contact._id,
+		name: 'Noboby',
+		_applyTransitions: [ { name:'Update' } ]
+	}
 };
 contact = instanceHelper.applyTransition( query );
 }}}
@@ -115,14 +117,15 @@ query = {
 var instances = instanceHelper.getInstances( query );
 }}}
 
-And delete those instances (if any).
+And delete those instances _using brut force loop_ (API provides smarter query, but for this example we keep it simple).
 {{{
 for( var i=0; i<instances.length; i++ ){
         var instance = instances[i];
         var query = {
-                ownerFieldName: 'contacts',
-                appliedTransitionNames: ['Delete' ],
-                instance: instance
+		instance: {
+			_id: instance._id,
+			_applyTransitions: [{ name: 'Delete'} ]
+		}
         };
         instanceHelper.applyTransition( query );
 }
