@@ -88,13 +88,14 @@
 		{
 			var query = 
 			{ 
-				ownerId: article._id,
-				ownerFieldName: 'comments',
-				appliedTransitionNames: ['New', 'Store'],
 				instance: 
 				{
 					title: commentTitle,
-					body: commentBody
+					body: commentBody,
+					_applyTransitions: [ 
+						{ name:'New',   parameters: { ownerId: article._id, ownerFieldName: 'comments' } },
+						{ name:'Store', parameters: { ownerId: article._id, ownerFieldName: 'comments' } }
+					]
 				},
 			};
 			
