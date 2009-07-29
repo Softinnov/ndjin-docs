@@ -248,5 +248,4 @@ _Could also be `applyTransitionToInstances`_
 || Input ||  `items` ||
 || Output || `items` ||
 
-Apply transitions (call applyTransitionsToInstance) for each instance given in the items list.
-
+Apply transitions (call applyTransitionsToInstance) for each instance given in the items list. Convenience method to group many transitions in one request.
