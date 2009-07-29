@@ -217,20 +217,29 @@ package net.ndjin.ecommerce.controller
 			if( sourceProduct == null ) sourceProduct = selectedProduct;
 			
 			var data:Object = {
-				packagePath: "/eCommerce",
-				ownerFieldName: "products",
-				deepUpdateFieldNames: ["productSpecifics", "productOptions", "productType", "value" ],
 				viewStateName: true,
 				instance: sourceProduct.toJSONObject()
 			};
 			
 			if( sourceProduct.state == "Created" )
 			{
-				data.appliedTransitionName = "Store";	
+				data.instance._applyTransitions = [{
+						name:  "Store", 
+						parameters: { 
+							packagePath: "/eCommerce", 
+							ownerFieldName: "products"
+						} 
+					}]; 
 			}
 			else
 			{
-				data.appliedTransitionName = "Update";
+				data.instance._applyTransitions = [{
+						name:  "Update", 
+						parameters: { 
+							packagePath: "/eCommerce", 
+							ownerFieldName: "products"
+						} 
+					}]; 
 			}
 			
 			jsonService.query("applyTransitionToInstance", data, function( result:Object, queryData:Object ):void
