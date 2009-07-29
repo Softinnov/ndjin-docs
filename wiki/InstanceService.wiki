@@ -4,12 +4,13 @@
 = getInstances =
 
 || Security || Open ||
-|| Input ||  `ownerId`, `ownerFieldName`, `packagePath`, `start`, `count`, `viewFieldNames`, `deepFieldNames`, `filters`, `filtersOperator`, `sortByFieldNames`, `viewStateNames` ||
+|| Input ||  `ownerId`, `ownerFieldName`, `packagePath`, `start`, `count`, `viewFieldNames`, `deepFieldNames`, `selectOperationName`, `filters`, `filtersOperator`, `sortByFieldNames`, `viewStateNames` ||
 || Output || `instances`, `totalCount`, `siteName`, `stateNames` ||
 
 Result a list of instance.
 Following steps are executed to build the result:
-  * get an list of instance according to `ownerId`, `ownerFieldName`, `packagePath`
+  * get an list of instance according to `ownerId`, `ownerFieldName`, `packagePath`. If no ownerId is provided application instance or package instance (according to packagePath) will be choosen as relative entry path and its ownerFieldName instances will be selected
+  * if selectOperationName is provided, the operation of the entry path instance will be called to get a list of instance
   * filter this list applying `filters`, `filtersOperator`
   * sort the list using `sortByFieldNames`
   * keep `totalCount` of the list
@@ -29,12 +30,13 @@ Input value
   * ownerFieldName: name of dataType field pointing to a a collection of instances
 
 Optional input values
-  * ownerId: instance id number from where the query is performed (if none is provided, the query is performed on application singleton)
+  * ownerId: instance id number from where the query is performed (if none is provided, the query is performed on application singleton or package singleton according to packagePath)
   * start: start number from where it should retrieve item
   * count: number of item to get back in list
-  * packagePath: field path string to a package singleton (in of having many package singleton in application)
+  * packagePath: field path string to a package singleton (in case of having many package singleton in application)
   * viewFieldNames: array of string containing field name that should be returned
   * deepFieldNames: array of string containing field name of sub instance (in case of an object relation association)
+  * selectOperationName: name of the operation called to select a list of instances
   * filters: array of filter object
   * filtersOperator: operator applied to each element of filters object (if none provided then AND is applyed)
   * sortByFieldNames: array of sort object
@@ -43,10 +45,9 @@ Optional input values
 
 Output values
   * instances: list of resulting instance eventually sorted
-  * totalCount: total result count after filters and before applying start/count and 'View' transition applyed
-  * stateNames: a list of id/state name containing all name related to all state id mentioned in instance result
+  * totalCount: total result count after filters and before applying start/count and 'View' transition applied. If for some privilege reason 'View' transition is not applicable the count remain the same despite the fact that the instance will not be added in the return list
 Optional output value
-  * stateNames: array of all state object ( id/name) returned in result
+  * stateNames: (if viewStateNames was set) a list of id/state name containing all name related to all state id mentioned in instance result
 
 
 
@@ -186,4 +187,3 @@ $.ajax({
 }); // ajax     
 
 }}}
-
