@@ -86,7 +86,7 @@ Each item object of `sortByFieldNames` has:
   * `sortAscOrder`: boolean if true then sort with be in ascending order
 
 
-=== Example using Javascript[http://jquery.org JQuery]/JSONP/[http://www.JSON.org/json2.js JSON2] ===
+=== Example using Javascript/[http://jquery.org JQuery]/JSONP/[http://www.JSON.org/json2.js JSON2] ===
 
 {{{
 // build the query object
@@ -210,7 +210,7 @@ var query = {
      }],
 
      
-     categories": [{
+     categories: [{
         _id: 660, 
         name: { fr: "Jeux", en: "Game" },
         _applyTransitions: [{
@@ -233,3 +233,20 @@ $.ajax({
 }); // ajax     
 
 }}}
+
+
+
+
+
+
+
+= applyTransitionsToInstances =
+
+_Could also be `applyTransitionToInstances`_
+
+|| Security || Open ||
+|| Input ||  `items` ||
+|| Output || `items` ||
+
+Apply transitions (call applyTransitionsToInstance) for each instance given in the items list.
+
