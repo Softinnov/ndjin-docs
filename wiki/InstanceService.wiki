@@ -161,7 +161,7 @@ Output values
 
 
 
-=== Example using Javascript[http://jquery.org JQuery]/JSONP/[http://www.JSON.org/json2.js JSON2] ===
+=== Examples using Javascript[http://jquery.org JQuery]/JSONP/[http://www.JSON.org/json2.js JSON2] ===
 
 
 {{{
@@ -175,6 +175,47 @@ var query = {
 	  ownerFieldName: "products"
 	} 
      }] 
+   } 
+};
+
+// do the HTTP request
+$.ajax({
+  url: "http://myapp.ndjin.net/ng/service/InstanceService/applyTransitionToInstance",
+  dataType: "jsonp",
+  data: { requestDataType:'json', responseDataType:'jsonp', data: JSON.stringify( query ) },
+  success: function (data, textStatus) {
+    result = data.result.instance;
+  } // success
+}); // ajax     
+
+}}}
+
+
+{{{
+// build the query to apply 'Update' transition on the given instance and its sub-instance.
+
+var query = {
+  instance: {
+     _id: 3323,
+     name: "Joe Fuu",
+     _applyTransitions: [{
+	name:  "Update", 
+	parameters: { 
+	  packagePath: "/eCommerce", 
+	  ownerFieldName: "products"
+	} 
+     }],
+
+     
+     categories": [{
+        _id: 660, 
+        name: { fr: "Jeux", en: "Game" },
+        _applyTransitions: [{
+  	  name:  "Update" 
+       }]
+
+     }]
+
    } 
 };
 
