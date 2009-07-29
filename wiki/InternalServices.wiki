@@ -3,7 +3,7 @@
 = Instance - Services =
 
 
-||Operation||Description||
+||Operations||Description||
 ||Create||Create an instance according either form the owner field dataType or the given cast dataType||
 ||Edit||Backup the current instance (see cancel edition)||
 ||Update||Update the current instance values with the given instance and remove the backuped instance (if any)||
@@ -18,7 +18,7 @@
 
 = User Level Requirement - Services =
 
-||Operation||Description||
+||Operations||Description||
 ||Administrator|| Current user should have administrator level membership (level <= 1) ||
 ||Editor|| Current user should have editor level membership (level <= 5) ||
 ||Member|| Current user should have member level membership (level <= 10) ||
