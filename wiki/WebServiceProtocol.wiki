@@ -109,7 +109,7 @@ For example a users collection with one instance of user having field 'name', 'n
   <n:age>23</n:age>
   <b:isChessMaster>false</b:isChessMaster>
  </ds:item>
-<r:users>
+</r:users>
 }}}
 
 Collection are listed using `<ds:item>` elements.
