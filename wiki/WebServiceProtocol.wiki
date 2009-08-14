@@ -108,6 +108,7 @@ For example a users collection with one instance of user having field 'name', 'n
   </s:nicknames>
   <n:age>23</n:age>
   <b:isChessMaster>false</b:isChessMaster>
+ </ds:item>
 <r:users>
 }}}
 
