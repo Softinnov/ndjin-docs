@@ -51,7 +51,7 @@ Date are returned in millisecond. File are referenced using URL.
 {{{
 var webserviceURL = "http://..."
 var object = {
- value1: "Welcome"
+ value1: "Welcome",
  value2: 13
 }
 
