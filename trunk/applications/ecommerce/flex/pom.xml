@@ -16,9 +16,18 @@
             <plugin>
                 <groupId>org.sonatype.flexmojos</groupId>
                 <artifactId>flexmojos-maven-plugin</artifactId>
-                <version>3.2.0</version>
+                <version>3.3.0</version>
                 <extensions>true</extensions>
-                
+
+                <dependencies>
+        		  	<dependency>
+	            		<groupId>com.adobe.flex</groupId>
+			            <artifactId>compiler</artifactId>
+	        		    <version>3.3.0.4852</version>
+	            		<type>pom</type>
+          			</dependency>
+        		</dependencies>
+        
                 <configuration>
           			<compiledLocales><!-- Compiled localization -->
            		 		<locale>en_US</locale>
@@ -49,7 +58,6 @@
             <artifactId>flex-framework</artifactId>
             <version>3.3.0.4852</version>
 			<type>pom</type>
-    		<scope>caching</scope>
         </dependency>
 
         <dependency>
