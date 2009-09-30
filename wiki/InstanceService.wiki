@@ -4,7 +4,7 @@
 = getInstances =
 
 || Security || Open ||
-|| Input ||  `ownerId`, `ownerFieldName`, `packagePath`, `start`, `count`, `viewFieldNames`, `deepFieldNames`, `selectOperationName`, `filters`, `filtersOperator`, `sortByFieldNames`, `viewStateNames` ||
+|| Input ||  `ownerId`, `ownerFieldName`, `packagePath`, `start`, `count`, `viewFieldNames`, `deepFieldNames`, `fetchFields`, `selectOperationName`, `filters`, `filtersOperator`, `sortByFieldNames`, `viewStateNames` ||
 || Output || `instances`, `totalCount`, `siteName`, `stateNames` ||
 
 Result a list of instance.
@@ -36,6 +36,7 @@ Optional input values
   * packagePath: field path string to a package singleton (in case of having many package singleton in application)
   * viewFieldNames: array of string containing field name that should be returned
   * deepFieldNames: array of string containing field name of sub instance (in case of an object relation association)
+  * fetchFields : for each instance in the return result, each fiechFields item call getInstance with given item as parameter and instance id as ownerId 
   * selectOperationName: name of the operation called to select a list of instances
   * filters: array of filter object
   * filtersOperator: operator applied to each element of filters object (if none provided then AND is applyed)
@@ -127,7 +128,7 @@ $.ajax({
 _Could also be `applyTransitionToInstance`_
 
 || Security || Open ||
-|| Input ||  `instance`, `appliedTransitionNames`, `ownerId`, `ownerFieldName`, `packagePath`, `viewFieldNames`, `deepFieldNames` ||
+|| Input ||  `instance`, `appliedTransitionNames`, `ownerId`, `ownerFieldName`, `packagePath`, `viewFieldNames`, `deepFieldNames`, `fetchFields` ||
 || Output || `instance`, `siteName` ||
 
 Apply transitions to the given instance.
@@ -148,6 +149,7 @@ Optional input values
 
   * viewFieldNames: array of string containing field name that should be returned
   * deepFieldNames: array of string containing field name of sub instance (in case of an object relation association)
+  * fetchFields : each fiechFields item call getInstance relative to the instance with given item as parameter and instance id as ownerId 
 
 Common operation transition parameters values
   * ownerId: instance id number of the owner (parent) of the instance (if none is provided, the query is performed on application singleton)
