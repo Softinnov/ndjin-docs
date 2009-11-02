@@ -65,7 +65,7 @@ package net.ndjin.ecommerce.controller
 			var data:Object = {
 				packagePath: "/eCommerce",
 				ownerFieldName: "products",
-				viewFieldNames: ["name"],
+				viewFieldNames: [ "name" ],
 				viewStateNames: true,
 				start: 0,
 				count: 50
@@ -127,7 +127,9 @@ package net.ndjin.ecommerce.controller
 					_id: sourceProduct._id,
 					_applyTransitions: [{name:  "Edit"}] 
 				},
-				deepViewFieldNames: ["productSpecifics", "productOptions"],
+				viewFieldNames: [ "name", "reference", "description", "pictures", "tax",  "price", "weight", "categories", 
+					"productSpecifics", "productOptions","productType", "value", "values" ],
+				deepViewFieldNames: ["productSpecifics", "productOptions", "productType", "value", "values" ],
 				viewStateName: true
 			};
 
@@ -148,7 +150,9 @@ package net.ndjin.ecommerce.controller
 					_id: sourceProduct._id,
 					_applyTransitions: [{name:  "View"}] 
 				},
-				deepViewFieldNames: ["productSpecifics", "productOptions"],
+				viewFieldNames: [ "name", "reference", "description", "pictures", "tax",  "price", "weight", "categories", 
+					"productSpecifics", "productOptions","productType", "value", "values" ],
+				deepViewFieldNames: ["productSpecifics", "productOptions", "productType", "value", "values" ],
 				viewStateName: true
 			};
 			
@@ -168,6 +172,7 @@ package net.ndjin.ecommerce.controller
 					_id: sourceProduct._id,
 					_applyTransitions: [{name:  "Cancel"}] 
 				},
+				viewFieldNames: [ "name", "description", "pictures", "tax", "weight", "categories", "productSpecifics", "productOptions"],
 				deepViewFieldNames: ["productSpecifics", "productOptions"],
 				viewStateName: true
 			};

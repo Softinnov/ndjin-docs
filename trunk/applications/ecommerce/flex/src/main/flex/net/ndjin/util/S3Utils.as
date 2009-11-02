@@ -1,12 +1,23 @@
 package net.ndjin.util
 {
+	import org.swizframework.Swiz;
+	
 	public class S3Utils
 	{
 		public static function getPublicURL( url:String ):String
 		{
 			if( url )
 			{
-				url = url.replace("s3://", "http://datastore-eu-test.smk.fr/" );
+				if( url.indexOf("s3://") >= 0 )
+				{
+					url = url.replace("s3://", "http://datastore-eu-test.smk.fr/" );				
+				}
+				else if( url.indexOf( "s3p://" ) >= 0 )
+				{
+					 
+					url = Swiz.getBean("baseURL")+"/s3p/?url=" + url;
+				}
+				
 				return url;
 			}
 			return null;	
