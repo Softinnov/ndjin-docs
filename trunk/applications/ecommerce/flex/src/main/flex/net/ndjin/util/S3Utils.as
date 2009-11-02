@@ -10,7 +10,7 @@ package net.ndjin.util
 			{
 				if( url.indexOf("s3://") >= 0 )
 				{
-					url = url.replace("s3://", "http://datastore-eu-test.smk.fr/" );				
+					url = url.replace("s3://", Swiz.getBean("publicDataStoreURL")+'/' );				
 				}
 				else if( url.indexOf( "s3p://" ) >= 0 )
 				{

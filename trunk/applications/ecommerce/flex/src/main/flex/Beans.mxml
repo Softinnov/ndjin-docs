@@ -9,6 +9,8 @@
 	]]>
 </mx:Script>
 	<mx:String id="baseURL">http://localhost:8080/ng/ecom</mx:String>
+	<mx:String id="publicDataStoreURL">http://datastore-eu-test.smk.fr</mx:String>
+	
 	
 	<controller:ProductController id="productController">
 		<controller:jsonService>
