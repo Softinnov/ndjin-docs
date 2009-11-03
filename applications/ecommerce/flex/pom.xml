@@ -42,6 +42,12 @@
             <id>flexmojos-repository</id>
             <url>http://repository.sonatype.org/content/groups/public/</url>
         </repository>
+		<repository>
+			<id>ndjin-repository</id>
+			<name>NDJIN Repository</name>
+			<url>http://ndjin.googlecode.com/svn/repository</url>
+			<layout>default</layout>
+		</repository>
     </repositories>
 
     <pluginRepositories>
