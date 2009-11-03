@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata>
+  <groupId>com.adobe.as3corelib</groupId>
+  <artifactId>as3corelib</artifactId>
+  <version>0.92.1</version>
+  <versioning>
+    <versions>
+      <version>0.92.1</version>
+    </versions>
+    <lastUpdated>20090526144751</lastUpdated>
+  </versioning>
+</metadata>
