@@ -26,18 +26,20 @@ Optional output values
 
 Authenticated the current session with an API Key associated to the user account instance. 
 This operation could be used when ndjin is used outside a web browser usage.
+
+
 Otherwise you should use authentication servlet using URL:
 
 `http://yourdomainname.ndjin.net/ng/auth` and pass 2 parameters:
   * openID: your OpenID (such as `https://me.yahoo.com/yourlogin`)
   * returnURL: the URL your browser will be redirected after authenticated
-For example : `http://yourdomainname.ndjin.net/ng/auth?openID=yourOpenId&returnURL=http://yourhost/currentpage`
+For example : `http://yourdomainname.ndjin.net/ng/auth?openID=yourOpenId&returnURL=http:yourhost/currentpage`
 
 
 Input value
   * apiKey: api key that should match a user api key
   * login and password
-
+ ||
 
 
 Output value
