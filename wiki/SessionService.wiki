@@ -38,7 +38,8 @@ For example : `http://yourdomainname.ndjin.net/ng/auth?openID=yourOpenId&returnU
 
 Input value
   * apiKey: api key that should match a user api key
-  * login and password
+  * login 
+  * password
  ||
 
 
