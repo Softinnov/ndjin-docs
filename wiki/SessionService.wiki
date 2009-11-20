@@ -21,7 +21,7 @@ Optional output values
 = authenticate =
 
 || Security || Open ||
-|| Input || `apiKey` ||
+|| Input || `apiKey` or `login`, `password` ||
 || Output || `user`, `member`,`currentOpenId`, `captchaValid` ||
 
 Authenticated the current session with an API Key associated to the user account instance. 
