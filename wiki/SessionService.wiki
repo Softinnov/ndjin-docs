@@ -21,7 +21,7 @@ Optional output values
 = authenticate =
 
 || Security || Open ||
-|| Input || `apiKey` or `login` and `password` ||
+|| Input || `apiKey` or `email` and `password` ||
 || Output || `user`, `member`,`currentOpenId`, `captchaValid` ||
 
 Authenticated the current session with an API Key associated to the user account instance. 
@@ -38,9 +38,9 @@ For example : `http://yourdomainname.ndjin.net/ng/auth?openID=yourOpenId&returnU
 
 Input value
   * apiKey: api key that should match a user api key
-  * login 
+  * email 
   * password
- ||
+ 
 
 
 Output value
