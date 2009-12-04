@@ -76,8 +76,8 @@ Filter item `operator` are:
 || `>=` || greater than or equals (case insensitive for string) ||
 || `<` || lower than (case insensitive for string) ||
 || `<=` || lower than or equals (case insensitive for string) ||
-|| `#=` || start with (case insensitive for string) ||
-|| `=#` || end with (case insensitive for string) ||
+|| `#=` || string start with (case insensitive) ||
+|| `=#` || string end with (case insensitive) ||
 
 
 
