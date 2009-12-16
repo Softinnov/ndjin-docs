@@ -33,7 +33,7 @@ Response is structured as follow:
 
 || `result` || contains the webservice data response if any ||
 || `state` || one literal values: `OK`, `SERVER_ERROR`, `PROTOCOL_ERROR`, `SECURITY_ERROR` ||
-|| `error` || in case of error state it should contains field `message` and `cause` ||
+|| `error` || in case of error state it should contains field `message` ||
 || `sessionId` || session id used the request ||
 
 
@@ -68,7 +68,6 @@ $.ajax({
   {
    var error = dataResponse.error
    var errorMessage = error.message
-   var errorCause = error.cause
   }
 
  }
