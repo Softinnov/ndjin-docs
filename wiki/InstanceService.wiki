@@ -130,7 +130,7 @@ $.ajax({
 _Could also be `applyTransitionToInstance`_
 
 || Security || Open ||
-|| Input ||  `instance`, `appliedTransitionNames`, `ownerId`, `ownerFieldName`, `packagePath`, `viewFieldNames`, `deepFieldNames`, `fetchFields` ||
+|| Input ||  `instance`, `instances`, `appliedTransitionNames`, `ownerId`, `ownerFieldName`, `packagePath`, `viewFieldNames`, `deepFieldNames`, `fetchFields` ||
 || Output || `instance`, `siteName` ||
 
 Apply transitions to the given instance.
@@ -146,7 +146,8 @@ If one operation fails (generating an exception) the transition is not applied b
 
 Input value
   * instance: object instance on which transitions will be applied. The transitions list applied to the instance is specified using `_applyTransitions` field inside that instance. Each transition item in that list must contain transition `name` and could have `parameters`.
-
+ * instances: a collection of instance where each item of the collection will be processed as one instance with the optional input value below applied.
+ 
 Optional input values
 
   * viewFieldNames: array of string containing field name that should be returned
@@ -241,15 +242,3 @@ $.ajax({
 
 
 
-
-
-
-= applyTransitionsToInstances =
-
-_Could also be `applyTransitionToInstances`_
-
-|| Security || Open ||
-|| Input ||  `items` ||
-|| Output || `items` ||
-
-Apply transitions (call applyTransitionsToInstance) for each instance given in the items list. Convenience method to group many transitions in one request.
