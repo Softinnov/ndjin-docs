@@ -69,7 +69,6 @@ Each item object in list of filter could be
 Filter item `operator` are:
 || `operator` || Description ||
 || `==` || strict equal (case sensitive for string)  ||
-|| `!=` ||  strict not equal (case sensitive for string) ||
 || `=~` || equals ignore case ||
 || `=%` || contains ||
 || `>` ||  greater than (case insensitive for string) ||
@@ -79,7 +78,8 @@ Filter item `operator` are:
 || `#=` || string start with (case insensitive) ||
 || `=#` || string end with (case insensitive) ||
 
-
+You can add `!` (bang) char to any of those operators, to get the opposite result.
+For example `!=%` will return all instances that do not contains the provided value. 
 
 === Sort ===
 
@@ -238,7 +238,5 @@ $.ajax({
 }); // ajax     
 
 }}}
-
-
 
 
