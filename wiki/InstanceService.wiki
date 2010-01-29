@@ -86,7 +86,8 @@ For example `!=%` will return all instances that do not contains the provided va
 Result can be sorted using `sortByFieldNames` list.
 Each item object of `sortByFieldNames` has: 
   * `sortBy`: a field name string
-  * `sortAscOrder`: boolean if true then sort with be in ascending order
+  * `sortAscOrder`: (default true) boolean if true then sort with be in ascending order
+  * `sortCaseSensitive`: (default false) boolean if true then sort is case sensitive
 
 
 === Example using Javascript/[http://jquery.org JQuery]/JSONP/[http://www.JSON.org/json2.js JSON2] ===
@@ -238,5 +239,3 @@ $.ajax({
 }); // ajax     
 
 }}}
-
-
