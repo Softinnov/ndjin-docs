@@ -68,8 +68,11 @@ Each item object in list of filter could be
 
 Filter item `operator` are:
 || `operator` || Description ||
+|| `~` || contains ignore case  ||
+|| `~~` || contains ignore case and accent  ||
 || `==` || strict equal (case sensitive for string)  ||
 || `=~` || equals ignore case ||
+|| `=~~` || equals ignore case and accent ||
 || `=%` || contains ||
 || `>` ||  greater than (case insensitive for string) ||
 || `>=` || greater than or equals (case insensitive for string) ||
