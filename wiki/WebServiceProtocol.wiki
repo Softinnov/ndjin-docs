@@ -154,7 +154,7 @@ Having data parameter value: `data=`
 	<ds:item>
 		<s:fieldName>isChessMaster</s:fieldName>
 		<s:operator>=</s:operator>
-		<s:keyword>true</s:keyword>
+		<b:keyword>true</b:keyword>
 	</ds:item>
 </r:filters>
 
