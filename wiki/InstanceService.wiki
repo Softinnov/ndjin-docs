@@ -91,6 +91,7 @@ Each item object of `sortByFieldNames` has:
   * `sortBy`: a field name string
   * `sortAscOrder`: (default true) boolean if true then sort with be in ascending order
   * `sortCaseSensitive`: (default false) boolean if true then sort is case sensitive
+  *  `ignoreAccents` : (default true) boolean if true then sort ignore accents
 
 
 === Example using Javascript/[http://jquery.org JQuery]/JSONP/[http://www.JSON.org/json2.js JSON2] ===
