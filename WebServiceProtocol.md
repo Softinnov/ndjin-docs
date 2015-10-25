@@ -1,0 +1,214 @@
+# Overview #
+
+Ndjin webservices are accessible via GET or POST HTTP requests.
+
+All data encoding MUST be done using **UTF-8** encoding.
+
+Data and HTTP responses could be formatted using either [JSON](http://json.org) or XML.
+
+[JSONP](http://bob.pythonmac.org/archives/2005/12/05/remote-json-jsonp/) is supported allowing you cross domain scripting features.
+
+**Request paremeters**
+
+An HTTP request should have following parameters:
+
+| Parameters | |
+|:-----------|:|
+| `requestDataType` | `data` request parameter format: could be `json` or `xml` |
+| `responseDataType` | response format: could be `xml`, `json` or `jsonp`  |
+| `callback` | optional, in case of [jsonp](http://bob.pythonmac.org/archives/2005/12/05/remote-json-jsonp/) response callback is required |
+| `data`     | request data that will be deserialized and passed to webservice  |
+
+
+**Response**
+
+Content response are directly send to the HTTP output stream formatted according to the `responseDataType` value with content type:
+
+|responseDataType | Content-Type |
+|:----------------|:-------------|
+| `xml`           | text/xml     |
+| `json` or `jsonp` | application/jsonrequest |
+
+Response is structured as follow:
+
+| `result` | contains the webservice data response if any |
+|:---------|:---------------------------------------------|
+| `state`  | one literal values: `OK`, `SERVER_ERROR`, `PROTOCOL_ERROR`, `SECURITY_ERROR` |
+| `error`  | in case of error state it should contains field `message` |
+| `sessionId` | session id used the request                  |
+
+
+
+
+
+# JSON #
+
+Data object could be formatted using [JSON](http://json.org) format.
+
+Date are returned in millisecond. File are referenced using URL.
+
+**Example using Javascript [JQuery](http://jquery.org)/JSONP/[JSON2](http://www.JSON.org/json2.js)**
+
+```
+var webserviceURL = "http://..."
+var object = {
+ value1: "Welcome",
+ value2: 13
+}
+
+$.ajax({
+ url: webserviceURL,
+ dataType: "jsonp",
+ data: { requestDataType:'json', responseDataType:'jsonp', data:  JSON.stringify( object ) },
+ success: function ( dataResponse, textStatus )
+ {
+  var result = dataResponse.result
+  var state = dataResponse.state
+  var sessionId = dataResponse.sessionId
+  if( state == 'SERVER_ERROR' )
+  {
+   var error = dataResponse.error
+   var errorMessage = error.message
+  }
+
+ }
+
+```
+
+
+# XML #
+
+We use a custom XML data format very close to JSON approach.
+
+Object hierarchy is serialized as is in an XML using:
+  * element name as object field name
+  * element namespace as object value type
+  * element value as object value
+
+Namespace is used to qualify the value type of an element.
+
+| Usual prefix | Type |
+|:-------------|:-----|
+| s            | string |
+| d            | date in miliseconds |
+| l            | locale string (string that could have diffent value according the locale) |
+| n            | number |
+| b            | boolean (true/false) |
+| r            | reference to another object instance |
+
+
+For example a users collection with one instance of user having field 'name', 'nickname', 'age', 'isChessMaster' will be serialized:
+
+```
+<r:users>
+ <ds:item ds:id="1">
+  <s:name>John</s:name>
+  <s:nicknames>
+   <ds:item>JJ</ds:item>
+   <ds:item>CyberDude</ds:item>
+  </s:nicknames>
+  <n:age>23</n:age>
+  <b:isChessMaster>false</b:isChessMaster>
+ </ds:item>
+</r:users>
+```
+
+Collection are listed using `<ds:item>` elements.
+
+Reference to object instance are also using item element but include also and instance id such as: `<ds:item ds:id='...' />`.
+
+Content of object referenced are serialized only once. Any reference to an object allready serialized mention its refered id using `<ds:ref ds:ref-id='...'/>` instead of `<ds:item>` element.
+
+
+**Example of request HTTP/XML**
+
+We perform HTTP request to URL: `http://myapplication.ndjin.net/ng/service/InstanceService/getInstances`
+
+With HTTP parameters : `requestDataType=xml&responseDataType=xml`
+
+
+Having data parameter value: `data=`
+
+```
+<data xmlns:ds='http://ndjin.net/ds/1.0/' 
+	xmlns:s='urn:ds:string'
+	xmlns:d='urn:ds:date'
+	xmlns:l='urn:ds:localestring'
+	xmlns:n='urn:ds:number'
+	xmlns:b='urn:ds:boolean'
+	xmlns:f='urn:ds:file'
+	xmlns:r='urn:ds:ref'
+>
+
+<r:sortByFieldNames>
+	<ds:item>
+		<s:sortBy>name</s:sortBy>
+		<b:ascOrder>true</b:ascOrder>
+	</ds:item>
+	<ds:item>
+		<s:sortBy>age</s:sortBy>
+		<b:ascOrder>true</b:ascOrder>
+	</ds:item>
+</r:sortByFieldNames>
+
+
+<r:filters>
+	<ds:item>
+		<s:fieldName>isChessMaster</s:fieldName>
+		<s:operator>=</s:operator>
+		<b:keyword>true</b:keyword>
+	</ds:item>
+</r:filters>
+
+<n:start>0</n:start>
+<n:count>10</n:count>
+<s:ownerFieldName>users</s:ownerFieldName>
+</data>
+```
+
+Response would look like:
+
+```
+<?xml version='1.0' encoding='UTF-8'?>
+<response xmlns:ds='http://ndjin.net/ds/1.0/'
+ xmlns:s='urn:ds:string'
+ xmlns:d='urn:ds:date'
+ xmlns:l='urn:ds:localestring'
+ xmlns:n='urn:ds:number'
+ xmlns:b='urn:ds:boolean'
+ xmlns:r='urn:ds:ref'>
+
+<r:result>
+	<ds:item>
+		<r:instances>
+			<ds:item ds:id="11442">
+				<r:modifyUser>
+					<ds:item ds:id="200">
+						<s:name>NG Admin</s:name>
+					</ds:item>
+				</r:modifyUser>
+				<s:name>Bill</s:name>
+				<n:age>23</n:age>
+				<b:isChessMaster>true</b:isChessMaster>
+			</ds:item>
+			
+			<ds:item ds:id="9620">
+				<r:modifyUser>
+					<ds:ref ds:ref-id="200" />
+				</r:modifyUser>
+				<s:name>Zoe</s:name>
+				<n:age>24</n:age>
+				<b:isChessMaster>true</b:isChessMaster>
+			</ds:item>
+		</r:instances>
+		<n:totalCount>2</n:totalCount>
+		<s:siteName> myapplication </s:siteName>
+	</ds:item>
+</r:result>
+<s:state>OK</s:state>
+<s:sessionId>ndjin.78sjelbpg6ib</s:sessionId>
+
+</response>
+```
+
+As you can see, `modifyUser` object is only serialized once, being referred on next object using XML fragment: `<ds:ref ds:ref-id="200" />`

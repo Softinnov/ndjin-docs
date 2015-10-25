@@ -1,0 +1,129 @@
+# Prerequisite #
+
+You need to register an [OpenID](http://openid.net/get/) and create an application site on [ndjin platform](http://ndjin.net).
+Once your application site your have URL to refer to it such as: `http://[your application site name].ndjin.net/ng/`
+
+You can get the source of this tutorial [here](http://code.google.com/p/ndjin/source/browse/trunk/js/5min-sample.html).
+
+# Authenticate yourself #
+
+You have to authenticate yourself to get the required right to operate on your application site.
+Just make a request with your browser to the url `http://[your application site name].ndjin.net/ng/auth` and pass 2 parameters:
+  * openID: your OpenID (such as `https://me.yahoo.com/[your login]` for Yahoo or `https://www.google.com/accounts/o8/id/[your google email]` for Google)
+  * returnURL: the URL your browser will be redirected after authenticated
+
+For example :
+http://yourdomainname.ndjin.net/ng/auth?openID=yourOpenId&returnURL=http://yourhost/currentpage
+
+
+
+# Create your model #
+
+Each new application site starts with a default ApplicationModel you can modify to provide you own model.
+
+You just need to edit a new web page hosted behind any web server.
+
+Include our simple model library.
+```
+<script type="text/javascript" src="http://ndjin.googlecode.com/svn/trunk/js/lib/model.js"></script>
+```
+
+Initialize model instance proxy that will permform webservice requests to the server and provide your application domain name.
+```
+var applicationDomainName = "your-application-domain-name";
+var model = new Model( applicationDomainName, false );
+model.init();
+```
+
+Create a 'Contact' class that extends 'Object' class. 'Contact' will have 'name' text field and a 'phone' text field.
+```
+var dataType = {
+        name: "Contact",
+        inheritedDataTypeId: model.getDataTypeByName( 'Object' )._id,
+        fields: [
+                { name: 'name', dataTypeId: model.getDataTypeIdByName( 'Text' ), min: 0, max: 1, unique: false, preview: true },
+                { name: 'phone', dataTypeId: model.getDataTypeIdByName( 'Text' ), min: 0, max: 1, unique: false, preview: false },
+        ]
+}
+model.createOrUpdateDataType( dataType );
+```
+
+
+Create a collection of 'Contacts' to your 'Application class'. 'Application' class will live as singleton and run as the main entry point of you application.
+```
+var applicationDataType = model.getDataTypeByName( 'Application' );
+applicationDataType.fields.push( { name: 'contacts', dataTypeId: model.getDataTypeByName( 'Contact' )._id, min: 0, max: 100, unique: false, preview: false } );
+model.createOrUpdateDataType( applicationDataType );
+```
+
+
+# Operate your model #
+
+
+Include our simple instance helper library.
+```
+<script type="text/javascript" src="http://ndjin.googlecode.com/svn/trunk/js/lib/instanceHelper.js"></script>
+```
+
+
+Initialize instance helper proxy that will permform webservice request to the server and provide you application URL.
+```
+var applicationDomainName = "your-application-domain-name";
+var instanceHelper = new InstanceHelper( applicationDomainName, false );
+```
+
+Create an instance of 'Contact' and append it to the 'contacts' collection of your application singleton. As you can see we apply two transitions to the 'Contact' instance: 'New' and 'Store'.
+'New' instantiate one 'Contact', and 'Store' updates it with the given values, checks the assertion if any and appends it to the collection.
+```
+var query = {
+	instance: 
+	{
+		name: 'MySelf',
+		telephone: '0123456789',
+		_applyTransitions: [ 
+			{ name:'New',   parameters: { ownerFieldName: 'contacts' } },
+			{ name:'Store', parameters: { ownerFieldName: 'contacts' } }
+		]
+	}
+};
+
+var contact = instanceHelper.applyTransition( query );
+```
+
+Update the previous instance of 'Contact' . As you can see, we apply two transitions to the 'Contact' instance: 'Edit' and 'Update'.
+'Edit' set the instance in an 'Edited' state disallowing someone else to apply an 'Edit' on it. 'Update' updates the instance with the given values and checks the assertion.
+Also, you might note that the instance '_id' is obviously required for those transitions.
+```
+query = {
+	instance: {
+		_id: contact._id,
+		name: 'Noboby',
+		_applyTransitions: [ { name:'Update' } ]
+	}
+};
+contact = instanceHelper.applyTransition( query );
+```_
+
+
+Get 10 contacts from the 'contacts' collection of 'Application'.
+```
+query = {
+        ownerFieldName: "contacts",
+        count: 10,
+};
+var instances = instanceHelper.getInstances( query );
+```
+
+And delete those instances _using brut force loop_ (API provides smarter query, but for this example we keep it simple).
+```
+for( var i=0; i<instances.length; i++ ){
+        var instance = instances[i];
+        var query = {
+		instance: {
+			_id: instance._id,
+			_applyTransitions: [{ name: 'Delete'} ]
+		}
+        };
+        instanceHelper.applyTransition( query );
+}
+```

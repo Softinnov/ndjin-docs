@@ -1,0 +1,133 @@
+# Prerequisite #
+
+You can get the source of this tutorial [here](http://code.google.com/p/ndjin/source/browse/#svn/trunk/js/blog).
+
+Check [5MinutesTutorial](5MinutesTutorial.md) especially the 'Prerequisite' and 'Authenticate' section.
+
+
+# Create Your Model #
+
+We create a simple Blog model having Article, Topic and Comment based on this diagram.
+
+![http://ndjin.googlecode.com/svn/trunk/js/blog/admin/blogModel.png](http://ndjin.googlecode.com/svn/trunk/js/blog/admin/blogModel.png)
+
+You can view the full JS script [here](http://code.google.com/p/ndjin/source/browse/trunk/js/blog/admin/createModel.html).
+
+We first create the Topic class:
+
+```
+var dataType = {
+	name: 'Topic',
+	inheritedDataTypeId: model.getDataTypeIdByName( 'Object' ),
+	fields: [
+		{ name: 'name', dataTypeId: model.getDataTypeIdByName( 'Text' ), min: 1, max: 1, unique: true, preview: true }
+	]
+}
+model.createOrUpdateDataType( dataType );
+```
+
+
+Then the Comment class:
+
+```
+var dataType = {
+	name: 'Comment',
+	inheritedDataTypeId: model.getDataTypeIdByName( 'Object' ),
+	fields: [
+		{ name: 'title', dataTypeId: model.getDataTypeIdByName( 'Text' ), min: 0, max: 1, unique: false, preview: true },
+		{ name: 'body', dataTypeId: model.getDataTypeIdByName( 'Text' ), min: 0, max: 1, unique: false, preview: false }
+	]
+}
+model.createOrUpdateDataType( dataType );
+```
+
+And the Article class:
+
+```
+var dataType = {
+	name: 'Article',
+	inheritedDataTypeId: model.getDataTypeIdByName( 'Object' ),
+	fields: [
+		{ name: 'title', dataTypeId: model.getDataTypeIdByName( 'Text' ), min: 1, max: 1, unique: false, preview: true },
+		{ name: 'topic', dataTypeId: model.getDataTypeIdByName( 'Topic' ), relationPath: '/topics', min: 1, max: 1, unique: false, preview: false },
+		{ name: 'abstract', dataTypeId: model.getDataTypeIdByName( 'Text' ), min: 0, max: 1, unique: false, preview: false },
+		{ name: 'body', dataTypeId: model.getDataTypeIdByName( 'Text' ), min: 0, max: 1, unique: false, preview: false },
+		{ name: 'comments', dataTypeId: model.getDataTypeIdByName( 'Comment' ), min: 0, max: 1000, unique: false, preview: false }
+	]
+}
+model.createOrUpdateDataType( dataType );
+```
+
+As you can see here, we define the relation topic and comments relations just as any primitive field.
+
+
+
+# Create Admin Forms #
+
+You can check JS the sources for the [topic](http://code.google.com/p/ndjin/source/browse/trunk/js/blog/admin/formTopic.html) and [article](http://code.google.com/p/ndjin/source/browse/trunk/js/blog/admin/formArticle.html) form.
+
+
+
+We focus on Article creation function:
+```
+function createArticle( articleTitle, articleTopic, articleAbstract, articleBody )
+{
+
+	var query = 
+	{ 
+		instance: 
+		{
+			title: articleTitle,
+			abstract: articleAbstract,
+			body: articleBody,
+			_applyTransitions: 
+			[ 
+				{ name:'New',   parameters: { ownerFieldName: 'articles' } },
+				{ name:'Store', parameters: { ownerFieldName: 'articles' } }
+			],
+			
+			topic : 
+			{
+				_id: articleTopic._id,
+				_applyTransitions: [ { name:'Append' } ]
+			}
+		}
+	};
+
+	
+	instanceHelper.callBackApplyTransition( query, function(data, textStatus)
+	{
+		loadArticles();					
+	}
+	);
+}
+```
+
+Here you can see that we specify a `deepUpdateFieldNames` to allow the creation of an article and the link of the selected topic at the same time.
+
+The new Article instance will be append in the Application 'articles' field collection.
+
+
+
+# Create Main View Page #
+
+
+You can check JS the source [here](http://code.google.com/p/ndjin/source/browse/trunk/js/blog/index.html).
+
+
+We focus on article list query:
+
+```
+query = 
+{
+	ownerFieldName: "articles",
+	count: 100,
+	deepFieldNames: ['comments', 'body']
+};
+instanceHelper.callbackInstances( query, function (data, textStatus)
+{
+	/// ...
+```
+
+Here you can see that we specify a `deepFieldNames ` to fetch in one query all the comments and body fields.
+By default each relation instance get only the field set as 'preview' fetched.

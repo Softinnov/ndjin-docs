@@ -1,0 +1,59 @@
+# Model #
+
+### Class Diagram ###
+Any application created on ndjin start with a default model.
+
+![http://ndjin.googlecode.com/svn/trunk/docs/applicationModel.png](http://ndjin.googlecode.com/svn/trunk/docs/applicationModel.png)
+
+Application model can be modified dynamically using ModelService.
+
+
+Common ApplicationModel dataTypes/classes primitives are:
+
+| **Name** | **Description** |
+|:---------|:----------------|
+|Text      |UTF-8 string     |
+|Number    |any kind of numbers|
+|Date      |represented in millisecond since EPOC|
+|File      |any kind of file |
+
+
+Specific classes are:
+
+| **Name** | **Description** |
+|:---------|:----------------|
+|Object    |base object inherited by any object of your application|
+|Application|application class that is instantiated once and used has your application entry point|
+|Member    |dataType used to specify user level of the member of you application|
+
+
+### Object states ###
+
+![http://ndjin.googlecode.com/svn/trunk/docs/objectStates.png](http://ndjin.googlecode.com/svn/trunk/docs/objectStates.png)
+
+When a class (dataType) extends an existing class, it inherit of its states. So basically any class extending `Object` class automatically gets all its states.
+Of course each state could be overloaded or you can modify object state model itself to get custom behaviors.
+
+When a transition is applied, a list of operation can be executed. There are two types of operations:
+  * InternalServices Operations: global scope operation implemented inside the engine
+  * DataType/Class Field Operations: operations implemented as member of a class (using scripting language)
+
+| **Transition** | **Executed Operations** |
+|:---------------|:------------------------|
+| Create (1)     | Instance Create - Instance Edit |
+| Store (2)      | User Level Requirement Member - Instance Update - Instance Append to collection |
+| Cancel (3)     | Instance Cancel Edition |
+| View (4)       |                         |
+| Edit (5)       | User Level Requirement Member - Instance Edit|
+| Delete (6)     | User Level Requirement Member -Instance Delete |
+| Append (7)     | User Level Requirement Member - Instance Append to collection|
+| Remove (8)     | User Level Requirement Member - Instance Remove from collection |
+| Move (9)       | User Level Requirement Member - Instance Remove from collection - Instance Append to collection|
+| Update (10)    | User Level Requirement Member - Instance Update |
+| Cancel (11)    | Instance Cancel Edition |
+
+_To simplify we grouped transitions operations descriptions, but you should be aware that 'View' transition from 'Stored' state is not the same as 'View' transition from 'Edited' state._
+
+By default, operations applied during transition on object are coming from InternalServices.
+
+As you can see, anyone can view content of an object instance when it is in 'Stored' or 'Edited' state, but only members can edit/update values.

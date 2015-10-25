@@ -1,0 +1,245 @@
+# getInstances #
+
+| Security | Open |
+|:---------|:-----|
+| Input    |  `ownerId`, `ownerFieldName`, `packagePath`, `start`, `count`, `viewFieldNames`, `deepFieldNames`, `fetchFields`, `selectOperationName`, `filters`, `filtersOperator`, `sortByFieldNames`, `viewStateNames` |
+| Output   | `instances`, `totalCount`, `siteName`, `stateNames` |
+
+Result a list of instance.
+Following steps are executed to build the result:
+  * get an list of instance according to `ownerId`, `ownerFieldName`, `packagePath`. If no ownerId is provided application instance or package instance (according to packagePath) will be choosen as relative entry path and its ownerFieldName instances will be selected
+  * if selectOperationName is provided, the operation of the entry path instance will be called to get a list of instance
+  * filter this list applying `filters`, `filtersOperator`
+  * sort the list using `sortByFieldNames`
+  * keep `totalCount` of the list
+  * apply 'View' transition on each item in the list starting at `start` until the sublist list reach `count` size
+  * copy each instance value of sublist in result list `viewFieldNames`, `deepFieldNames`
+  * build  `stateNames` list of states name of resulting instance
+
+Instances returned are reduced value object with selected field. Each instance contains also internal fields:
+  * `id` persistent unique id of the instance
+  * `stateId` referring to id of a state model object
+  * `dataTypeId` referring to the id of a dataType mode object
+
+_Internal values are returned as `_id`, `_stateId` and `_dataTypeId` object fieldname when using JSON format and as element attribute in XML format._
+
+
+Input value
+  * ownerFieldName: name of dataType field pointing to a a collection of instances
+
+Optional input values
+  * ownerId: instance id number from where the query is performed (if none is provided, the query is performed on application singleton or package singleton according to packagePath)
+  * start: start number from where it should retrieve item
+  * count: number of item to get back in list
+  * packagePath: field path string to a package singleton (in case of having many package singleton in application)
+  * viewFieldNames: array of string containing field name that should be returned
+  * deepFieldNames: array of string containing field name of sub instance (in case of an object relation association)
+  * fetchFields : for each instance in the return result, each fiechFields item call getInstance with given item as parameter and instance id as ownerId
+  * selectOperationName: name of the operation called to select a list of instances
+  * filters: array of filter object
+  * filtersOperator: operator applied to each element of filters object (if none provided then AND is applyed)
+  * sortByFieldNames: array of sort object
+  * viewStateNames: boolean true if result should contain an array of all state id/name returned in result
+
+
+Output values
+  * instances: list of resulting instance eventually sorted
+  * totalCount: total result count after filters and before applying start/count and 'View' transition applied. If for some privilege reason 'View' transition is not applicable the count remain the same despite the fact that the instance will not be added in the return list
+Optional output value
+  * stateNames: (if viewStateNames was set) a list of id/state name containing all name related to all state id mentioned in instance result
+
+
+
+### Filters ###
+
+You can limit the result by applying a list of filters to the query.
+Each item object in list of filter could be
+  * a filter list item having:
+    * `filters`: a list of filter object
+    * `filtersOperator`: operator applied between item object of the `filters`, could be `AND` or `OR`
+  * a filter item object having:
+    * `fieldName`: a string with dataType field name
+    * `operator` : a string (see below)
+    * `value`:  any primitive type (string, number, boolean) to be compared
+
+
+
+Filter item `operator` are:
+| `operator` | Description |
+|:-----------|:------------|
+| `%`        | contains    |
+| `~`        | contains ignore case  |
+| `~~`       | contains ignore case and accent  |
+| `==`       | strict equal (case sensitive for string)  |
+| `=~`       | equals ignore case |
+| `=~~`      | equals ignore case and accent |
+| `>`        |  greater than (case insensitive for string) |
+| `>=`       | greater than or equals (case insensitive for string) |
+| `<`        | lower than (case insensitive for string) |
+| `<=`       | lower than or equals (case insensitive for string) |
+| `#=`       | string start with (case insensitive) |
+| `=#`       | string end with (case insensitive) |
+
+You can add `!` (bang) char to any of those operators, to get the opposite result.
+For example `!=%` will return all instances that do not contains the provided value.
+
+### Sort ###
+
+Result can be sorted using `sortByFieldNames` list.
+Each item object of `sortByFieldNames` has:
+  * `sortBy`: a field name string
+  * `sortAscOrder`: (default true) boolean if true then sort with be in ascending order
+  * `sortCaseSensitive`: (default false) boolean if true then sort is case sensitive
+  * `ignoreAccents` : (default true) boolean if true then sort ignore accents
+
+
+### Example using Javascript/[JQuery](http://jquery.org)/JSONP/[JSON2](http://www.JSON.org/json2.js) ###
+
+```
+// build the query object
+query = {
+  ownerFieldName: "contacts",
+  count: 10,
+
+  filters: [
+    { fieldName: "name", operator: "=%", value: "Bill" },
+    { fieldName: "age", operator: ">", value: 18 }
+  ],
+  filtersOperator: "AND",
+
+  sortByFieldNames: [ { sortBy: "name", sortAscOrder: true } ],
+
+  viewFieldNames: [ "name", "age", "nickname" ]
+
+};
+
+// do the HTTP request
+$.ajax({
+  url: "http://myapp.ndjin.net/ng/service/InstanceService/getInstances",
+  dataType: "jsonp",
+  data: { requestDataType:'json', responseDataType:'jsonp', data: JSON.stringify( query ) },
+  success: function (data, textStatus) {
+    result = data.result.instances;
+  }
+}); // ajax
+```
+
+
+
+
+
+
+# applyTransitionsToInstance #
+
+_Could also be `applyTransitionToInstance`_
+
+| Security | Open |
+|:---------|:-----|
+| Input    |  `instance`, `instances`, `appliedTransitionNames`, `ownerId`, `ownerFieldName`, `packagePath`, `viewFieldNames`, `deepFieldNames`, `fetchFields` |
+| Output   | `instance`, `siteName` |
+
+Apply transitions to the given instance.
+According to the current state of the instance and the transition defined at his state, a transition is applied on this instance.
+
+When a transition is applied, an set of operation can be executed. Those operation may required some parameters to be properly executed.
+Those parameters should also be provided in input object.
+
+Each operation are individually executed inside a transaction meaning that if an instance is modified during the execution of an operation, all modified value are saved transactionally.
+So the whole transition is not transaction (for performance reasons). If you need to have complete set of operations executed in a transactional context, you should define an operation that will itself call other operations, in this case the transaction will be propagated.
+If one operation fails (generating an exception) the transition is not applied but, each previous modifications that might have occurs in other operation, still remains. So it is better practice to set security and safety check operation on top of operations list and apply modifications at last operation execution.
+
+
+Input value
+  * instance: object instance on which transitions will be applied. The transitions list applied to the instance is specified using `_applyTransitions` field inside that instance. Each transition item in that list must contain transition `name` and could have `parameters`.
+  * instances: a collection of instance where each item of the collection will be processed as one instance with the optional input value below applied.
+
+Optional input values
+
+  * viewFieldNames: array of string containing field name that should be returned
+  * deepFieldNames: array of string containing field name of sub instance (in case of an object relation association)
+  * fetchFields : each fiechFields item call getInstance relative to the instance with given item as parameter and instance id as ownerId
+
+Common operation transition parameters values
+  * ownerId: instance id number of the owner (parent) of the instance (if none is provided, the query is performed on application singleton)
+  * ownerFieldName: name of dataType field pointing to a a collection of instances (used when should append instance to that collection)
+  * packagePath: field path string to a package singleton (in of having many package singleton in application)
+
+
+Output values
+  * instance: instance after transitions applied
+  * siteName: site name on witch transition has been applyed (_might be considered as redundent_)
+
+
+
+### Examples using Javascript/[JQuery](http://jquery.org)/JSONP/[JSON2](http://www.JSON.org/json2.js) ###
+
+A simple example:
+
+```
+// build the query to apply 'New' transition on the given instance that will be appended to products property of eCommerce package singleton.
+var query = {
+  instance: { 
+     _applyTransitions: [{
+	name:  "New", 
+	parameters: { 
+	  packagePath: "/eCommerce", 
+	  ownerFieldName: "products"
+	} 
+     }] 
+   } 
+};
+
+// do the HTTP request
+$.ajax({
+  url: "http://myapp.ndjin.net/ng/service/InstanceService/applyTransitionToInstance",
+  dataType: "jsonp",
+  data: { requestDataType:'json', responseDataType:'jsonp', data: JSON.stringify( query ) },
+  success: function (data, textStatus) {
+    result = data.result.instance;
+  } // success
+}); // ajax     
+
+```
+
+
+A more complex example with sub-instance update:
+
+```
+// build the query to apply 'Update' transition on the given instance and its sub-instance.
+
+var query = {
+  instance: {
+     _id: 3323,
+     name: "Joe Fuu",
+     _applyTransitions: [{
+	name:  "Update", 
+	parameters: { 
+	  packagePath: "/eCommerce", 
+	  ownerFieldName: "products"
+	} 
+     }],
+
+     
+     categories: [{
+        _id: 660, 
+        name: { fr: "Jeux", en: "Game" },
+        _applyTransitions: [{
+  	  name:  "Update" 
+       }]
+
+     }]
+
+   } 
+};
+
+// do the HTTP request
+$.ajax({
+  url: "http://myapp.ndjin.net/ng/service/InstanceService/applyTransitionToInstance",
+  dataType: "jsonp",
+  data: { requestDataType:'json', responseDataType:'jsonp', data: JSON.stringify( query ) },
+  success: function (data, textStatus) {
+    result = data.result.instance;
+  } // success
+}); // ajax     
+
+```

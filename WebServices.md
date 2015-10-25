@@ -1,0 +1,45 @@
+# Introduction #
+
+### Operation webservice ###
+
+Operations webservice required data formatted with JSON or XML WebServiceProtocol.
+Ndjin webservice can be called using HTTP/JSON or XML request.
+
+Request URL should be formatted as: `http://[you application site name].ndjin.net/ng/service/[service name]/[operation name]`
+
+For example: `http://myapp.ndjin.net/ng/service/AuthenticationService/getSessionInfo`
+
+Available webservices group are:
+  * SessionService: user session/authentication operations
+  * ModelService: application model operations
+  * InstanceService: object instances operations
+
+### Direct webservices ###
+
+Direct webservice can be called using direct HTTP request:
+`http://[you application site name].ndjin.net/ng/service/[name]`
+
+Direct webservice are:
+  * [auth](auth.md): web browser authentication
+  * [exportpackage](exportpackage.md): export application package model in an XML
+  * [importpackage](importpackage.md): import application package model using an XML
+  * [upload](upload.md): upload a file and associate it with the current session
+  * [importxls](importxls.md): export a collection of instances in an XLS file
+  * [exportxls](exportxls.md): import a collection of instance using an XLS file
+
+### Privileges ###
+
+Each operation that may required membership privilege to be executed.
+
+Common privileges are:
+
+| Open | operation can be executed by anybody  |
+|:-----|:--------------------------------------|
+| Captcha | a captcha chalenge should have been passed with this session |
+| Authenticaded | this session must be authenticated    |
+| Owner | if operation may concern an instance then the current session user must be owner of the instance |
+| MemberLevel |  session user must have member level on the application |
+| EditorLevel |   session user must have editor level on the application |
+| AdministratorLevel |   session user must have administrator level on the application |
+
+This list may be extended according to specific application model.

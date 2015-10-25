@@ -1,0 +1,50 @@
+# Big Picture #
+
+![http://ndjin.googlecode.com/svn/trunk/docs/metamodel.png](http://ndjin.googlecode.com/svn/trunk/docs/metamodel.png)
+
+Due to limitation of our underlying data storage model, the metamodel cannot contain inheritance.
+
+Each new application starts with a default ApplicationModel based on this MetaModel.
+
+## DataType/Class ##
+
+DataType (or Class) are similar to classes in OO languages with few enhancements.
+
+A dataType has a name, belongs to a package, and contains:
+  * fields: properties of the dataType
+  * operationFields: equivalent to the object methods
+  * states: set of state associated with this datatype
+  * uiTypes: type of user interface that could be associated to this dataType
+  * validatorTypes: type of data validator that could be associated to this dataType
+  * serviceTypes: executable service that could be accessed via this dataType
+
+
+## States ##
+
+
+DataType can have states.
+A dataType instance can be in a specific state and anyone can apply a transition on the instance to change its state. When a transition is apply, a set of operation can be executed.
+Those operations can generate exception and cancel transition. Each operations are transactional but the whole transition is not transactional itself for performance reason.
+If an exception occurs during a transition, the current operation is rolled back but previous one remains. To be sure to have an atomic set of operation executed in transition you can define a specific method (operationField) and execute all operation in a transition inside this method.
+
+## Operations ##
+
+Operations are executed during transitions.
+
+Service operations are integrated in the platform and can be accessed by most of dataType instance.
+
+Field operations code can be written using scripts language and are owed by one dataType.
+
+For example, in the ApplicationModel, the Member dataType has the field operation 'checkRight'.
+This operation has one input parameter `instance` (which is itself a Member).
+The code script is:
+```
+@groovy
+
+if( instance.level < _member.level ) throw new ServiceException( 'Current User Level is lower than assigned level' )
+```
+
+Has you can see first line `@groovy` indicate that we use [Groovy](http://groovy.codehaus.org/) script to write this code.
+
+
+### more to come... ###
